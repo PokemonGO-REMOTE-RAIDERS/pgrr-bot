@@ -1,12 +1,15 @@
+// Config
 const dotenv = require('dotenv');
 dotenv.config();
+
+// Discord JS
 const fs = require('fs');
 const Discord = require('discord.js');
 const prefix = process.env.prefix;
-const token = process.env.token;
-
+const discordToken = process.env.token;
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
+
 
 const commandFolders = fs.readdirSync('./commands');
 
@@ -34,8 +37,6 @@ client.once('ready', () => {
 });
 
 client.on('message', message => {
-
-	console.log(message.content);
 
 	let noPrefix = false;
 	let args = '';
@@ -117,4 +118,4 @@ client.on('message', message => {
 	}
 });
 
-client.login(token);
+client.login(discordToken);
