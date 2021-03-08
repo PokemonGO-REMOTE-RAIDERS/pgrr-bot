@@ -1,18 +1,22 @@
 // Config
 const dotenv = require('dotenv');
 dotenv.config();
+const prefix = process.env.prefix;
+const discordToken = process.env.token;
 
 // Discord JS
 const fs = require('fs');
 const Discord = require('discord.js');
-const prefix = process.env.prefix;
-const discordToken = process.env.token;
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
 
+// Utilities
+const validateArguments = require('./util/validateArguments.js');
+const expectedArguments = require('./util/expectedArguments.js');
+const cooldown = require('./util/cooldown.js');
 
+// Get all of the commands
 const commandFolders = fs.readdirSync('./commands');
-
 for (const folder of commandFolders) {
 	const commandFiles = fs.readdirSync(`./commands/${folder}`).filter(file => file.endsWith('.js'));
 	for (const file of commandFiles) {
@@ -21,6 +25,7 @@ for (const folder of commandFolders) {
 	}
 }
 
+// Find all commands that have no prefix.
 const noPrefixes = [];
 for(const cmds of client.commands) {
 	if(cmds.find(cmd => cmd.noPrefix)) {
@@ -33,31 +38,29 @@ const cooldowns = new Discord.Collection();
 
 client.once('ready', () => {
 	console.log('Ready!');
-	client.user.setActivity('Stuff Happen.', { type: 'WATCHING' });
+	client.user.setActivity('PokemonGO every day.', { type: 'PLAYING' });
 });
 
 client.on('message', message => {
 
 	let noPrefix = false;
 	let args = '';
-	for(const noPrefixCommand of noPrefixes) {
+	for (const noPrefixCommand of noPrefixes) {
 		if(noPrefix) { break; }
 		if (message.content.startsWith(noPrefixCommand)) {
 			noPrefix = true;
 		}
 	}
 
-	if(noPrefix && !message.author.bot) {
+	if (noPrefix && !message.author.bot) {
 		args = message.content.trim().split(/ +/);
 
 	}
-	else if(!message.content.startsWith(prefix) || message.author.bot) {
+	else if (!message.content.startsWith(prefix) || message.author.bot) {
 		return;
 	}
 
-	console.log(noPrefix);
-
-	if(!noPrefix) {
+	if (!noPrefix) {
 		args = message.content.slice(prefix.length).trim().split(/ +/);
 	}
 
@@ -89,25 +92,20 @@ client.on('message', message => {
 		return message.channel.send(reply);
 	}
 
-	if (!cooldowns.has(command.name)) {
-		cooldowns.set(command.name, new Discord.Collection());
+
+	const validArgs = validateArguments(message, command, args);
+
+	if(!validArgs) {
+		return;
 	}
 
-	const now = Date.now();
-	const timestamps = cooldowns.get(command.name);
-	const cooldownAmount = (command.cooldown || 3) * 1000;
+	args = expectedArguments(message, commandName, noPrefix, command, args);
 
-	if (timestamps.has(message.author.id)) {
-		const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
 
-		if (now < expirationTime) {
-			const timeLeft = (expirationTime - now) / 1000;
-			return message.reply(`please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`);
-		}
+	const isCooldown = cooldown(cooldowns, command, message, Discord);
+	if(isCooldown) {
+		return;
 	}
-
-	timestamps.set(message.author.id, now);
-	setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
 
 	try {
 		command.execute(message, args);

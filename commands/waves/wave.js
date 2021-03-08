@@ -1,6 +1,7 @@
 module.exports = {
 	name: 'wave',
 	description: 'Let a wave know which one is happening next.',
+	expectedArgs: 1,
 	noPrefix: true,
 	execute(message, args) {
 		const amount = parseInt(args[0]);
