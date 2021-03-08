@@ -11,6 +11,7 @@ module.exports = {
 		getUserInfo(0, user, data)
 			.then((response) => {
 				const embed = {
+					color: '#f1609f',
 					title: `Wavehost: ${response.ign}`,
 					description: `<@&818325677492797460> Hop on board and ride the wave with ${response.ign}`,
 					author: {

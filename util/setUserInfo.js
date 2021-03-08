@@ -49,6 +49,7 @@ module.exports = async function setUserInfo(sheetIndex, user, data, value) {
 
 		response = {
 			embed: {
+				color: '#f1609f',
 				title: 'New user created',
 				description: `${data} is set to ${this.value}`,
 			},
@@ -59,6 +60,7 @@ module.exports = async function setUserInfo(sheetIndex, user, data, value) {
 		await userInfo.save();
 		response = {
 			embed: {
+				color: '#f1609f',
 				title: `${data} updated`,
 				description: this.value,
 			},
