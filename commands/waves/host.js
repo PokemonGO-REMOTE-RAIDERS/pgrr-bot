@@ -10,7 +10,6 @@ module.exports = {
 		const user = message.author.id;
 		getUserInfo(0, user, data)
 			.then((response) => {
-				console.log(response);
 				const embed = {
 					title: `Wavehost: ${response.ign}`,
 					description: `<@&818325677492797460> Hop on board and ride the wave with ${response.ign}`,
@@ -55,8 +54,7 @@ module.exports = {
 
 
 				setUserInfo(0, user, 'hosts', parseInt(response.hosts) + 1)
-					.then((rspns) => console.log(rspns))
-					.catch((error) => console.log(error));
+					.then().catch((error) => console.log(error));
 			})
 			.catch((error) => {
 				console.log(error, `userid: ${user}`);

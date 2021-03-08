@@ -41,7 +41,6 @@ module.exports = async function setUserInfo(sheetIndex, user, data, value) {
 	}
 
 	if(!userInfo) {
-		console.log('No user info');
 		const newUser = {};
 		newUser.userid = this.user;
 		newUser[this.data] = this.value;

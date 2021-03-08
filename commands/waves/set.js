@@ -30,7 +30,6 @@ module.exports = {
 		const data = args[0];
 		const value = args['content'];
 		const user = message.author.id;
-		console.log({ user, data, value });
 
 		setUserInfo(0, user, data, value)
 			.then((response) => {
