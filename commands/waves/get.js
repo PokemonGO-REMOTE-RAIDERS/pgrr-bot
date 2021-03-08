@@ -1,7 +1,7 @@
 const getUserInfo = require('../../util/getUserInfo.js');
 module.exports = {
 	name: 'get',
-	description: 'Get information about a wavehost. Only accessible by mod or the actual wavehost.',
+	description: 'Get information about a wavehost. Only accessible by the actual wavehost.',
 	args: true,
 	expectedArgs: 1,
 	cooldown: 5,
@@ -33,10 +33,6 @@ module.exports = {
 		{
 			name: 'rules',
 			aliases: ['rule'],
-		},
-		{
-			name: 'mentionUser',
-			aliases: [],
 		},
 	],
 	execute(message, args) {

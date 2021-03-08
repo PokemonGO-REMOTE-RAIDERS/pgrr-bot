@@ -25,10 +25,6 @@ module.exports = {
 			name: 'rules',
 			aliases: ['rule'],
 		},
-		{
-			name: 'mentionUser',
-			aliases: [],
-		},
 	],
 	execute(message, args) {
 		const data = args[0];
