@@ -11,13 +11,9 @@ module.exports = async function getUserInfo(sheetIndex, user, data) {
 	this.data = data;
 	let response;
 
-	const dotenv = require('dotenv');
-	dotenv.config();
-
 	// Google Sheets
 	const { GoogleSpreadsheet } = require('google-spreadsheet');
-	const sheetID = '1Ueq5Eh4aHcmabwmBQsvMt-xnsGgGC8OSw7a_hSI4ruk';
-	const doc = new GoogleSpreadsheet(sheetID);
+	const doc = new GoogleSpreadsheet(process.env.GOOGLE_SHEET_ID);
 
 	await doc.useServiceAccountAuth({
 		client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,

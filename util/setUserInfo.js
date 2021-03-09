@@ -17,14 +17,9 @@ module.exports = async function setUserInfo(sheetIndex, user, data, value) {
 	// 	return Object.prototype.toString.call(obj) === '[object Object]';
 	// };
 
-
-	const dotenv = require('dotenv');
-	dotenv.config();
-
 	// Google Sheets
 	const { GoogleSpreadsheet } = require('google-spreadsheet');
-	const sheetID = '1Ueq5Eh4aHcmabwmBQsvMt-xnsGgGC8OSw7a_hSI4ruk';
-	const doc = new GoogleSpreadsheet(sheetID);
+	const doc = new GoogleSpreadsheet(process.env.GOOGLE_SHEET_ID);
 
 	await doc.useServiceAccountAuth({
 		client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,

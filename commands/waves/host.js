@@ -75,11 +75,13 @@ module.exports = {
 
 				if(response.tc) {
 					message.channel.send(response.tc).then((sent) => {
+
 						const dataSend = {
 							hosting: 'true',
 							tcmessageid: sent.id,
 							hosts: parseInt(response.hosts) + 1,
 						};
+
 						setUserInfo(0, user, 'tcmessageid', dataSend.tcmessageid).then(() => {
 							setUserInfo(0, user, 'hosting', dataSend.hosting).then(() => {
 								setUserInfo(0, user, 'hosts', dataSend.hosts).then().catch();
