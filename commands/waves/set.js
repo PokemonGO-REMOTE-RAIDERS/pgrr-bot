@@ -25,12 +25,16 @@ module.exports = {
 			name: 'rules',
 			aliases: ['rule'],
 		},
+		{
+			name: 'tcdeletetimer',
+			aliases: ['delete', 'timer'],
+		},
 	],
 	execute(message, args) {
 		const data = args[0];
 		const value = args['content'];
 		const user = message.author.id;
-
+		console.log(data);
 		setUserInfo(0, user, data, value)
 			.then((response) => {
 				message.channel.send(response);

@@ -13,6 +13,11 @@ module.exports = async function setUserInfo(sheetIndex, user, data, value) {
 	this.value = value;
 	let response;
 
+	// const isObject = (obj) => {
+	// 	return Object.prototype.toString.call(obj) === '[object Object]';
+	// };
+
+
 	const dotenv = require('dotenv');
 	dotenv.config();
 
@@ -31,19 +36,24 @@ module.exports = async function setUserInfo(sheetIndex, user, data, value) {
 	const sheet = doc.sheetsByIndex[this.sheetIndex];
 	const rows = await sheet.getRows();
 
-	let userInfo = false;
-
 	// Check to make sure a user exists
+	let userInfo = false;
 	for(const row of rows) {
 		if(row.userid == this.user) {
 			userInfo = row;
 		}
 	}
 
+
 	if(!userInfo) {
 		const newUser = {};
 		newUser.userid = this.user;
 		newUser[this.data] = this.value;
+		if(this.sheetIndex == 0) {
+			newUser['hosts'] = 0;
+			newUser['maxwaves'] = 0;
+			newUser['tcdeletetimer'] = 0;
+		}
 		const addNewUser = await sheet.addRow(newUser);
 		await addNewUser.save();
 
@@ -56,7 +66,10 @@ module.exports = async function setUserInfo(sheetIndex, user, data, value) {
 		};
 	}
 	else {
+		// THIS DOESN'T WORK FOR SOME REASON, FIGURE IT OUT!
+
 		userInfo[this.data] = this.value;
+
 		await userInfo.save();
 		response = {
 			embed: {
