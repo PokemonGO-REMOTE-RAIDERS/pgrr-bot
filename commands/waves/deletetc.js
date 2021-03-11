@@ -1,6 +1,7 @@
 const getUserInfo = require('../../util/getUserInfo.js');
 module.exports = {
 	name: 'deletetc',
+	aliases: [ 'delete', 'tc', 'trainercode'],
 	description: 'Delete a tc that was just posted by PGRR bot',
 	cooldown: 5,
 	execute(message) {
