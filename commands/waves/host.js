@@ -92,8 +92,8 @@ module.exports = {
 							sent.delete();
 						}
 
-						if(response.tcdeletetimer > 0) {
-							setTimeout(deleteMsg, response.tcdeletetimer);
+						if(response.timer > 0) {
+							setTimeout(deleteMsg, response.timer);
 						}
 					});
 				}

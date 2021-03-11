@@ -1,4 +1,5 @@
 const setUserInfo = require('../../util/setUserInfo.js');
+const ms = require('ms');
 module.exports = {
 	name: 'set',
 	description: 'Set information about a wavehost. Only accessible by mod or the actual wavehost.',
@@ -8,10 +9,6 @@ module.exports = {
 		{
 			name: 'ign',
 			aliases: ['name', 'trainername'],
-		},
-		{
-			name: 'userid',
-			aliases: ['id', 'user'],
 		},
 		{
 			name: 'tc',
@@ -26,15 +23,18 @@ module.exports = {
 			aliases: ['rule'],
 		},
 		{
-			name: 'tcdeletetimer',
+			name: 'timer',
 			aliases: ['delete', 'timer'],
 		},
 	],
 	execute(message, args) {
 		const data = args[0];
-		const value = args['content'];
-		const user = message.author.id;
-		console.log(data);
+		let value = args['content'];
+		const user = message.author;
+
+		if(data == 'timer') {
+			value = ms(value);
+		}
 		setUserInfo(0, user, data, value)
 			.then((response) => {
 				message.channel.send(response);

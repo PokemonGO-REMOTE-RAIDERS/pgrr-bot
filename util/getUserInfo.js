@@ -25,8 +25,8 @@ module.exports = async function getUserInfo(sheetIndex, user, data) {
 	const sheet = doc.sheetsByIndex[this.sheetIndex];
 	const rows = await sheet.getRows();
 
-	let userInfo = false;
 
+	let userInfo = false;
 	for(const row of rows) {
 		if(row.userid == this.user) {
 			userInfo = row;

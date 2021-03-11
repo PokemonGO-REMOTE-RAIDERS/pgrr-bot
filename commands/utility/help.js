@@ -1,4 +1,4 @@
-const prefix = '!';
+const prefix = process.env.prefix;
 
 module.exports = {
 	name: 'help',

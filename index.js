@@ -10,10 +10,12 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
 
+
 // Utilities
 const validateArguments = require('./util/validateArguments.js');
 const expectedArguments = require('./util/expectedArguments.js');
 const cooldown = require('./util/cooldown.js');
+
 
 // Get all of the commands
 const commandFolders = fs.readdirSync('./commands');
@@ -47,7 +49,7 @@ client.on('message', message => {
 	let args = '';
 	for (const noPrefixCommand of noPrefixes) {
 		if(noPrefix) { break; }
-		if (message.content.startsWith(noPrefixCommand)) {
+		if (message.content.toLowerCase().startsWith(noPrefixCommand)) {
 			noPrefix = true;
 		}
 	}
@@ -61,7 +63,8 @@ client.on('message', message => {
 	}
 
 	if (!noPrefix) {
-		args = message.content.slice(prefix.length).trim().split(/ +/);
+		// args = message.content.slice(prefix.length).trim().split(/ +/);
+		args = message.content.slice(prefix.length).trim().replace(/\n/g, ' ').split(' ');
 	}
 
 	const commandName = args.shift().toLowerCase();
@@ -92,6 +95,7 @@ client.on('message', message => {
 		return message.channel.send(reply);
 	}
 
+	args = expectedArguments(message, commandName, noPrefix, command, args);
 
 	const validArgs = validateArguments(message, command, args);
 
@@ -99,8 +103,7 @@ client.on('message', message => {
 		return;
 	}
 
-	args = expectedArguments(message, commandName, noPrefix, command, args);
-
+	args = validArgs;
 
 	const isCooldown = cooldown(cooldowns, command, message, Discord);
 	if(isCooldown) {

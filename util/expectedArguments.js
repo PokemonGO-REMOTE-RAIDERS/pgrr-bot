@@ -1,4 +1,6 @@
 module.exports = function expectedArguments(message, commandName, noPrefix, command, args) {
+
+	// If the command doesn't have a set amount of args it's expecting then return what was passed. 
 	if (!command.expectedArgs && command.args) {
 		return args;
 	}
@@ -7,24 +9,22 @@ module.exports = function expectedArguments(message, commandName, noPrefix, comm
 	const expectedArgs = [];
 	let content = message.content;
 
+	// If this is a prefixed command, slice off the first char
 	if(!noPrefix) {
 		content = content.slice(process.env.prefix.length).trim();
 	}
-	content = content.replace(commandName, '').trim();
 
+	// Remove the command name from the content
+	content = content.slice(String(commandName).length).trim();
+
+	// Loop through for the amount of expected args.
 	for(i = 0; i + 1 <= command.expectedArgs; i++) {
-		expectedArgs.push(args[i]);
-		content = content.replace(args[i], '').trim();
 
-		if(command.validArgs) {
-			for(const validArg of command.validArgs) {
-				if(validArg.name == args[i]) {
-					for(const aliase of validArg.aliases) {
-						content = content.replace(aliase, '').trim();
-					}
-				}
-			}
-		}
+		const currentArg = String(args[i]);
+		// push an arg if it is expected.
+		expectedArgs.push(args[i]);
+
+		content = content.slice(currentArg.length).trim();
 	}
 
 	if(content) {

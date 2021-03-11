@@ -1,4 +1,5 @@
 const getUserInfo = require('../../util/getUserInfo.js');
+const ms = require('ms');
 module.exports = {
 	name: 'get',
 	description: 'Get information about a wavehost. Only accessible by the actual wavehost.',
@@ -31,15 +32,22 @@ module.exports = {
 			aliases: ['maxhosts', 'hosttimes', 'timeshosted'],
 		},
 		{
+			name: 'timer',
+			aliases: ['deletetimer'],
+		},
+		{
 			name: 'rules',
 			aliases: ['rule'],
 		},
 	],
 	execute(message, args) {
 		const data = args[0];
-		const user = message.author.id;
+		const user = message.author;
 		getUserInfo(0, user, data)
 			.then((response) => {
+				if(data == 'timer') {
+					response = ms(response);
+				}
 				message.channel.send(response);
 			})
 			.catch((error) => {
