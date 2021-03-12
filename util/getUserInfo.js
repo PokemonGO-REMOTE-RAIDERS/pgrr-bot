@@ -34,7 +34,7 @@ module.exports = async function getUserInfo(sheetIndex, user, data) {
 	}
 
 	if(!userInfo) {
-		throw new Error(`No data found for this user. Maybe consider using \`${process.env.prefix}set \` and add yourself!`);
+		return false;
 	}
 	else if(this.data == 'row') {
 		response = userInfo;

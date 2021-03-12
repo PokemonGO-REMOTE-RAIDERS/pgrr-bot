@@ -45,10 +45,15 @@ module.exports = {
 		const user = message.author;
 		getUserInfo(0, user, data)
 			.then((response) => {
-				if(data == 'timer') {
-					response = ms(response);
+				if(response) {
+					if(data == 'timer') {
+						response = ms(response);
+					}
+					message.channel.send(response);
 				}
-				message.channel.send(response);
+				else {
+					message.channel.send(`No information found, consider starting a wavehost profile by using use \`${process.env.prefix}set tc\` and set your trainer code.`);
+				}
 			})
 			.catch((error) => {
 				console.log(error, `userid: ${user}`);

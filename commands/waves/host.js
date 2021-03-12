@@ -1,5 +1,5 @@
 const getUserInfo = require('../../util/getUserInfo.js');
-const setUserInfo = require('../../util/setUserInfo.js');
+const setUserInfoObject = require('../../util/setUserInfoObject.js');
 module.exports = {
 	name: 'host',
 	description: 'Post a host\'s card',
@@ -7,7 +7,7 @@ module.exports = {
 	args: false,
 	execute(message) {
 		const data = 'row';
-		const user = message.author.id;
+		const user = message.author;
 		getUserInfo(0, user, data)
 			.then((response) => {
 				let embed;
@@ -76,17 +76,14 @@ module.exports = {
 				if(response.tc) {
 					message.channel.send(response.tc).then((sent) => {
 
-						const dataSend = {
-							hosting: 'true',
-							tcmessageid: sent.id,
-							hosts: parseInt(response.hosts) + 1,
-						};
+						const userInfos = [
+							{ sheetIndex: 0, user: user, data: 'tcmessageid', value: sent.id },
+							{ sheetIndex: 0, user: user, data: 'hosting', value: true },
+							{ sheetIndex: 0, user: user, data: 'hosts', value: parseInt(response.hosts) + 1 },
+							{ sheetIndex: 0, user: user, data: 'currentwave', value: parseInt(0) },
+						];
 
-						setUserInfo(0, user, 'tcmessageid', dataSend.tcmessageid).then(() => {
-							setUserInfo(0, user, 'hosting', dataSend.hosting).then(() => {
-								setUserInfo(0, user, 'hosts', dataSend.hosts).then().catch();
-							}).catch();
-						}).catch();
+						setUserInfoObject(userInfos);
 
 						function deleteMsg() {
 							sent.delete();
