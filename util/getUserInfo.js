@@ -28,7 +28,7 @@ module.exports = async function getUserInfo(sheetIndex, user, data) {
 
 	let userInfo = false;
 	for(const row of rows) {
-		if(row.userid == this.user) {
+		if(row.userid == this.user.id) {
 			userInfo = row;
 		}
 	}

@@ -39,6 +39,18 @@ module.exports = {
 			name: 'rules',
 			aliases: ['rule'],
 		},
+		{
+			name: 'failed',
+			aliases: ['fail', 'fails'],
+		},
+		{
+			name: 'closed',
+			aliases: ['close', 'closing'],
+		},
+		{
+			name: 'last',
+			aliases: ['lasts'],
+		},
 	],
 	execute(message, args) {
 		const data = args[0];

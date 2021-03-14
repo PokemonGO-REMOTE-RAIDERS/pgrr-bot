@@ -1,17 +1,21 @@
 const getUserInfo = require('../../util/getUserInfo.js');
+const setUserInfo = require('../../util/setUserInfo.js');
 module.exports = {
 	name: 'deletetc',
 	aliases: [ 'delete', 'tc', 'trainercode'],
 	description: 'Delete a tc that was just posted by PGRR bot',
 	cooldown: 5,
 	execute(message) {
-		const user = message.author.id;
+		const user = message.author;
 		getUserInfo(0, user, 'tcmessageid')
 			.then((response) => {
 				message.channel.messages.fetch(response)
 					.then((rsp) => {
 						rsp.delete();
 						rsp.channel.send('Trainer Code Deleted');
+
+						setUserInfo(0, user, 'tcmessageid', 0, false).catch();
+
 					})
 					.catch((error) => console.log(error));
 			})

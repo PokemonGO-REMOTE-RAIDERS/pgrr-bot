@@ -28,6 +28,18 @@ module.exports = {
 			name: 'timer',
 			aliases: ['delete', 'timer'],
 		},
+		{
+			name: 'failed',
+			aliases: ['fail', 'fails'],
+		},
+		{
+			name: 'closed',
+			aliases: ['close', 'closing'],
+		},
+		{
+			name: 'last',
+			aliases: ['lasts'],
+		},
 	],
 	execute(message, args) {
 

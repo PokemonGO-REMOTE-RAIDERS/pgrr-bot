@@ -5,15 +5,14 @@
  * @param {*} value the value of data do you need to set for the user.
  */
 // const ms = require('ms');
-module.exports = async function setUserInfo(sheetIndex, user, data, value, newRow) {
+module.exports = async function setUserInfo(sheetIndex, user, colHead, value, newRow) {
 
 	// Setup
-	this.sheetIndex = sheetIndex;
-	this.user = user;
-	this.data = data;
-	this.value = value;
-	this.newRow = newRow;
-	// let response;
+	this.sheetIndex 	= sheetIndex;
+	this.user 		= user;
+	this.colHead 		= colHead;
+	this.value 		= value;
+	this.newRow 		= newRow;
 
 	const isObject = (obj) => {
 		return Object.prototype.toString.call(obj) === '[object Object]';
@@ -42,25 +41,41 @@ module.exports = async function setUserInfo(sheetIndex, user, data, value, newRo
 		}
 	}
 
-	if(newRow && isObject(this.data)) {
+	// New User
+	if(this.newRow && isObject(this.colHead)) {
 
-		const addNewUser = await sheet.addRow(this.data);
-		await addNewUser.save();
+		const addNewUser = await sheet.addRow(this.colHead);
 
-		// response = true;
-	}
-	else {
-
-		userInfo[this.data] = this.value;
-
-		await userInfo.save().then((rsp) => {
-			if(rsp) {
-				console.log(rsp);
-			}
-		});
+		await addNewUser.save()
+			.then(() => { return true; })
+			.catch((error) => { console.log(error); return false; });
 
 	}
 
-	// return await response;
+	// Process an array of data
+	else if(userInfo && Array.isArray(colHead)) {
+
+		for(const newData of this.colHead) {
+
+			userInfo[newData.data] = newData.value;
+
+			await userInfo.save()
+				.then(() => { return true; })
+				.catch((error) => { console.log(error); return false; });
+
+		}
+
+	}
+
+	// Process a single value
+	else if(userInfo) {
+
+		userInfo[this.colHead] = this.value;
+
+		await userInfo.save()
+			.then(() => { return true; })
+			.catch((error) => { console.log(error); return false; });
+
+	}
 
 };

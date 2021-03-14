@@ -1,9 +1,10 @@
 const getUserInfo = require('../../util/getUserInfo.js');
-const setUserInfoObject = require('../../util/setUserInfoObject.js');
+const setUserInfo = require('../../util/setUserInfo.js');
 module.exports = {
 	name: 'host',
 	description: 'Post a host\'s card',
 	expectedArgs: 0,
+	cooldown: 600,
 	args: false,
 	execute(message) {
 		const data = 'row';
@@ -77,13 +78,13 @@ module.exports = {
 					message.channel.send(response.tc).then((sent) => {
 
 						const userInfos = [
-							{ sheetIndex: 0, user: user, data: 'tcmessageid', value: sent.id },
-							{ sheetIndex: 0, user: user, data: 'hosting', value: true },
-							{ sheetIndex: 0, user: user, data: 'hosts', value: parseInt(response.hosts) + 1 },
-							{ sheetIndex: 0, user: user, data: 'currentwave', value: parseInt(0) },
+							{ data: 'tcmessageid', value: sent.id },
+							{ data: 'hosting', value: true },
+							{ data: 'hosts', value: parseInt(response.hosts) + 1 },
+							{ data: 'currentwave', value: parseInt(0) },
 						];
 
-						setUserInfoObject(userInfos);
+						setUserInfo(0, user, userInfos, null);
 
 						function deleteMsg() {
 							sent.delete();

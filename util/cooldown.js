@@ -1,3 +1,5 @@
+const ms = require('ms');
+
 module.exports = function cooldown(cooldowns, command, message, Discord) {
 	if (!cooldowns.has(command.name)) {
 		cooldowns.set(command.name, new Discord.Collection());
@@ -11,8 +13,10 @@ module.exports = function cooldown(cooldowns, command, message, Discord) {
 		const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
 
 		if (now < expirationTime) {
-			const timeLeft = (expirationTime - now) / 1000;
-			message.reply(`please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`);
+			// const timeLeft = (expirationTime - now) / 1000;
+			const timeLeft = ms(expirationTime - now);
+			// message.reply(`please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`);
+			message.reply(`please wait ${timeLeft} before reusing the \`${command.name}\` command.`);
 			return true;
 		}
 	}
