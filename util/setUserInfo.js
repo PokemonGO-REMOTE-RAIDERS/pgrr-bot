@@ -1,8 +1,9 @@
 /**
  * @param {*} sheetIndex Set the index of the sheet you want to return.
  * @param {*} user The id of the user you're looking up.
- * @param {*} columnIndex target the column of data that we need to set.  The main command will tell us where to go based on it's.
+ * @param {*} colHead target the column of data that we need to set.  The main command will tell us where to go based on it's.
  * @param {*} value the value of data do you need to set for the user.
+ * @param {*} newRow bool that sets a new row
  */
 // const ms = require('ms');
 module.exports = async function setUserInfo(sheetIndex, user, colHead, value, newRow) {
@@ -59,10 +60,9 @@ module.exports = async function setUserInfo(sheetIndex, user, colHead, value, ne
 
 			userInfo[newData.data] = newData.value;
 
-			await userInfo.save()
-				.then(() => { return true; })
-				.catch((error) => { console.log(error); return false; });
+			await userInfo.save();
 
+			return true;
 		}
 
 	}
@@ -72,9 +72,9 @@ module.exports = async function setUserInfo(sheetIndex, user, colHead, value, ne
 
 		userInfo[this.colHead] = this.value;
 
-		await userInfo.save()
-			.then(() => { return true; })
-			.catch((error) => { console.log(error); return false; });
+		await userInfo.save();
+
+		return true;
 
 	}
 

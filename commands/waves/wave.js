@@ -12,7 +12,7 @@ module.exports = {
 		const arg = args[0];
 		const user = message.author;
 
-		getUserInfo(0, user, 'row').then((userInfo) => {
+		getUserInfo(process.env.sheetIndexWaveHosts, user, 'row').then((userInfo) => {
 			const thisWave = parseInt(userInfo.currentwave) + 1;
 
 			if (isNaN(amount) && userInfo.hosting) {
@@ -46,7 +46,7 @@ module.exports = {
 							}).catch((error) => console.log(error));
 					}
 
-					setUserInfo(0, user, endWaveData, null).catch();
+					setUserInfo(process.env.sheetIndexWaveHosts, user, endWaveData, null).catch();
 
 				}
 
@@ -54,7 +54,7 @@ module.exports = {
 					message.channel.send(`**✨WAVE ${thisWave} SENDING INVITES✨**\n\n**DON’T LEAVE WHEN THE HOST DOES.**\n_LEAVE ONLY AT 10 SECONDS IF YOU HAVE LESS PEOPLE THAN RECOMMENDED._`);
 
 					if(userInfo.hosting) {
-						setUserInfo(0, user, 'currentwave', thisWave).then().catch();
+						setUserInfo(process.env.sheetIndexWaveHosts, user, 'currentwave', thisWave).then().catch();
 					}
 				}
 
@@ -63,7 +63,7 @@ module.exports = {
 				message.channel.send(`**✨WAVE ${amount} SENDING INVITES✨**\n\n**DON’T LEAVE WHEN THE HOST DOES.**\n_LEAVE ONLY AT 10 SECONDS IF YOU HAVE LESS PEOPLE THAN RECOMMENDED._`);
 
 				if(userInfo.hosting) {
-					setUserInfo(0, user, 'currentwave', thisWave).then().catch();
+					setUserInfo(process.env.sheetIndexWaveHosts, user, 'currentwave', thisWave).then().catch();
 				}
 			}
 		});

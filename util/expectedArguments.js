@@ -1,6 +1,6 @@
 module.exports = function expectedArguments(message, commandName, noPrefix, command, args) {
 
-	// If the command doesn't have a set amount of args it's expecting then return what was passed. 
+	// If the command doesn't have a set amount of args it's expecting then return what was passed.
 	if (!command.expectedArgs && command.args) {
 		return args;
 	}

@@ -6,6 +6,7 @@ module.exports = {
 	description: 'Set information about a wavehost. Only accessible by mod or the actual wavehost.',
 	args: true,
 	cooldown: 5,
+	roles: ['rolewavehost', 'roleadmin'],
 	expectedArgs: 1,
 	validArgs: [
 		{
@@ -50,7 +51,7 @@ module.exports = {
 		if(data == 'timer') {
 			value = ms(value);
 		}
-		getUserInfo(0, user, data).then((userInfo) => {
+		getUserInfo(process.env.sheetIndexWaveHosts, user, data).then((userInfo) => {
 
 			if(!userInfo) {
 				const newUser = {
@@ -67,7 +68,7 @@ module.exports = {
 					last: '**Last Wave, please don\'t forget to delete me!**',
 				};
 
-				setUserInfo(0, user, newUser, null, true).then((response) => {
+				setUserInfo(process.env.sheetIndexWaveHosts, user, newUser, null, true).then((response) => {
 					if(response) {
 						message.channel.send(`New wavehost ${user.username} added! Next set your rules by using \`${process.env.prefix}set rules`);
 					}
@@ -78,7 +79,7 @@ module.exports = {
 			}
 			else {
 
-				setUserInfo(0, user, data, value)
+				setUserInfo(process.env.sheetIndexWaveHosts, user, data, value)
 					.then((response) => {
 						if(response) {
 							message.channel.send(
