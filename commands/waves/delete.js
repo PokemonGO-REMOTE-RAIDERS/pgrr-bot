@@ -8,14 +8,14 @@ module.exports = {
 	roles: ['rolewavehost'],
 	execute(message) {
 		const user = message.author;
-		getUserInfo(process.env.sheetIndexWaveHosts, user, 'tcmessageid')
+		getUserInfo(process.env.sheetWaveHosts, user, 'tcmessageid')
 			.then((response) => {
 				message.channel.messages.fetch(response)
 					.then((rsp) => {
 						rsp.delete();
 						rsp.channel.send('Trainer Code Deleted');
 
-						setUserInfo(process.env.sheetIndexWaveHosts, user, 'tcmessageid', 0, false).catch();
+						setUserInfo(process.env.sheetWaveHosts, user, 'tcmessageid', 0, false).catch();
 
 					})
 					.catch((error) => console.log(error));

@@ -8,6 +8,7 @@ module.exports = function expectedArguments(message, commandName, noPrefix, comm
 	let i;
 	const expectedArgs = [];
 	let content = message.content;
+	let mention = '';
 
 	// If this is a prefixed command, slice off the first char
 	if(!noPrefix) {
@@ -21,6 +22,7 @@ module.exports = function expectedArguments(message, commandName, noPrefix, comm
 	for(i = 0; i + 1 <= command.expectedArgs; i++) {
 
 		const currentArg = String(args[i]);
+
 		// push an arg if it is expected.
 		expectedArgs.push(args[i]);
 
@@ -31,6 +33,19 @@ module.exports = function expectedArguments(message, commandName, noPrefix, comm
 		expectedArgs['content'] = content;
 	}
 
+	for(const arg of args) {
+		const currentArg = String(arg);
+
+		if (currentArg.startsWith('<@') && currentArg.endsWith('>')) {
+			mention = currentArg.slice(2, -1);
+			if (mention.startsWith('!')) {
+				mention = mention.slice(1);
+			}
+			expectedArgs['mention'] = mention;
+		}
+	}
+
+	console.log(expectedArgs);
 	return expectedArgs;
 
 };

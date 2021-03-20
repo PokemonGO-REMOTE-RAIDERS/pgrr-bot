@@ -1,6 +1,6 @@
 const setUserInfo = require('../../util/setUserInfo.js');
-const ms = require('ms');
 const getUserInfo = require('../../util/getUserInfo.js');
+const ms = require('ms');
 module.exports = {
 	name: 'set',
 	description: 'Set information about a wavehost. Only accessible by mod or the actual wavehost.',
@@ -43,21 +43,21 @@ module.exports = {
 		},
 	],
 	execute(message, args) {
+		(async function() {
+			const data = args[0];
+			let value = args['content'];
+			const user = message.author;
+			const userInfo = await getUserInfo(process.env.sheetWaveHosts, user, 'row').catch();
 
-		const data = args[0];
-		let value = args['content'];
-		const user = message.author;
-
-		if(data == 'timer') {
-			value = ms(value);
-		}
-		getUserInfo(process.env.sheetIndexWaveHosts, user, data).then((userInfo) => {
+			if(data == 'timer') {
+				value = ms(value);
+			}
 
 			if(!userInfo) {
 				const newUser = {
 					userid: user.id,
-					ign: user.username,
-					tc: value,
+					ign: 0,
+					tc: 0,
 					hosts: 0,
 					maxwaves: 0,
 					timer: 0,
@@ -66,12 +66,21 @@ module.exports = {
 					failed: '**The wave has failed, please type "failed" below if you were in that wave. Delete me as a friend and readd me please.  Trainer code will show for 10 seconds.**',
 					closed: '**This wave is closed, I will not accept anymore invites.**',
 					last: '**Last Wave, please don\'t forget to delete me!**',
+					rules: 'not set',
 				};
 
-				setUserInfo(process.env.sheetIndexWaveHosts, user, newUser, null, true).then((response) => {
-					if(response) {
-						message.channel.send(`New wavehost ${user.username} added! Next set your rules by using \`${process.env.prefix}set rules`);
+				newUser[data] = value;
+
+				setUserInfo(process.env.sheetWaveHosts, user, newUser, null, true).then(() => {
+
+					if(data == 'ign') {
+						message.channel.send(`<@${user.id}> You've been added as wavehost! Next set your trainer code by using \`${process.env.prefix}set tc\``);
 					}
+					else if(data == 'tc') {
+						message.channel.send(`<@${user.id}> You've been added as wavehost! Next set your in game name by using \`${process.env.prefix}set ign\``);
+					}
+
+
 				}).catch((error) => {
 					message.channel.send(`Error trying to add new wavehost ${user.username}, please try again later or contact a manager!`);
 					console.log(error);
@@ -79,7 +88,7 @@ module.exports = {
 			}
 			else {
 
-				setUserInfo(process.env.sheetIndexWaveHosts, user, data, value)
+				setUserInfo(process.env.sheetWaveHosts, user, data, value)
 					.then((response) => {
 						if(response) {
 							message.channel.send(
@@ -87,15 +96,17 @@ module.exports = {
 									embed: {
 										color: process.env.color,
 										author: {
-											name: `${user.username} Profile Updated`,
+											name: `${user.username} WaveHost Profile Updated`,
 											icon_url: process.env.icon,
 										},
-										footer: {
-											name: 'PokémonGO Remote Raiders',
-											icon_url: process.env.icon,
-										},
-										title: `Information: ${data}`,
-										description: value,
+										title: `${data} updated to:`,
+										description: args['content'],
+										fields: [
+											{
+												name: `${data} was:`,
+												value: userInfo[data],
+											},
+										],
 									},
 								});
 						}
@@ -105,6 +116,6 @@ module.exports = {
 						console.log(error);
 					});
 			}
-		}).catch();
+		})();
 	},
 };

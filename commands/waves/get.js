@@ -4,7 +4,7 @@ module.exports = {
 	name: 'get',
 	description: 'Get information about a wavehost. Only accessible by the actual wavehost.',
 	args: true,
-	expectedArgs: 1,
+	expectedArgs: 2,
 	roles: ['rolewavehost'],
 	cooldown: 5,
 	validArgs: [
@@ -55,8 +55,15 @@ module.exports = {
 	],
 	execute(message, args) {
 		const data = args[0];
-		const user = message.author;
-		getUserInfo(process.env.sheetIndexWaveHosts, user, data)
+		let user;
+		if(args['mention']) {
+			user = {	id: args['mention'] };
+		}
+		else {
+			user = message.author;
+		}
+
+		getUserInfo(process.env.sheetWaveHosts, user, data)
 			.then((response) => {
 				if(response) {
 					if(data == 'timer') {

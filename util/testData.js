@@ -1,7 +1,7 @@
 GoogleSpreadsheetRow {
 	_sheet: GoogleSpreadsheetWorksheet {
 	  _spreadsheet: GoogleSpreadsheet {
-	    spreadsheetId: '1Ueq5Eh4aHcmabwmBQsvMt-xnsGgGC8OSw7a_hSI4ruk',
+	    spreadsheet: '1Ueq5Eh4aHcmabwmBQsvMt-xnsGgGC8OSw7a_hSI4ruk',
 	    authMode: 'JWT',
 	    _rawSheets: [Object],
 	    _rawProperties: [Object],
@@ -9,7 +9,7 @@ GoogleSpreadsheetRow {
 	    jwtClient: [JWT]
 	  },
 	  _rawProperties: {
-	    sheetId: 0,
+	    sheet: 0,
 	    title: 'WaveHosts',
 	    index: 0,
 	    sheetType: 'GRID',

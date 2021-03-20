@@ -3,13 +3,11 @@
  * @param {*} user The id of the user you're looking up.
  * @param {*} data which data do you need to return from that user.
  */
-module.exports = async function getUserInfo(sheetIndex, user, data) {
+
+module.exports = async function getHistoricalWaves(user) {
 
 	// Setup
-	this.sheetIndex = sheetIndex;
 	this.user = user;
-	this.data = data;
-	let response;
 
 	// Google Sheets
 	const { GoogleSpreadsheet } = require('google-spreadsheet');
@@ -22,29 +20,23 @@ module.exports = async function getUserInfo(sheetIndex, user, data) {
 
 	await doc.loadInfo();
 
-	const sheet = doc.sheetsById[this.sheetIndex];
+	const sheet = doc.sheetsById[process.env.sheetWaveHistory];
 	const rows = await sheet.getRows();
 
 
-	let userInfo = false;
+	const waveHistory = [];
 	for(const row of rows) {
 		if(row.userid == this.user.id) {
-			userInfo = row;
+			waveHistory.push(row);
 		}
 	}
 
-	if(!userInfo) {
+	if(!waveHistory) {
 		return false;
 	}
-	else if(this.data == 'row') {
-		response = userInfo;
-	}
 	else {
-		response = userInfo[data];
+		return waveHistory;
 	}
-	if(!response) {
-		response = `No data, please use \`${process.env.prefix}set\``;
-	}
-	return await response;
+
 
 };

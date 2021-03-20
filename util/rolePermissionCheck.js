@@ -12,7 +12,7 @@ module.exports = async function rolePermissionCheck(message, command) {
 
 	await doc.loadInfo();
 
-	const sheet = doc.sheetsByIndex[process.env.sheetIndexConfig];
+	const sheet = doc.sheetsById[process.env.sheetConfig];
 	const rows = await sheet.getRows();
 
 	const allowedRoles = [];

@@ -35,6 +35,10 @@ module.exports = function validateArguments(message, command, args) {
 		validArgs['content'] = args['content'];
 	}
 
+	if(args['mention']) {
+		validArgs['mention'] = args['mention'];
+	}
+
 	// Return an array of valid args.
 	return validArgs;
 

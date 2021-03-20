@@ -4,14 +4,14 @@ module.exports = {
 	name: 'host',
 	description: 'Post a host\'s card',
 	expectedArgs: 0,
-	cooldown: 600,
+	// cooldown: 600,
 	roles: ['rolewavehost'],
 	args: false,
 	execute(message) {
 		(async function() {
 			const data = 'row';
 			const user = message.author;
-			const userInfo = await getUserInfo(process.env.sheetIndexWaveHosts, user, data);
+			const userInfo = await getUserInfo(process.env.sheetWaveHosts, user, data).catch();
 
 			if(!userInfo || !userInfo.tc || !userInfo.ign) {
 				return message.reply('Please set a WaveHost profile.  You can start with set ign');
@@ -62,21 +62,22 @@ module.exports = {
 
 			message.channel.send(userInfo.tc).then((sent) => {
 
-				const userInfos = [
-					{ data: 'tcmessageid', value: sent.id },
-					{ data: 'hosting', value: true },
-					{ data: 'hosts', value: parseInt(userInfo.hosts) + 1 },
-					{ data: 'currentwave', value: parseInt(0) },
+				const startWaveData = [
+					{ data: 'tcmessageid', 	value: sent.id },
+					{ data: 'hosting', 		value: true },
+					{ data: 'fails', 		value: parseInt(0) },
+					{ data: 'currentwave', 	value: parseInt(0) },
+					{ data: 'waveid', 		value: sent.id },
+					{ data: 'starttime', 	value: new Date() },
 				];
 
-				setUserInfo(process.env.sheetIndexWaveHosts, user, userInfos, null);
-
-				function deleteMsg() {
-					sent.delete();
-				}
+				setUserInfo(process.env.sheetWaveHosts, user, startWaveData, null).catch();
 
 				if(userInfo.timer > 0) {
-					setTimeout(deleteMsg, userInfo.timer);
+					setTimeout(() => {
+						sent.delete();
+						setUserInfo(process.env.sheetWaveHosts, user, 'tcmessageid', '').catch();
+					}, userInfo.timer);
 				}
 			});
 

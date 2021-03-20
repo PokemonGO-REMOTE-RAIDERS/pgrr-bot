@@ -106,7 +106,7 @@ client.on('message', message => {
 			return message.channel.send(reply);
 		}
 
-		args = expectedArguments(message, commandName, noPrefix, command, args);
+		args = expectedArguments(message, commandName, noPrefix, command, args, client);
 
 		const validArgs = validateArguments(message, command, args);
 
