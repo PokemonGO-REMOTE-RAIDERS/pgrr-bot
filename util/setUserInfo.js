@@ -43,7 +43,7 @@ module.exports = async function setUserInfo(sheetId, user, data, value, newRow) 
 		}
 	}
 
-	console.log(userInfo);
+	// console.log(userInfo);
 
 	// New User
 	if(this.newRow && isObject(this.data)) {
@@ -74,7 +74,7 @@ module.exports = async function setUserInfo(sheetId, user, data, value, newRow) 
 	else if(userInfo) {
 
 		userInfo[this.data] = this.value;
-		console.log(this.value);
+		// console.log(this.value);
 		await userInfo.save();
 
 		response = true;

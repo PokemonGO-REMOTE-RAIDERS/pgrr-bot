@@ -26,8 +26,8 @@ module.exports = {
 				return;
 			}
 
-			//console.log(userInfo);
-			console.log(wavehistory);
+			// console.log(userInfo);
+			// console.log(wavehistory);
 		}());
 	},
 };

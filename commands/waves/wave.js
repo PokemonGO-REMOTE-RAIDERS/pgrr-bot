@@ -1,8 +1,24 @@
 const getUserInfo = require('../../util/getUserInfo');
 const setUserInfo = require('../../util/setUserInfo');
+const ms = require('ms');
 
-function waveMessage(wave) {
-	return `**✨WAVE ${wave} SENDING INVITES✨**\n\n**DON’T LEAVE WHEN THE HOST DOES.**\n_LEAVE ONLY AT 10 SECONDS IF YOU HAVE LESS PEOPLE THAN RECOMMENDED._`;
+function waveMessage(wave, userInfo) {
+	const embed = {
+		color: process.env.color,
+		title: `**✨Wave ${wave} SENDING INVITES!✨**`,
+		description: 'DON’T LEAVE WHEN THE HOST DOES\n\n_LEAVE ONLY AT 10 SECONDS IF YOU HAVE LESS PEOPLE THAN RECOMMENDED._',
+		author: {
+			name: process.env.botname,
+			icon_url: process.env.boticon,
+		},
+		timestamp: new Date(),
+	};
+
+	if(userInfo) {
+		embed['footer'] = { text: `Invite coming from ${userInfo.ign}` };
+	}
+
+	return embed;
 }
 
 module.exports = {
@@ -19,14 +35,16 @@ module.exports = {
 			const userInfo = await getUserInfo(process.env.sheetWaveHosts, user, 'row');
 
 			if(!userInfo) {
-				return message.channel.send(waveMessage(wave));
+				return message.channel.send({ embded: waveMessage(wave, userInfo) });
 			}
 			else if(!userInfo.hosting) {
-				return message.channel.send(waveMessage(wave));
+				return message.channel.send({ embded: waveMessage(wave, userInfo) });
 			}
 
-			// Set the wave that's being set.
+			const now = new Date();
+			const duration = now - Date.parse(userInfo.starttime);
 			const thisWave = parseInt(userInfo.currentwave) + 1;
+
 			const resetWaveData = [
 				{ data: 'hosting', 		value: false },
 				{ data: 'currentwave', 	value: 0 },
@@ -34,8 +52,10 @@ module.exports = {
 				{ data: 'tcmessageid', 	value: '' },
 				{ data: 'starttime',	value: '' },
 				{ data: 'waveid',		value: '' },
+				{ data: 'boss',		value: '' },
 				{ data: 'hosts', 		value: parseInt(userInfo.hosts) + 1 },
 			];
+
 
 			// Log all data to WaveHistory
 			const history = {
@@ -43,9 +63,10 @@ module.exports = {
 				userid: 		userInfo.userid,
 				ign: 		userInfo.ign,
 				starttime: 	userInfo.starttime,
-				endtime:		new Date(),
+				endtime:		now,
+				duration:		ms(duration, { long: true }),
 				channel:		message.channel.id,
-				boss:		'N/A Yet',
+				boss:		userInfo.boss,
 				waves:		userInfo.currentwave,
 				fails:		userInfo.fails,
 			};
@@ -65,31 +86,89 @@ module.exports = {
 				});
 				break;
 
-
-			case 'next':
-				message.channel.send(waveMessage(thisWave));
-				setUserInfo(process.env.sheetWaveHosts, user, 'currentwave', thisWave).catch();
-				break;
-
-
 			case 'last':
-				message.channel.send(waveMessage(thisWave));
+			case 'final':
+				message.channel.send({ embed: waveMessage(thisWave, userInfo) });
 				message.channel.send(userInfo.last);
 				setUserInfo(process.env.sheetWaveHosts, user, 'currentwave', thisWave).catch();
 				break;
 
 
+			case 'close':
 			case 'closed':
 			case 'end':
+
+				// Send Wave Record if reached
 				if(parseInt(userInfo.maxwaves) < userInfo.currentwave) {
 					resetWaveData.push({ data: 'maxwaves', value: userInfo.currentwave });
-					message.channel.send(`Congratulations <@${user.id}>, you beat your old wave record of ${userInfo.maxwaves}.  Your new record is ${userInfo.currentwave} waves!`);
+					message.channel.send({ embed: {
+						color: process.env.color,
+						title: `Congratulations ${userInfo.ign}, you set a personal best!`,
+						author: {
+							name: process.env.botname,
+							icon_url: process.env.boticon,
+						},
+						fields: [
+							{
+								name: 'Previous Record',
+								value: userInfo.maxwaves,
+								inline: true,
+							},
+							{
+								name: 'New Record',
+								value: userInfo.currentwave,
+								inline: true,
+							},
+						],
+						timestamp: now,
+					} });
 				}
 
-				setUserInfo(process.env.sheetWaveHistory, user, history, null, true).then(() => {
-					setUserInfo(process.env.sheetWaveHosts, user, resetWaveData, null).catch();
-				}).catch();
 
+				// Send Wave Summary
+				message.channel.send({ embed: {
+					color: process.env.color,
+					title: 'WAVE HOST HAS BEEN CLOSED!',
+					description: userInfo.closed + `\n\n================ \n\nSummary for ${userInfo.ign} below:`,
+					author: {
+						name: process.env.botname,
+						icon_url: process.env.boticon,
+					},
+					fields: [
+						{
+							name: 'Host Duration',
+							value: history.duration,
+							inline: true,
+						},
+						{
+							name: 'Boss',
+							value: history.boss,
+							inline: true,
+						},
+						{
+							name: 'Host #',
+							value: parseInt(userInfo.hosts) + 1,
+							inline: true,
+						},
+						{
+							name: 'Completed Waves',
+							value: history.waves,
+							inline: true,
+						},
+						{
+							name: 'Waves Failed',
+							value: history.fails,
+							inline: true,
+						},
+					],
+					timestamp: now,
+					// footer: {
+					// 	text: 'If you have questions, please tag @manager',
+					// },
+				},
+				});
+
+				// Delete Trainer Code if it's still there.
 				if(userInfo.tcmessageid) {
 					message.channel.messages.fetch(userInfo.tcmessageid)
 						.then((tcmessage) => {
@@ -98,10 +177,23 @@ module.exports = {
 						}).catch((error) => console.log(error));
 				}
 
+				// Save all data to History
+				setUserInfo(process.env.sheetWaveHistory, user, history, null, true).then(() => {
+
+					// Reset wavehost sheet
+					setUserInfo(process.env.sheetWaveHosts, user, resetWaveData, null).catch();
+
+				}).catch();
+
+				break;
+
+			case 'next':
+				message.channel.send({ embed: waveMessage(thisWave, userInfo) });
+				setUserInfo(process.env.sheetWaveHosts, user, 'currentwave', thisWave).catch();
 				break;
 
 			default:
-				message.channel.send(waveMessage(wave));
+				message.channel.send({ embed: waveMessage(thisWave, userInfo) });
 				setUserInfo(process.env.sheetWaveHosts, user, 'currentwave', thisWave).catch();
 				break;
 

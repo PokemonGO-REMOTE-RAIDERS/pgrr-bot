@@ -7,10 +7,13 @@ module.exports = {
 	// cooldown: 600,
 	roles: ['rolewavehost'],
 	args: false,
-	execute(message) {
+	execute(message, args) {
+
 		(async function() {
 			const data = 'row';
 			const user = message.author;
+			const role = message.guild.roles.cache.get(args['role']);
+
 			const userInfo = await getUserInfo(process.env.sheetWaveHosts, user, data).catch();
 
 			if(!userInfo || !userInfo.tc || !userInfo.ign) {
@@ -19,8 +22,8 @@ module.exports = {
 
 			const embed = {
 				color: '#f1609f',
-				title: `Wavehost: ${userInfo.ign}`,
-				description: `<@&818325677492797460> Hop on board and ride the wave with ${userInfo.ign}`,
+				title: `New wave with ${userInfo.ign}!`,
+				description: `<@&${process.env.waveriders}> it's time to ride the wave!`,
 				author: {
 					name: 'PokémonGO Remote Raiders',
 					icon_url: 'https://raw.githubusercontent.com/PokemonGO-REMOTE-RAIDERS/pgrr-triple-threat/main/assets/pgrr-logo.png',
@@ -34,6 +37,11 @@ module.exports = {
 					{
 						name: 'Location',
 						value: userInfo.location ? userInfo.location : 'Not set',
+						inline: true,
+					},
+					{
+						name: 'Boss',
+						value: role ? role.name : 'Not set',
 						inline: true,
 					},
 					{
@@ -58,6 +66,11 @@ module.exports = {
 				},
 			};
 
+			if(role) {
+				embed.description = `<@&${process.env.waveriders}>, it's time to ride the wave and fight <@&${role.id}>!`;
+			}
+
+
 			message.channel.send({ embed: embed });
 
 			message.channel.send(userInfo.tc).then((sent) => {
@@ -70,6 +83,10 @@ module.exports = {
 					{ data: 'waveid', 		value: sent.id },
 					{ data: 'starttime', 	value: new Date() },
 				];
+
+				if(role) {
+					startWaveData.push({ data: 'boss', value: role.name });
+				}
 
 				setUserInfo(process.env.sheetWaveHosts, user, startWaveData, null).catch();
 

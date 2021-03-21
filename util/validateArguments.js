@@ -38,6 +38,9 @@ module.exports = function validateArguments(message, command, args) {
 	if(args['mention']) {
 		validArgs['mention'] = args['mention'];
 	}
+	if(args['role']) {
+		validArgs['role'] = args['role'];
+	}
 
 	// Return an array of valid args.
 	return validArgs;

@@ -40,12 +40,16 @@ module.exports = function expectedArguments(message, commandName, noPrefix, comm
 			mention = currentArg.slice(2, -1);
 			if (mention.startsWith('!')) {
 				mention = mention.slice(1);
+				expectedArgs['mention'] = mention;
 			}
-			expectedArgs['mention'] = mention;
+			if (mention.startsWith('&')) {
+				mention = mention.slice(1);
+				expectedArgs['role'] = mention;
+			}
 		}
 	}
 
-	console.log(expectedArgs);
+	// console.log(args);
 	return expectedArgs;
 
 };

@@ -56,17 +56,18 @@ module.exports = {
 			if(!userInfo) {
 				const newUser = {
 					userid: user.id,
-					ign: 0,
-					tc: 0,
+					ign: 'not set',
+					tc: 'not set',
+					location: 'not set',
+					failed: 'not set',
+					closed: 'not set',
+					last: 'not set',
+					rules: 'not set',
 					hosts: 0,
 					maxwaves: 0,
 					timer: 0,
 					hosting: false,
 					currentwave: 0,
-					failed: '**The wave has failed, please type "failed" below if you were in that wave. Delete me as a friend and readd me please.  Trainer code will show for 10 seconds.**',
-					closed: '**This wave is closed, I will not accept anymore invites.**',
-					last: '**Last Wave, please don\'t forget to delete me!**',
-					rules: 'not set',
 				};
 
 				newUser[data] = value;
