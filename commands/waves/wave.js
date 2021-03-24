@@ -2,14 +2,14 @@ const getUserInfo = require('../../util/getUserInfo');
 const setUserInfo = require('../../util/setUserInfo');
 const ms = require('ms');
 
-function waveMessage(wave, userInfo) {
+function waveMessage(wave, userInfo, client) {
 	const embed = {
-		color: process.env.color,
+		color: client.config.embedColor,
 		title: `**✨Wave ${wave} SENDING INVITES!✨**`,
 		description: 'DON’T LEAVE WHEN THE HOST DOES\n\n_LEAVE ONLY AT 10 SECONDS IF YOU HAVE LESS PEOPLE THAN RECOMMENDED._',
 		author: {
-			name: process.env.botname,
-			icon_url: process.env.boticon,
+			name: client.config.botName,
+			icon_url: client.config.botIcon,
 		},
 		timestamp: new Date(),
 	};
@@ -27,7 +27,7 @@ module.exports = {
 	expectedArgs: 1,
 	cooldown: 2,
 	noPrefix: true,
-	execute(message, args) {
+	execute(message, args, client) {
 		(async function() {
 
 			const wave = args[0];
@@ -35,10 +35,10 @@ module.exports = {
 			const userInfo = await getUserInfo(process.env.sheetWaveHosts, user, 'row');
 
 			if(!userInfo) {
-				return message.channel.send({ embded: waveMessage(wave, userInfo) });
+				return message.channel.send({ embed: waveMessage(wave, userInfo, client) });
 			}
 			else if(!userInfo.hosting) {
-				return message.channel.send({ embded: waveMessage(wave, userInfo) });
+				return message.channel.send({ embed: waveMessage(wave, userInfo, client) });
 			}
 
 			const now = new Date();
@@ -94,7 +94,7 @@ module.exports = {
 
 			case 'last':
 			case 'final':
-				message.channel.send({ embed: waveMessage(thisWave, userInfo) });
+				message.channel.send({ embed: waveMessage(thisWave, userInfo, client) });
 				message.channel.send(userInfo.last);
 				setUserInfo(process.env.sheetWaveHosts, user, 'currentwave', thisWave).catch();
 				break;
@@ -108,11 +108,11 @@ module.exports = {
 				if(parseInt(userInfo.maxwaves) < userInfo.currentwave) {
 					resetWaveData.push({ data: 'maxwaves', value: userInfo.currentwave });
 					message.channel.send({ embed: {
-						color: process.env.color,
+						color: client.config.embedColor,
 						title: `Congratulations ${userInfo.ign}, you set a personal best!`,
 						author: {
-							name: process.env.botname,
-							icon_url: process.env.boticon,
+							name: client.config.botName,
+							icon_url: client.config.botIcon,
 						},
 						fields: [
 							{
@@ -133,12 +133,12 @@ module.exports = {
 
 				// Send Wave Summary
 				message.channel.send({ embed: {
-					color: process.env.color,
+					color: client.config.embedColor,
 					title: 'WAVE HOST HAS BEEN CLOSED!',
 					description: userInfo.closed,
 					author: {
-						name: process.env.botname,
-						icon_url: process.env.boticon,
+						name: client.config.botName,
+						icon_url: client.config.botIcon,
 					},
 					fields: [
 						{
@@ -199,12 +199,12 @@ module.exports = {
 				break;
 
 			case 'next':
-				message.channel.send({ embed: waveMessage(thisWave, userInfo) });
+				message.channel.send({ embed: waveMessage(thisWave, userInfo, client) });
 				setUserInfo(process.env.sheetWaveHosts, user, 'currentwave', thisWave).catch();
 				break;
 
 			default:
-				message.channel.send({ embed: waveMessage(thisWave, userInfo) });
+				message.channel.send({ embed: waveMessage(thisWave, userInfo, client) });
 				setUserInfo(process.env.sheetWaveHosts, user, 'currentwave', thisWave).catch();
 				break;
 

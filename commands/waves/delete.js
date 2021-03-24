@@ -5,7 +5,7 @@ module.exports = {
 	aliases: [ 'delete', 'tc', 'trainercode'],
 	description: 'Delete a tc that was just posted by PGRR bot',
 	cooldown: 5,
-	roles: ['rolewavehost'],
+	roles: ['roleWaveHost'],
 	execute(message) {
 		const user = message.author;
 		getUserInfo(process.env.sheetWaveHosts, user, 'tcmessageid')

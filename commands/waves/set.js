@@ -6,7 +6,7 @@ module.exports = {
 	description: 'Set information about a wavehost. Only accessible by mod or the actual wavehost.',
 	args: true,
 	cooldown: 5,
-	roles: ['rolewavehost', 'roleadmin'],
+	roles: ['roleWaveHost', 'roleAdmin'],
 	expectedArgs: 1,
 	validArgs: [
 		{
@@ -46,7 +46,7 @@ module.exports = {
 			aliases: ['lasts'],
 		},
 	],
-	execute(message, args) {
+	execute(message, args, client) {
 		(async function() {
 			const data = args[0];
 			let value = args['content'];
@@ -80,10 +80,10 @@ module.exports = {
 				setUserInfo(process.env.sheetWaveHosts, user, newUser, null, true).then(() => {
 
 					if(data == 'ign') {
-						message.channel.send(`<@${user.id}> You've been added as wavehost! Next set your trainer code by using \`${process.env.prefix}set tc\``);
+						message.channel.send(`<@${user.id}> You've been added as wavehost! Next set your trainer code by using \`${client.config.prefix}set tc\``);
 					}
 					else if(data == 'tc') {
-						message.channel.send(`<@${user.id}> You've been added as wavehost! Next set your in game name by using \`${process.env.prefix}set ign\``);
+						message.channel.send(`<@${user.id}> You've been added as wavehost! Next set your in game name by using \`${client.config.prefix}set ign\``);
 					}
 
 
@@ -100,10 +100,10 @@ module.exports = {
 							message.channel.send(
 								{
 									embed: {
-										color: process.env.color,
+										color: client.config.embedColor,
 										author: {
 											name: `${user.username} WaveHost Profile Updated`,
-											icon_url: process.env.boticon,
+											icon_url: client.config.botIcon,
 										},
 										title: `${data} updated to:`,
 										description: args['content'],

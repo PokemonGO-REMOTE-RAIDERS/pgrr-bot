@@ -1,4 +1,4 @@
-module.exports = function expectedArguments(message, commandName, noPrefix, command, args) {
+module.exports = function expectedArguments(message, commandName, noPrefix, command, args, client) {
 
 	// If the command doesn't have a set amount of args it's expecting then return what was passed.
 	if (!command.expectedArgs && command.args) {
@@ -12,7 +12,7 @@ module.exports = function expectedArguments(message, commandName, noPrefix, comm
 
 	// If this is a prefixed command, slice off the first char
 	if(!noPrefix) {
-		content = content.slice(process.env.prefix.length).trim();
+		content = content.slice(client.config.prefix.length).trim();
 	}
 
 	// Remove the command name from the content

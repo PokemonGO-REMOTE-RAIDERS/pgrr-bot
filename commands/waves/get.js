@@ -6,7 +6,7 @@ module.exports = {
 	description: 'Get information about a wavehost. Only accessible by the actual wavehost.',
 	args: true,
 	expectedArgs: 2,
-	roles: ['rolewavehost'],
+	roles: ['roleWaveHost', 'roleAdmin'],
 	cooldown: 5,
 	validArgs: [
 		{

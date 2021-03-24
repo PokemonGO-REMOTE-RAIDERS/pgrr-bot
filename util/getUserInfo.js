@@ -42,9 +42,7 @@ module.exports = async function getUserInfo(sheetIndex, user, data) {
 	else {
 		response = userInfo[data];
 	}
-	if(!response) {
-		response = `No data, please use \`${process.env.prefix}set\``;
-	}
+
 	return await response;
 
 };

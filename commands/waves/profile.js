@@ -7,7 +7,7 @@ module.exports = {
 	description: 'Get historical information about a wavehost.',
 	aliases: ['wavehost', 'waveprofile'],
 	// args: true,
-	roles: ['rolewavehost', 'roleadmin'],
+	roles: ['roleWaveHost', 'roleAdmin'],
 	cooldown: 5,
 	expectedArgs: 1,
 	validArgs: [
@@ -20,7 +20,7 @@ module.exports = {
 			aliases: ['setting'],
 		},
 	],
-	execute(message, args) {
+	execute(message, args, client) {
 		(async function() {
 			const filter = args[0];
 			const user = checkMentions(message, args);
@@ -33,13 +33,15 @@ module.exports = {
 				return;
 			}
 
+			const userName = user.username ? user.username : user.name;
+
 			const embed = {
-				color: process.env.color,
+				color: client.config.embedColor,
 				author: {
-					name: process.env.botname,
-					icon_url: process.env.boticon,
+					name: client.config.botName,
+					icon_url: client.config.botIcon,
 				},
-				title: `WaveHost Profile: ${user.username}`,
+				title: `WaveHost Profile: ${userName}`,
 			};
 
 			if(filter == 'stats') {

@@ -1,13 +1,14 @@
 const getUserInfo = require('../../util/getUserInfo.js');
 const setUserInfo = require('../../util/setUserInfo.js');
+const processNotifications = require('../../util/processNotifications.js');
 module.exports = {
 	name: 'host',
 	description: 'Post a host\'s card',
 	expectedArgs: 0,
 	// cooldown: 600,
-	roles: ['rolewavehost'],
+	roles: ['roleWaveHost', 'roleAdmin'],
 	args: false,
-	execute(message, args) {
+	execute(message, args, client) {
 
 		(async function() {
 			const data = 'row';
@@ -21,9 +22,9 @@ module.exports = {
 			}
 
 			const embed = {
-				color: '#f1609f',
+				color: client.config.embedColor,
 				title: `New wave with ${userInfo.ign}!`,
-				description: `<@&${process.env.waveriders}> it's time to ride the wave!`,
+				description: 'It\'s time to ride the wave!',
 				author: {
 					name: 'PokémonGO Remote Raiders',
 					icon_url: 'https://raw.githubusercontent.com/PokemonGO-REMOTE-RAIDERS/pgrr-triple-threat/main/assets/pgrr-logo.png',
@@ -66,12 +67,9 @@ module.exports = {
 				},
 			};
 
-			if(role) {
-				embed.description = `<@&${process.env.waveriders}>, it's time to ride the wave and fight <@&${role.id}>!`;
+			const notify = processNotifications(client, 'wbNotifications', role);
 
-				message.channel.send(`<@&${role.id}> <@&${process.env.waveriders}> <@&${process.env.bfraids}>`);
-			}
-
+			message.channel.send(notify);
 
 			message.channel.send({ embed: embed });
 

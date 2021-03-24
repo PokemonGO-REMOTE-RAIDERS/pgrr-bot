@@ -1,4 +1,4 @@
-module.exports = function validateArguments(message, command, args) {
+module.exports = function validateArguments(message, command, args, client) {
 
 	// If this command doesn't have valid args, just return the args that were passed
 	if(!command.validArgs) {
@@ -25,7 +25,7 @@ module.exports = function validateArguments(message, command, args) {
 	// if no valid args are found send a reply to the user.
 	if (validArgs === undefined || validArgs.length == 0) {
 
-		const reply = `The argument(s) you used are invalid, type \`${process.env.prefix}help\` for more information.`;
+		const reply = `The argument(s) you used are invalid, type \`${client.config.prefix}help\` for more information.`;
 		message.channel.send(reply);
 		return false;
 	}
