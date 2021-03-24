@@ -68,6 +68,8 @@ module.exports = {
 
 			if(role) {
 				embed.description = `<@&${process.env.waveriders}>, it's time to ride the wave and fight <@&${role.id}>!`;
+
+				message.channel.send(`<@&${role.id}> <@&${process.env.waveriders}> <@&${process.env.bfraids}>`);
 			}
 
 
@@ -86,6 +88,7 @@ module.exports = {
 
 				if(role) {
 					startWaveData.push({ data: 'boss', value: role.name });
+					startWaveData.push({ data: 'bossid', value: role.id });
 				}
 
 				setUserInfo(process.env.sheetWaveHosts, user, startWaveData, null).catch();

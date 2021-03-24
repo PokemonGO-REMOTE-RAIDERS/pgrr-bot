@@ -49,10 +49,12 @@ module.exports = {
 				{ data: 'hosting', 		value: false },
 				{ data: 'currentwave', 	value: 0 },
 				{ data: 'fails',		value: 0 },
+				{ data: 'notifications',	value: 0 },
 				{ data: 'tcmessageid', 	value: '' },
 				{ data: 'starttime',	value: '' },
 				{ data: 'waveid',		value: '' },
 				{ data: 'boss',		value: '' },
+				{ data: 'bossid',		value: '' },
 				{ data: 'hosts', 		value: parseInt(userInfo.hosts) + 1 },
 			];
 
@@ -69,6 +71,7 @@ module.exports = {
 				boss:		userInfo.boss,
 				waves:		userInfo.currentwave,
 				fails:		userInfo.fails,
+				notifications: userInfo.notifications,
 			};
 
 			switch(wave) {
@@ -76,14 +79,17 @@ module.exports = {
 			case 'fail':
 			case 'fails':
 			case 'failed':
-				message.channel.send(userInfo.failed);
-				message.channel.send(userInfo.tc).then((sent) => {
+				message.channel.send(userInfo.failed ? userInfo.failed : 'Wave Failed');
+				console.log(userInfo.failtc);
+				if(userInfo.failtc == 'TRUE' && userInfo.failtc !== 'FALSE') {
+					message.channel.send(userInfo.tc).then((sent) => {
 
-					setUserInfo(process.env.sheetWaveHosts, user, 'fails', parseInt(userInfo.fails) + 1);
+						setUserInfo(process.env.sheetWaveHosts, user, 'fails', parseInt(userInfo.fails) + 1);
 
-					setTimeout(() => sent.delete(), 10000);
+						setTimeout(() => sent.delete(), 10000);
 
-				});
+					});
+				}
 				break;
 
 			case 'last':
@@ -129,7 +135,7 @@ module.exports = {
 				message.channel.send({ embed: {
 					color: process.env.color,
 					title: 'WAVE HOST HAS BEEN CLOSED!',
-					description: userInfo.closed + `\n\n================ \n\nSummary for ${userInfo.ign} below:`,
+					description: userInfo.closed,
 					author: {
 						name: process.env.botname,
 						icon_url: process.env.boticon,
@@ -158,6 +164,11 @@ module.exports = {
 						{
 							name: 'Waves Failed',
 							value: history.fails,
+							inline: true,
+						},
+						{
+							name: 'Notifications',
+							value: history.notifications,
 							inline: true,
 						},
 					],

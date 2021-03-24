@@ -45,6 +45,7 @@ client.once('ready', () => {
 });
 
 client.on('message', message => {
+	// console.log(message);
 	(async function() {
 		let noPrefix = false;
 		let args = '';

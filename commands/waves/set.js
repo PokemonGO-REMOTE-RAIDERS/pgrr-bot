@@ -34,6 +34,10 @@ module.exports = {
 			aliases: ['fail', 'fails'],
 		},
 		{
+			name: 'failtc',
+			aliases: ['failedtc', 'tcfail', 'trainercodefail', 'showtc'],
+		},
+		{
 			name: 'closed',
 			aliases: ['close', 'closing'],
 		},
@@ -66,6 +70,7 @@ module.exports = {
 					hosts: 0,
 					maxwaves: 0,
 					timer: 0,
+					notifications: 0,
 					hosting: false,
 					currentwave: 0,
 				};
@@ -98,7 +103,7 @@ module.exports = {
 										color: process.env.color,
 										author: {
 											name: `${user.username} WaveHost Profile Updated`,
-											icon_url: process.env.icon,
+											icon_url: process.env.boticon,
 										},
 										title: `${data} updated to:`,
 										description: args['content'],

@@ -1,4 +1,5 @@
 const getUserInfo = require('../../util/getUserInfo.js');
+const checkMentions = require('../../util/checkMentions.js');
 const ms = require('ms');
 module.exports = {
 	name: 'get',
@@ -45,6 +46,10 @@ module.exports = {
 			aliases: ['fail', 'fails'],
 		},
 		{
+			name: 'failtc',
+			aliases: ['failedtc', 'tcfail', 'trainercodefail', 'showtc'],
+		},
+		{
 			name: 'closed',
 			aliases: ['close', 'closing'],
 		},
@@ -55,13 +60,7 @@ module.exports = {
 	],
 	execute(message, args) {
 		const data = args[0];
-		let user;
-		if(args['mention']) {
-			user = {	id: args['mention'] };
-		}
-		else {
-			user = message.author;
-		}
+		const user = checkMentions(message, args);
 
 		getUserInfo(process.env.sheetWaveHosts, user, data)
 			.then((response) => {
