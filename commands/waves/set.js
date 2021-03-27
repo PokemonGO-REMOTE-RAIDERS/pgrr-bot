@@ -72,6 +72,7 @@ module.exports = {
 					timer: 0,
 					notifications: 0,
 					hosting: false,
+					failtc: true,
 					currentwave: 0,
 				};
 
@@ -80,10 +81,10 @@ module.exports = {
 				setUserInfo(process.env.sheetWaveHosts, user, newUser, null, true).then(() => {
 
 					if(data == 'ign') {
-						message.channel.send(`<@${user.id}> You've been added as wavehost! Next set your trainer code by using \`${client.config.prefix}set tc\``);
+						message.channel.send(`<@${user.id}> You've been added as wavehost! Next set your trainer code by using \`${client.config.guild.prefix}set tc\``);
 					}
 					else if(data == 'tc') {
-						message.channel.send(`<@${user.id}> You've been added as wavehost! Next set your in game name by using \`${client.config.prefix}set ign\``);
+						message.channel.send(`<@${user.id}> You've been added as wavehost! Next set your in game name by using \`${client.config.guild.prefix}set ign\``);
 					}
 
 
@@ -100,10 +101,10 @@ module.exports = {
 							message.channel.send(
 								{
 									embed: {
-										color: client.config.embedColor,
+										color: client.config.guild.embedColor,
 										author: {
 											name: `${user.username} WaveHost Profile Updated`,
-											icon_url: client.config.botIcon,
+											icon_url: client.config.guild.botIcon,
 										},
 										title: `${data} updated to:`,
 										description: args['content'],

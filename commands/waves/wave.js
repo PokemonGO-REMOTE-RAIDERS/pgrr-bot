@@ -4,12 +4,12 @@ const ms = require('ms');
 
 function waveMessage(wave, userInfo, client) {
 	const embed = {
-		color: client.config.embedColor,
+		color: client.config.guild.embedColor,
 		title: `**✨Wave ${wave} SENDING INVITES!✨**`,
 		description: 'DON’T LEAVE WHEN THE HOST DOES\n\n_LEAVE ONLY AT 10 SECONDS IF YOU HAVE LESS PEOPLE THAN RECOMMENDED._',
 		author: {
-			name: client.config.botName,
-			icon_url: client.config.botIcon,
+			name: client.config.guild.botName,
+			icon_url: client.config.guild.botIcon,
 		},
 		timestamp: new Date(),
 	};
@@ -108,11 +108,11 @@ module.exports = {
 				if(parseInt(userInfo.maxwaves) < userInfo.currentwave) {
 					resetWaveData.push({ data: 'maxwaves', value: userInfo.currentwave });
 					message.channel.send({ embed: {
-						color: client.config.embedColor,
+						color: client.config.guild.embedColor,
 						title: `Congratulations ${userInfo.ign}, you set a personal best!`,
 						author: {
-							name: client.config.botName,
-							icon_url: client.config.botIcon,
+							name: client.config.guild.botName,
+							icon_url: client.config.guild.botIcon,
 						},
 						fields: [
 							{
@@ -133,12 +133,12 @@ module.exports = {
 
 				// Send Wave Summary
 				message.channel.send({ embed: {
-					color: client.config.embedColor,
+					color: client.config.guild.embedColor,
 					title: 'WAVE HOST HAS BEEN CLOSED!',
 					description: userInfo.closed,
 					author: {
-						name: client.config.botName,
-						icon_url: client.config.botIcon,
+						name: client.config.guild.botName,
+						icon_url: client.config.guild.botIcon,
 					},
 					fields: [
 						{

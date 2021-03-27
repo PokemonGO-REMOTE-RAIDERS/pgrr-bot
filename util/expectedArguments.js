@@ -12,7 +12,7 @@ module.exports = function expectedArguments(message, commandName, noPrefix, comm
 
 	// If this is a prefixed command, slice off the first char
 	if(!noPrefix) {
-		content = content.slice(client.config.prefix.length).trim();
+		content = content.slice(client.config.guild.prefix.length).trim();
 	}
 
 	// Remove the command name from the content

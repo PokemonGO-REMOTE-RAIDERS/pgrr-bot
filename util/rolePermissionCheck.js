@@ -3,7 +3,7 @@ module.exports = async function rolePermissionCheck(client, message, command) {
 	const allowedRoles = [];
 	for(const role of command.roles) {
 
-		const allowedRole = client.config[role];
+		const allowedRole = client.config.guild[role];
 		allowedRole.forEach(e => allowedRoles.push(e));
 
 	}

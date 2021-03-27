@@ -36,10 +36,10 @@ module.exports = {
 			const userName = user.username ? user.username : user.name;
 
 			const embed = {
-				color: client.config.embedColor,
+				color: client.config.guild.embedColor,
 				author: {
-					name: client.config.botName,
-					icon_url: client.config.botIcon,
+					name: client.config.guild.botName,
+					icon_url: client.config.guild.botIcon,
 				},
 				title: `WaveHost Profile: ${userName}`,
 			};

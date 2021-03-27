@@ -17,7 +17,7 @@ module.exports = {
 			const userInfo = await getUserInfo(process.env.sheetWaveHosts, user, data).catch();
 
 			if(!userInfo.hosting) {
-				return message.reply(`Please start a wave host session using \`${client.config.prefix}host @boss\``);
+				return message.reply(`Please start a wave host session using \`${client.config.guild.prefix}host @boss\``);
 			}
 			const bossrole = message.guild.roles.cache.get(userInfo.bossid);
 

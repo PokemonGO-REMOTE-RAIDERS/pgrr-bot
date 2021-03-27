@@ -22,7 +22,7 @@ module.exports = {
 			}
 
 			const embed = {
-				color: client.config.embedColor,
+				color: client.config.guild.embedColor,
 				title: `New wave with ${userInfo.ign}!`,
 				description: 'It\'s time to ride the wave!',
 				author: {

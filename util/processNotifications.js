@@ -1,6 +1,6 @@
 module.exports = function processNotifications(client, commandNotifies, role) {
 
-	const notifications = client.config[commandNotifies];
+	const notifications = client.config.guild[commandNotifies];
 	if(!notifications) {
 		return 'No notifications configured';
 	}

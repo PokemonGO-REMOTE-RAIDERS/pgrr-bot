@@ -52,12 +52,10 @@
 		(async function() {
 
 			// Set config for Prod or Dev.
-			if(client.config.guild === undefined) {
-				client.config = message.guild.id == client.config.production.id ? client.config.production : client.config.development;
-			}
+			client.config.guild = message.guild.id === client.config.production.guild ? client.config.production : client.config.development;
 
 			// Establish Prefix
-			const prefix = client.config.prefix;
+			const prefix = client.config.guild.prefix;
 
 			let noPrefix = false;
 			let args = '';
