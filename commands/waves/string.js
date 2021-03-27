@@ -1,10 +1,9 @@
-const readScreenshot = require('../../util/readScreenshot.js');
 module.exports = {
 	name: 'string',
 	aliases: [ 'ss', 'screenshot', 'stringme', 'stringify'],
 	description: 'Delete a tc that was just posted by PGRR bot',
-	// cooldown: 5,
-	// roles: ['roleWaveHost'],
+	cooldown: 5,
+	roles: ['roleWaveHost', 'roleAdmin'],
 	execute(message) {
 		(async function() {
 
@@ -50,7 +49,7 @@ module.exports = {
 				}
 
 				sequences.then(items => {
-					// console.log(items);
+					console.log(items);
 					// console.log(screenshots);
 					const words = new Array();
 					const text = new Array();
