@@ -50,7 +50,7 @@ module.exports = function expectedArguments(message, commandName, noPrefix, comm
 		}
 	}
 
-	console.log(expectedArgs);
+	// console.log(expectedArgs);
 	return expectedArgs;
 
 };
