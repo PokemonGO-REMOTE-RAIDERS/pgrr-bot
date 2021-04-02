@@ -37,13 +37,14 @@ module.exports = {
 			if(!userInfo) {
 				return message.channel.send({ embed: waveMessage(wave, userInfo, client) });
 			}
-			else if(!userInfo.hosting) {
+			else if(userInfo.hosting == 'FALSE' || userInfo.hosting == false) {
 				return message.channel.send({ embed: waveMessage(wave, userInfo, client) });
 			}
 
 			const now = new Date();
 			const duration = now - Date.parse(userInfo.starttime);
 			const thisWave = parseInt(userInfo.currentwave) + 1;
+			const tcmessageid = userInfo.tcmessageid;
 
 			const resetWaveData = [
 				{ data: 'hosting', 		value: false },
@@ -56,6 +57,7 @@ module.exports = {
 				{ data: 'boss',		value: '' },
 				{ data: 'bossid',		value: '' },
 				{ data: 'hosts', 		value: parseInt(userInfo.hosts) + 1 },
+				{ data: 'channelname', 	value: '' },
 			];
 
 
@@ -68,10 +70,11 @@ module.exports = {
 				endtime:		now,
 				duration:		ms(duration, { long: true }),
 				channel:		message.channel.id,
-				boss:		userInfo.boss,
+				boss:		userInfo.boss ? userInfo.boss : 'Not Set',
 				waves:		userInfo.currentwave,
 				fails:		userInfo.fails,
 				notifications: userInfo.notifications,
+				channelname: 	userInfo.channelname,
 			};
 
 			switch(wave) {
@@ -96,7 +99,21 @@ module.exports = {
 			case 'final':
 				message.channel.send({ embed: waveMessage(thisWave, userInfo, client) });
 				message.channel.send(userInfo.last);
-				setUserInfo(process.env.sheetWaveHosts, user, 'currentwave', thisWave).catch();
+				setUserInfo(process.env.sheetWaveHosts, user, 'currentwave', thisWave).then(() => {
+
+					// Delete Trainer Code if it's still there.
+					if(tcmessageid) {
+						message.channel.messages.fetch(tcmessageid)
+							.then((tcmessage) => {
+								tcmessage.delete();
+								tcmessage.channel.send('Trainer Code Deleted');
+
+								setUserInfo(process.env.sheetWaveHosts, user, 'tcmessageid', '', false).catch();
+
+							}).catch((error) => console.log(error));
+					}
+
+				}).catch();
 				break;
 
 
@@ -109,7 +126,7 @@ module.exports = {
 					resetWaveData.push({ data: 'maxwaves', value: userInfo.currentwave });
 					message.channel.send({ embed: {
 						color: client.config.guild.embedColor,
-						title: `Congratulations ${userInfo.ign}, you set a personal best!`,
+						title: `<a:AnimatedPartyPopperBadge:745495016067301547> <a:AnimatedPartyPopperBadge:745495016067301547> Congratulations ${userInfo.ign}, you set a personal best! <a:AnimatedPartyPopperBadge:745495016067301547> <a:AnimatedPartyPopperBadge:745495016067301547>`,
 						author: {
 							name: client.config.guild.botName,
 							icon_url: client.config.guild.botIcon,
@@ -180,8 +197,8 @@ module.exports = {
 				});
 
 				// Delete Trainer Code if it's still there.
-				if(userInfo.tcmessageid) {
-					message.channel.messages.fetch(userInfo.tcmessageid)
+				if(tcmessageid) {
+					message.channel.messages.fetch(tcmessageid)
 						.then((tcmessage) => {
 							tcmessage.delete();
 							tcmessage.channel.send('Trainer Code Deleted');

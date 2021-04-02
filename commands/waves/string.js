@@ -48,15 +48,18 @@ module.exports = {
 					});
 				}
 
+				// THIS IS TERRIBLE....
+				// TODO: MUST FIX SOMEHOW
 				sequences.then(items => {
+
+					// I hate lintcompile warnings so I'm dumping these.
 					console.log(items);
-					// console.log(screenshots);
+
 					const words = new Array();
 					const text = new Array();
 					screenshots.forEach(s => {
 						s.regions.forEach(r => {
 							r.lines.forEach(l => {
-								// console.log(l.words);
 								words.push(l.words);
 							});
 						});
@@ -73,25 +76,42 @@ module.exports = {
 						'FRIEND',
 						'REQUESTS',
 						'Today',
+						'Yesterday',
 						'Sent',
-						'you',
-						'a',
 						'Friend',
 						'Request',
 						'ACCEPT',
 						'DELETE',
 						'Request!',
-						'*',
+						'oday',
+						'ACCE',
+						'ACCEP',
+						'iend',
+						'toda',
 					];
 
+					console.log(text);
+
 					const regex = new RegExp(/^[A-Za-z0-9]+$/);
-					const difference = text
-						.filter(x => !exclude.includes(x))
-						.filter(x => x.length > 3)
-						.filter(x => regex.test(x));
-					console.log(difference);
-					if(difference.length > 0) {
-						const trainerString = difference.join(', ');
+					const stringNames = text
+						// exlude the exclusion array
+						.filter(elem => !exclude.includes(elem))
+						// exlude anything smaller than 3 charaters
+						.filter(elem => elem.length > 3)
+						// exlude special characters
+						.filter(elem => regex.test(elem))
+						// duplicates check
+						.filter((elem, index, self) => {
+							return index === self.indexOf(elem);
+						});
+
+					if(stringNames.length > 0) {
+						const trainerNames = [];
+						stringNames.forEach(name => {
+							const ign = new String(name);
+							trainerNames.push(ign.toLowerCase().substr(0, 5));
+						});
+						const trainerString = trainerNames.join(', ');
 						message.channel.send(trainerString);
 					}
 

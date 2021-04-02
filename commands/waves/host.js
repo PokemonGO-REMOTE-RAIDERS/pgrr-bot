@@ -21,6 +21,8 @@ module.exports = {
 				return message.reply('Please set a WaveHost profile.  You can start with set ign');
 			}
 
+			// console.log(message.channel);
+
 			const embed = {
 				color: client.config.guild.embedColor,
 				title: `New wave with ${userInfo.ign}!`,
@@ -73,6 +75,8 @@ module.exports = {
 
 			message.channel.send({ embed: embed });
 
+			message.channel.send('Wave Host\'s Trainer Code:');
+
 			message.channel.send(userInfo.tc).then((sent) => {
 
 				const startWaveData = [
@@ -82,6 +86,7 @@ module.exports = {
 					{ data: 'currentwave', 	value: parseInt(0) },
 					{ data: 'waveid', 		value: sent.id },
 					{ data: 'starttime', 	value: new Date() },
+					{ data: 'channelname', 	value: message.channel.name },
 				];
 
 				if(role) {
@@ -97,6 +102,7 @@ module.exports = {
 						setUserInfo(process.env.sheetWaveHosts, user, 'tcmessageid', '').catch();
 					}, userInfo.timer);
 				}
+
 			});
 
 		}());
