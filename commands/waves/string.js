@@ -53,7 +53,7 @@ module.exports = {
 				sequences.then(items => {
 
 					// I hate lintcompile warnings so I'm dumping these.
-					console.log(items);
+					// console.log(items);
 
 					const words = new Array();
 					const text = new Array();
@@ -90,7 +90,7 @@ module.exports = {
 						'toda',
 					];
 
-					console.log(text);
+					// console.log(text);
 
 					const regex = new RegExp(/^[A-Za-z0-9]+$/);
 					const stringNames = text

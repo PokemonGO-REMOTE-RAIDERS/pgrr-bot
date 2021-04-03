@@ -83,7 +83,7 @@ module.exports = {
 			case 'fails':
 			case 'failed':
 				message.channel.send(userInfo.failed ? userInfo.failed : 'Wave Failed');
-				console.log(userInfo.failtc);
+				// console.log(userInfo.failtc);
 				if(userInfo.failtc == 'TRUE' && userInfo.failtc !== 'FALSE') {
 					message.channel.send(userInfo.tc).then((sent) => {
 
