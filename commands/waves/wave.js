@@ -27,6 +27,7 @@ module.exports = {
 	expectedArgs: 1,
 	cooldown: 2,
 	noPrefix: true,
+	roles: ['roleWaveHost', 'roleAdmin'],
 	execute(message, args, client) {
 		(async function() {
 
