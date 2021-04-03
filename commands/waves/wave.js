@@ -24,6 +24,7 @@ function waveMessage(wave, userInfo, client) {
 module.exports = {
 	name: 'wave',
 	description: 'Let a wave know which one is happening next.',
+	config: 'wavehost',
 	expectedArgs: 1,
 	cooldown: 2,
 	noPrefix: true,
@@ -33,7 +34,7 @@ module.exports = {
 
 			const wave = args[0];
 			const user = message.author;
-			const userInfo = await getUserInfo(process.env.sheetWaveHosts, user, 'row');
+			const userInfo = await getUserInfo(process.env.workbookWavehost, process.env.sheetWaveHosts, user, 'row');
 
 			if(!userInfo) {
 				return message.channel.send({ embed: waveMessage(wave, userInfo, client) });
@@ -88,7 +89,7 @@ module.exports = {
 				if(userInfo.failtc == 'TRUE' && userInfo.failtc !== 'FALSE') {
 					message.channel.send(userInfo.tc).then((sent) => {
 
-						setUserInfo(process.env.sheetWaveHosts, user, 'fails', parseInt(userInfo.fails) + 1);
+						setUserInfo(process.env.workbookWavehost, process.env.sheetWaveHosts, user, 'fails', parseInt(userInfo.fails) + 1);
 
 						setTimeout(() => sent.delete(), 10000);
 
@@ -100,7 +101,7 @@ module.exports = {
 			case 'final':
 				message.channel.send({ embed: waveMessage(thisWave, userInfo, client) });
 				message.channel.send(userInfo.last);
-				setUserInfo(process.env.sheetWaveHosts, user, 'currentwave', thisWave).then(() => {
+				setUserInfo(process.env.workbookWavehost, process.env.sheetWaveHosts, user, 'currentwave', thisWave).then(() => {
 
 					// Delete Trainer Code if it's still there.
 					if(tcmessageid) {
@@ -109,7 +110,7 @@ module.exports = {
 								tcmessage.delete();
 								tcmessage.channel.send('Trainer Code Deleted');
 
-								setUserInfo(process.env.sheetWaveHosts, user, 'tcmessageid', '', false).catch();
+								setUserInfo(process.env.workbookWavehost, process.env.sheetWaveHosts, user, 'tcmessageid', '', false).catch();
 
 							}).catch((error) => console.log(error));
 					}
@@ -207,10 +208,10 @@ module.exports = {
 				}
 
 				// Save all data to History
-				setUserInfo(process.env.sheetWaveHistory, user, history, null, true).then(() => {
+				setUserInfo(process.env.workbookWavehost, process.env.sheetWaveHistory, user, history, null, true).then(() => {
 
 					// Reset wavehost sheet
-					setUserInfo(process.env.sheetWaveHosts, user, resetWaveData, null).catch();
+					setUserInfo(process.env.workbookWavehost, process.env.sheetWaveHosts, user, resetWaveData, null).catch();
 
 				}).catch();
 
@@ -218,12 +219,12 @@ module.exports = {
 
 			case 'next':
 				message.channel.send({ embed: waveMessage(thisWave, userInfo, client) });
-				setUserInfo(process.env.sheetWaveHosts, user, 'currentwave', thisWave).catch();
+				setUserInfo(process.env.workbookWavehost, process.env.sheetWaveHosts, user, 'currentwave', thisWave).catch();
 				break;
 
 			default:
 				message.channel.send({ embed: waveMessage(thisWave, userInfo, client) });
-				setUserInfo(process.env.sheetWaveHosts, user, 'currentwave', thisWave).catch();
+				setUserInfo(process.env.workbookWavehost, process.env.sheetWaveHosts, user, 'currentwave', thisWave).catch();
 				break;
 
 			}

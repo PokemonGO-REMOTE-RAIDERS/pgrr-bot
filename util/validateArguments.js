@@ -1,3 +1,14 @@
+/**
+ * 
+ * This function and expectedArguments do similar but different jobs.
+ * I'm considering refactoring them into one function at some point, but for now, they'll stay this way until I have some time to rethink it. 
+ * 
+ * @param {*} message The message object
+ * @param {*} command The command object
+ * @param {*} args The args array
+ * @param {*} client the client object
+ * @returns 
+ */
 module.exports = function validateArguments(message, command, args, client) {
 
 	// If this command doesn't have valid args, just return the args that were passed

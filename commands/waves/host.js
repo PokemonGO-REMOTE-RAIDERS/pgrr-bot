@@ -3,9 +3,9 @@ const setUserInfo = require('../../util/setUserInfo.js');
 const processNotifications = require('../../util/processNotifications.js');
 module.exports = {
 	name: 'host',
-	description: 'Post a host\'s card',
+	description: 'Start a wave hosting session.',
 	expectedArgs: 0,
-	// cooldown: 600,
+	config: 'wavehost',
 	roles: ['roleWaveHost', 'roleAdmin'],
 	args: false,
 	execute(message, args, client) {
@@ -15,7 +15,7 @@ module.exports = {
 			const user = message.author;
 			const role = message.guild.roles.cache.get(args['role']);
 
-			const userInfo = await getUserInfo(process.env.sheetWaveHosts, user, data).catch();
+			const userInfo = await getUserInfo(process.env.workbookWavehost, process.env.sheetWaveHosts, user, data).catch();
 
 			if(!userInfo || !userInfo.tc || !userInfo.ign) {
 				return message.reply('Please set a WaveHost profile.  You can start with set ign');
@@ -94,12 +94,12 @@ module.exports = {
 					startWaveData.push({ data: 'bossid', value: role.id });
 				}
 
-				setUserInfo(process.env.sheetWaveHosts, user, startWaveData, null).catch();
+				setUserInfo(process.env.workbookWavehost, process.env.sheetWaveHosts, user, startWaveData, null).catch();
 
 				if(userInfo.timer > 0) {
 					setTimeout(() => {
 						sent.delete();
-						setUserInfo(process.env.sheetWaveHosts, user, 'tcmessageid', '').catch();
+						setUserInfo(process.env.workbookWavehost, process.env.sheetWaveHosts, user, 'tcmessageid', '').catch();
 					}, userInfo.timer);
 				}
 

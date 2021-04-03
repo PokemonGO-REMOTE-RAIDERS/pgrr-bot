@@ -6,14 +6,15 @@
  * @param {boolean} newRow bool that sets a new row
  */
 // const ms = require('ms');
-module.exports = async function setUserInfo(sheetId, user, data, value, newRow) {
+module.exports = async function setUserInfo(workbookID, sheetID, user, data, value, newRow) {
 
 	// Setup
-	this.sheetId		= sheetId;
+	this.sheetID	= sheetID;
 	this.user 		= user;
 	this.data 		= data;
 	this.value 		= value;
-	this.newRow 		= newRow;
+	this.newRow 	= newRow;
+	this.wookbookID = workbookID;
 
 	const isObject = (obj) => {
 		return Object.prototype.toString.call(obj) === '[object Object]';
@@ -21,7 +22,7 @@ module.exports = async function setUserInfo(sheetId, user, data, value, newRow) 
 
 	// Google Sheets
 	const { GoogleSpreadsheet } = require('google-spreadsheet');
-	const doc = new GoogleSpreadsheet(process.env.GOOGLE_SHEET_ID);
+	const doc = new GoogleSpreadsheet(this.wookbookID);
 
 	await doc.useServiceAccountAuth({
 		client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
@@ -30,7 +31,7 @@ module.exports = async function setUserInfo(sheetId, user, data, value, newRow) 
 
 	await doc.loadInfo();
 
-	const sheet = doc.sheetsById[this.sheetId];
+	const sheet = doc.sheetsById[this.sheetID];
 	const rows = await sheet.getRows();
 
 	// Check to make sure a user exists

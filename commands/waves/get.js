@@ -4,6 +4,7 @@ const ms = require('ms');
 module.exports = {
 	name: 'get',
 	description: 'Get information about a wavehost. Only accessible by the actual wavehost.',
+	config: 'wavehost',
 	args: true,
 	expectedArgs: 2,
 	roles: ['roleWaveHost', 'roleAdmin'],
@@ -62,7 +63,7 @@ module.exports = {
 		const data = args[0];
 		const user = checkMentions(message, args);
 
-		getUserInfo(process.env.sheetWaveHosts, user, data)
+		getUserInfo(process.env.workbookWavehost, process.env.sheetWaveHosts, user, data)
 			.then((response) => {
 				if(response) {
 					if(data == 'timer') {

@@ -4,18 +4,19 @@ module.exports = {
 	name: 'deletetc',
 	aliases: [ 'delete', 'tc', 'trainercode'],
 	description: 'Delete a tc that was just posted by PGRR bot',
+	config: 'wavehost',
 	cooldown: 5,
 	roles: ['roleWaveHost'],
 	execute(message) {
 		const user = message.author;
-		getUserInfo(process.env.sheetWaveHosts, user, 'tcmessageid')
+		getUserInfo(process.env.workbookWavehost, process.env.sheetWaveHosts, user, 'tcmessageid')
 			.then((response) => {
 				message.channel.messages.fetch(response)
 					.then((rsp) => {
 						rsp.delete();
 						rsp.channel.send('Trainer Code Deleted');
 
-						setUserInfo(process.env.sheetWaveHosts, user, 'tcmessageid', 0, false).catch();
+						setUserInfo(process.env.workbookWavehost, process.env.sheetWaveHosts, user, 'tcmessageid', 0, false).catch();
 
 					})
 					.catch((error) => console.log(error));

@@ -13,11 +13,13 @@ module.exports = async function getHistoricalWaves(user) {
 	const { GoogleSpreadsheet } = require('google-spreadsheet');
 	const doc = new GoogleSpreadsheet(process.env.GOOGLE_SHEET_ID);
 
+	// Authorize with Google
 	await doc.useServiceAccountAuth({
 		client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
 		private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
 	});
 
+	// Get workbook information
 	await doc.loadInfo();
 
 	const sheet = doc.sheetsById[process.env.sheetWaveHistory];

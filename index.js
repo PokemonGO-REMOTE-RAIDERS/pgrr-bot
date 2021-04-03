@@ -12,7 +12,13 @@
 
 	// Bot Configuration
 	const botConfig = require('./util/config.js');
-	client.config = await botConfig();
+
+	// Get all of the config files ON LOAD to reduce database checks
+	// NOTE: This means if the config file changes we MUST restart Dynos.
+	client.config = new Array();
+	client.config['wavehost'] = await botConfig(process.env.workbookWavehost, process.env.sheetWaveConfig);
+	client.config['bx'] = await botConfig(process.env.workbookBX, process.env.sheetBXConfig);
+	client.config['cd'] = await botConfig(process.env.workbookCD, process.env.sheetCDConfig);
 
 	// Utilities
 	const validateArguments = require('./util/validateArguments.js');
@@ -51,14 +57,12 @@
 	client.on('message', message => {
 		(async function() {
 
-			// Set config for Prod or Dev.
-			client.config.guild = message.guild.id === client.config.production.guild ? client.config.production : client.config.development;
-
 			// Establish Prefix
-			const prefix = client.config.guild.prefix;
+			client.prefix = process.env.prefix;
 
 			let noPrefix = false;
 			let args = '';
+			// Loop 
 			for (const noPrefixCommand of noPrefixes) {
 				if(noPrefix) { break; }
 				if (message.content.toLowerCase().startsWith(noPrefixCommand)) {
@@ -70,13 +74,13 @@
 				args = message.content.trim().split(/ +/);
 
 			}
-			else if (!message.content.startsWith(prefix) || message.author.bot) {
+			else if (!message.content.startsWith(client.prefix) || message.author.bot) {
 				return;
 			}
 
 			if (!noPrefix) {
 				// args = message.content.slice(prefix.length).trim().split(/ +/);
-				args = message.content.slice(prefix.length).trim().replace(/\n/g, ' ').split(' ');
+				args = message.content.slice(client.prefix.length).trim().replace(/\n/g, ' ').split(' ');
 			}
 
 			const commandName = args.shift().toLowerCase();
@@ -86,6 +90,11 @@
 
 			if (!command) return;
 
+
+			// Set config for Prod or Dev based on the config file that the command uses.
+			if(command.config) {
+				client.config['guild'] = message.guild.id === client.config[command.config].production.guild ? client.config[command.config].production : client.config[command.config].development;
+			}
 
 			if (command.guildOnly && message.channel.type === 'dm') {
 				return message.reply('I can\'t execute that command inside DMs!');

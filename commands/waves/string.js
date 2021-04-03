@@ -2,6 +2,7 @@ module.exports = {
 	name: 'string',
 	aliases: [ 'ss', 'screenshot', 'stringme', 'stringify'],
 	description: 'Delete a tc that was just posted by PGRR bot',
+	config: 'wavehost',
 	cooldown: 5,
 	roles: ['roleWaveHost', 'roleAdmin'],
 	execute(message) {

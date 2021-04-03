@@ -4,6 +4,7 @@ const ms = require('ms');
 module.exports = {
 	name: 'set',
 	description: 'Set information about a wavehost. Only accessible by mod or the actual wavehost.',
+	config: 'wavehost',
 	args: true,
 	cooldown: 5,
 	roles: ['roleWaveHost', 'roleAdmin'],
@@ -51,7 +52,7 @@ module.exports = {
 			const data = args[0];
 			let value = args['content'];
 			const user = message.author;
-			const userInfo = await getUserInfo(process.env.sheetWaveHosts, user, 'row').catch();
+			const userInfo = await getUserInfo(process.env.workbookWavehost, process.env.sheetWaveHosts, user, 'row').catch();
 
 			if(data == 'timer') {
 				value = ms(value);
@@ -78,7 +79,7 @@ module.exports = {
 
 				newUser[data] = value;
 
-				setUserInfo(process.env.sheetWaveHosts, user, newUser, null, true).then(() => {
+				setUserInfo(process.env.workbookWavehost, process.env.sheetWaveHosts, user, newUser, null, true).then(() => {
 
 					if(data == 'ign') {
 						message.channel.send(`<@${user.id}> You've been added as wavehost! Next set your trainer code by using \`${client.config.guild.prefix}set tc\``);
@@ -95,7 +96,7 @@ module.exports = {
 			}
 			else {
 
-				setUserInfo(process.env.sheetWaveHosts, user, data, value)
+				setUserInfo(process.env.workbookWavehost, process.env.sheetWaveHosts, user, data, value)
 					.then((response) => {
 						if(response) {
 							message.channel.send(

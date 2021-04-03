@@ -8,6 +8,7 @@ module.exports = {
 	aliases: ['wavehost', 'waveprofile'],
 	// args: true,
 	roles: ['roleWaveHost', 'roleAdmin'],
+	config: 'wavehost',
 	cooldown: 5,
 	expectedArgs: 1,
 	validArgs: [
@@ -25,7 +26,7 @@ module.exports = {
 			const filter = args[0];
 			const user = checkMentions(message, args);
 
-			const userInfo = await getUserInfo(process.env.sheetWaveHosts, user, 'row');
+			const userInfo = await getUserInfo(process.env.workbookWavehost, process.env.sheetWaveHosts, user, 'row');
 			// const wavehistory = await getHistoricalWaves(user);
 
 			if(!userInfo) {
@@ -87,7 +88,7 @@ module.exports = {
 						inline: true,
 					},
 					{
-						name: 'Show Trainer Code of Failed Wave `failtc`',
+						name: 'Show Trainer Code on Failed Wave? `failtc`',
 						value: userInfo.failtc,
 						inline: true,
 					},
