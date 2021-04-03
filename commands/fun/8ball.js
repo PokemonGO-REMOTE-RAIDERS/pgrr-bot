@@ -2,7 +2,6 @@ module.exports = {
 	name: '8ball',
 	aliases: [ '8balls', 'eightball', '8bal', 'ball'],
 	description: 'Delete a tc that was just posted by PGRR bot',
-	cooldown: 8,
 	noPrefix: true,
 	execute(message) {
 
