@@ -1,6 +1,6 @@
 const ms = require('ms');
 /**
- * 
+ *
  * @param {*} cooldowns The collection of cooldowns
  * @param {*} command The command object
  * @param {*} message The message object
@@ -8,8 +8,8 @@ const ms = require('ms');
  * @returns message
  */
 module.exports = function cooldown(cooldowns, command, message, Discord) {
-	
-	// If the command is not already set in the cooldowns collection, set it. 
+
+	// If the command is not already set in the cooldowns collection, set it.
 	if (!cooldowns.has(command.name)) {
 		cooldowns.set(command.name, new Discord.Collection());
 	}
@@ -31,7 +31,7 @@ module.exports = function cooldown(cooldowns, command, message, Discord) {
 
 		// If it hasn't been longer than the expiration time, throw a warning in channel
 		if (now < expirationTime) {
-			
+
 			const timeLeft = ms(expirationTime - now);
 			message.reply(`please wait ${timeLeft} before reusing the \`${command.name}\` command.`);
 

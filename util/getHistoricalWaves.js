@@ -26,7 +26,7 @@ module.exports = async function getHistoricalWaves(user) {
 	const rows = await sheet.getRows();
 
 
-	const waveHistory = [];
+	const waveHistory = new Array();
 	for(const row of rows) {
 		if(row.userid == this.user.id) {
 			waveHistory.push(row);

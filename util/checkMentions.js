@@ -11,6 +11,5 @@ module.exports = function checkMentions(message, args) {
 		user = message.author;
 	}
 
-	
 	return user;
 };

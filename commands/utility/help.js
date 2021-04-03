@@ -5,7 +5,7 @@ module.exports = {
 	usage: '[command name]',
 	cooldown: 5,
 	execute(message, args, client) {
-		const data = [];
+		const data = new Array();
 		const { commands } = message.client;
 		const prefix = client.config.guild.prefix;
 

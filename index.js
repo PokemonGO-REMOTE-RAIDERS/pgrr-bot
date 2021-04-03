@@ -20,6 +20,8 @@
 	client.config['bx'] 		= await botConfig(process.env.workbookBX, process.env.sheetBXConfig).catch();
 	client.config['cd'] 		= await botConfig(process.env.workbookCD, process.env.sheetCDConfig).catch();
 
+	console.log('Config loaded.');
+
 	// Utilities
 	const validateArguments = require('./util/validateArguments.js');
 	const expectedArguments = require('./util/expectedArguments.js');
@@ -39,7 +41,7 @@
 	}
 
 	// Find all commands that have no prefix.
-	const noPrefixes = [];
+	const noPrefixes = new Array();
 	for(const cmds of client.commands) {
 		if(cmds.find(cmd => cmd.noPrefix)) {
 			const command = cmds.find(cmd => cmd.noPrefix);
@@ -47,10 +49,12 @@
 		}
 	}
 
+	console.log('Commands loaded.');
+
 	const cooldowns = new Discord.Collection();
 
 	client.once('ready', () => {
-		console.log('Ready!');
+		console.log('Ready and waiting...');
 		client.user.setActivity('PokemonGO every day.', { type: 'PLAYING' });
 	});
 
@@ -62,7 +66,7 @@
 
 			let noPrefix = false;
 			let args = '';
-			// Loop 
+			// Loop
 			for (const noPrefixCommand of noPrefixes) {
 				if(noPrefix) { break; }
 				if (message.content.toLowerCase().startsWith(noPrefixCommand)) {
@@ -120,7 +124,7 @@
 				let reply = `You didn't provide any arguments, ${message.author}!`;
 
 				if (command.usage) {
-					reply += `\nThe proper usage would be: \`${prefix}${command.name} ${command.usage}\``;
+					reply += `\nThe proper usage would be: \`${client.prefix}${command.name} ${command.usage}\``;
 				}
 
 				return message.channel.send(reply);

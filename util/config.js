@@ -1,12 +1,12 @@
 const { GoogleSpreadsheet } = require('google-spreadsheet');
 
 /**
- * 
+ *
  * This function gets a config information from a Google Sheet
- * 
+ *
  * @param {*} workbookID The workbookID value
  * @param {*} sheetID The sheetID value
- * @returns 
+ * @returns
  */
 
 module.exports = async function botConfig(workbookID, sheetID) {

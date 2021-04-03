@@ -31,14 +31,14 @@ module.exports = {
 			'Yes',
 			'No',
 			'I\'m positive you will',
-			'You may rely on it'
+			'You may rely on it',
 		];
 
-		let responses =  generalResponses;
-		
-		// Limit these to BX
+		let responses = generalResponses;
+
+		// Limit these to BX ... This needs a better solution that's flexible for future implementations
 		if(message.channel.id == '763560311327293460' || message.channel.id == '827925149605036053') {
-			
+
 			const bxResponses = [
 				'No, Amanda took a wrong turn to this gym',
 				'No, Amanda kicked Bill out of the car and you\'re on his team',

@@ -1,13 +1,13 @@
 /**
- * 
+ *
  * This function and expectedArguments do similar but different jobs.
- * I'm considering refactoring them into one function at some point, but for now, they'll stay this way until I have some time to rethink it. 
- * 
+ * I'm considering refactoring them into one function at some point, but for now, they'll stay this way until I have some time to rethink it.
+ *
  * @param {*} message The message object
  * @param {*} command The command object
  * @param {*} args The args array
  * @param {*} client the client object
- * @returns 
+ * @returns array
  */
 module.exports = function validateArguments(message, command, args, client) {
 
@@ -16,7 +16,7 @@ module.exports = function validateArguments(message, command, args, client) {
 		return args;
 	}
 
-	const validArgs = [];
+	const validArgs = new Array();
 
 	// loop through the args sent by user
 	for(const arg of args) {

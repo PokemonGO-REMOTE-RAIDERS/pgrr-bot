@@ -1,15 +1,15 @@
 /**
- * 
+ *
  * This function and validateArguments do similar but different jobs.
- * I'm considering refactoring them into one function at some point, but for now, they'll stay this way until I have some time to rethink it. 
- * 
- * @param {*} message Include the message 
+ * I'm considering refactoring them into one function at some point, but for now, they'll stay this way until I have some time to rethink it.
+ *
+ * @param {*} message Include the message
  * @param {*} commandName Name of the command
  * @param {*} noPrefix Do we need to worry about a prefix?
  * @param {*} command the command object
  * @param {*} args the array of args from the message
  * @param {*} client the client information
- * @returns 
+ * @returns
  */
 
 
@@ -59,7 +59,7 @@ module.exports = function expectedArguments(message, commandName, noPrefix, comm
 
 			// A user was mentioned
 			mention = currentArg.slice(2, -1);
-			
+
 			// A user with a nickname was mentioned
 			if (mention.startsWith('!')) {
 				mention = mention.slice(1);
