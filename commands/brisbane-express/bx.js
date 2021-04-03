@@ -1,6 +1,5 @@
 module.exports = {
 	name: 'bx',
-	aliases: [ '8balls', 'eightball', '8bal', 'ball'],
 	description: 'An 8ball command to replace the one from Carl. No prefix needed.',
 	config: 'bx',
 	noPrefix: true,
