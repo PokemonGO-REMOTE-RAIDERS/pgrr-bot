@@ -4,6 +4,7 @@ module.exports = {
 	description: 'An 8ball command to replace the one from Carl. No prefix needed.',
 	config: false,
 	noPrefix: true,
+	cooldown: 60,
 	execute(message) {
 
 		function randomNumber(min, max) {
