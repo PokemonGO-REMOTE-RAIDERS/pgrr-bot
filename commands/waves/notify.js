@@ -24,7 +24,7 @@ module.exports = {
 
 			if(bossrole) {
 				const notify = processNotifications(client, 'wbNotifications', bossrole);
-				message.channel.send(notify).then(() => {
+				message.channel.send(`<@${user.id}> is hosting ${notify}`).then(() => {
 					setUserInfo(process.env.workbookWavehost, process.env.sheetWaveHosts, user, 'notifications', parseInt(userInfo.notifications) + 1).catch();
 				});
 			}
