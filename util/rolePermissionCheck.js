@@ -14,6 +14,9 @@ module.exports = async function rolePermissionCheck(client, message, command) {
 
 	}
 
+	console.log(message.member._roles);
+	console.log(allowedRoles);
+
 	let response = false;
 
 	// Loop through all Role IDs and check to see if the user is assigned to any of them
