@@ -55,7 +55,7 @@
 
 	client.once('ready', () => {
 		console.log('Ready and waiting...');
-		client.user.setActivity('PokemonGO every day.', { type: 'PLAYING' });
+		client.user.setActivity('Made by the PGRR Dev Team.');
 	});
 
 	client.on('message', message => {

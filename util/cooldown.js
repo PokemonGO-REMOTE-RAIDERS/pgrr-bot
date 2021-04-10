@@ -33,7 +33,7 @@ module.exports = function cooldown(cooldowns, command, message, Discord) {
 		if (now < expirationTime) {
 
 			const timeLeft = ms(expirationTime - now);
-			message.reply(`please wait ${timeLeft} before reusing the \`${command.name}\` command.`);
+			// message.reply(`please wait ${timeLeft} before reusing the \`${command.name}\` command.`);
 
 			return true;
 		}

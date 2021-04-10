@@ -34,15 +34,13 @@ module.exports = {
 				return;
 			}
 
-			const userName = user.username ? user.username : user.name;
-
 			const embed = {
 				color: client.config.guild.embedColor,
 				author: {
 					name: client.config.guild.botName,
 					icon_url: client.config.guild.botIcon,
 				},
-				title: `WaveHost Profile: ${userName}`,
+				title: `WaveHost Profile: ${userInfo.ign}`,
 			};
 
 			if(filter == 'stats') {

@@ -71,7 +71,7 @@ module.exports = {
 
 			const notify = processNotifications(client, 'wbNotifications', role);
 
-			message.channel.send(notify);
+			message.channel.send(`<@${user.id}> is hosting ${notify}`);
 
 			message.channel.send({ embed: embed });
 
