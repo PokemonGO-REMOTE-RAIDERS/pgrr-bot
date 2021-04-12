@@ -29,6 +29,8 @@ module.exports = async function getUserInfo(workbookID, sheetID, user, data) {
 	const sheet = doc.sheetsById[this.sheetID];
 	const rows = await sheet.getRows();
 
+	// console.log(rows, user);
+
 	// Loop through the rows and pull back the user based on the Discord User ID
 	let userInfo = false;
 	for(const row of rows) {
