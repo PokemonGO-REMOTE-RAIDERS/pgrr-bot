@@ -1,6 +1,5 @@
 const setUserInfo = require('../../util/setUserInfo.js');
 const getUserInfo = require('../../util/getUserInfo.js');
-const ms = require('ms');
 module.exports = {
 	name: 'change',
 	description: 'Change information about a Community Day participant.',

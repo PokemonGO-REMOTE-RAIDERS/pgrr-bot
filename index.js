@@ -61,6 +61,11 @@
 	client.on('message', message => {
 		(async function() {
 
+			// console.log(message);
+
+			const member = message.guild.members.cache.get(message.author.id);
+			console.log(member);
+
 			// Establish Prefix
 			client.prefix = process.env.prefix;
 
