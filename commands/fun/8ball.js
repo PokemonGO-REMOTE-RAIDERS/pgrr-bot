@@ -39,7 +39,7 @@ module.exports = {
 		let responses =  generalResponses;
 		
 		// Limit these to BX
-		if(message.channel.id == '763560311327293460' || message.channel.id == '827925149605036053') {
+		if(message.channel.id == '831954736919347220' || message.channel.id == '827925149605036053') {
 			
 			const bxResponses = [
 				'No, Amanda took a wrong turn to this gym',
