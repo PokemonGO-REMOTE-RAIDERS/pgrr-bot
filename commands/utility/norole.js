@@ -1,5 +1,6 @@
 const noRoles = require('../../noRoles.js');
 const chunkArray = require('../../util/chunkArray.js');
+const secondsToHms = require('../../util/secondsToHms.js');
 module.exports = {
 	name: 'norole',
 	description: 'Assign users with no role a specific role',
@@ -35,6 +36,7 @@ module.exports = {
 			];
 			*/
 
+
 			const chunkSize = !isNaN(args[0]) ? parseInt(args[0]) : 3;
 			const chunkedRoles = chunkArray(noroles, chunkSize);
 
@@ -62,17 +64,32 @@ module.exports = {
 			});
 
 			sequences.then(members => {
-				message.channel.send(`Adding ${assignedRole.name} to found users.`);
-				let i = 0;
+
+				const cleanArray = new Array();
 				userCollection.forEach(chunk => {
 					chunk.forEach(member => {
+						cleanArray.push(member);
+					});
+				});
+				console.log(cleanArray.length);
+
+				const eta = secondsToHms(cleanArray.length);
+				message.channel.send(`Adding ${assignedRole.name} to ${cleanArray.length} members, ETA ${eta}.`);
+
+				let i = 0;
+				const processRoles = async () => {
+					for(const member of cleanArray) {
+						await new Promise(r => setTimeout(r, 1000));
 						console.log(member.user.username);
 						member.roles.add(assignedRole);
 						i++;
-					});
+					}
+				};
+
+				processRoles().then(() => {
+					message.channel.send(`Added ${assignedRole.name} to ${i} members.`);
 				});
 
-				message.channel.send(`Added ${assignedRole.name} to ${i} members.`);
 			});
 
 
