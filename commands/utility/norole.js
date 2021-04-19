@@ -1,6 +1,4 @@
 const noRoles = require('../../noRoles.js');
-const secondsToHms = require('../../util/secondsToHms.js');
-
 module.exports = {
 	name: 'norole',
 	description: 'Assign users with no role a specific role',
@@ -35,29 +33,21 @@ module.exports = {
 			];
 			*/
 
-			const timeToComplete = secondsToHms(noroles.length + 5);
+			message.guild.members.fetch({ user: noroles, force: true }).then(members => {
 
-			message.channel.send(`ETA: ${timeToComplete}`);
+				message.channel.send(`Members Found: ${members.size}.`);
 
-			let i = 0;
-			noroles.forEach(id => {
+				let i = 0;
+				members.forEach(member => {
+					console.log(member.user.username);
+					member.roles.add(assignedRole);
+					i++;
+				});
 
-				setTimeout(() => {
-					const member = message.channel.guild.members.cache.get(id);
+				message.channel.send(`Added ${assignedRole.name} to ${i} members.`);
 
-					if(member && !member.roles.cache.some(role => role.id === assignedRole.id)) {
-						member.roles.add(assignedRole);
-						i++;
-					}
-				}, 1000);
+			}).catch(error => console.log(error));
 
-			});
-
-			const awaitCompletion = Math.floor((noroles.length + 5) * 1000);
-
-			setTimeout(() => {
-				message.channel.send(`Added **${assignedRole.name}** to ${i} members.`);
-			}, awaitCompletion);
 
 		}());
 
