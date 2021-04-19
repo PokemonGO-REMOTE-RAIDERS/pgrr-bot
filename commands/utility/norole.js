@@ -1,8 +1,9 @@
 const noRoles = require('../../noRoles.js');
+const chunkArray = require('../../util/chunkArray.js');
 module.exports = {
 	name: 'norole',
 	description: 'Assign users with no role a specific role',
-	expectedArgs: 0,
+	expectedArgs: 1,
 	config: 'wavehost',
 	roles: ['roleAdmin'],
 	args: false,
@@ -21,6 +22,7 @@ module.exports = {
 			}
 
 			const noroles = noRoles();
+
 			// TESTING
 			/*
 			const noroles = [
@@ -33,20 +35,45 @@ module.exports = {
 			];
 			*/
 
-			message.guild.members.fetch({ user: noroles, force: true }).then(members => {
+			const chunkSize = !isNaN(args[0]) ? parseInt(args[0]) : 3;
+			const chunkedRoles = chunkArray(noroles, chunkSize);
 
-				message.channel.send(`Members Found: ${members.size}.`);
+			let sequences = Promise.resolve();
 
+			const userCollection = new Array();
+
+			chunkedRoles.forEach(users => {
+				sequences = sequences.then(() => {
+
+					return new Promise((resolve, reject) => {
+						message.guild.members.fetch({ user: users, force: true }).then(members => {
+
+							userCollection.push(members);
+							message.channel.send(`Found ${members.size} users.`);
+							resolve(members);
+
+						}).catch(error => {
+							console.log(error);
+							reject(error);
+							message.channel.send('TIME OUT ERROR');
+						});
+					});
+				});
+			});
+
+			sequences.then(members => {
+				message.channel.send(`Adding ${assignedRole.name} to found users.`);
 				let i = 0;
-				members.forEach(member => {
-					console.log(member.user.username);
-					member.roles.add(assignedRole);
-					i++;
+				userCollection.forEach(chunk => {
+					chunk.forEach(member => {
+						console.log(member.user.username);
+						member.roles.add(assignedRole);
+						i++;
+					});
 				});
 
 				message.channel.send(`Added ${assignedRole.name} to ${i} members.`);
-
-			}).catch(error => console.log(error));
+			});
 
 
 		}());
