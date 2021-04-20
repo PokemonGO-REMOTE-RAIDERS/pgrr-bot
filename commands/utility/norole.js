@@ -13,6 +13,11 @@ module.exports = {
 
 			const setRole = args['role'];
 			const assignedRole = message.channel.guild.roles.cache.find(role => role.id === setRole);
+			const off = true;
+
+			if(off) {
+				return message.channel.send('Contact <@310756994044657674> for help with this.');
+			}
 
 			if(!setRole) {
 				return message.channel.send('Please select a role to assign these users to.');
