@@ -13,7 +13,7 @@ module.exports = {
 
 			const setRole = args['role'];
 			const assignedRole = message.channel.guild.roles.cache.find(role => role.id === setRole);
-			const off = false;
+			const off = true;
 
 			if(off) {
 				return message.channel.send('Contact <@310756994044657674> for help with this.');
@@ -42,7 +42,7 @@ module.exports = {
 			*/
 
 
-			const chunkSize = !isNaN(args[0]) ? parseInt(args[0]) : 3;
+			const chunkSize = !isNaN(args[0]) ? parseInt(args[0]) : 50;
 			const chunkedRoles = chunkArray(noroles, chunkSize);
 
 			let sequences = Promise.resolve();
