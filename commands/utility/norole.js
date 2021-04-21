@@ -13,7 +13,7 @@ module.exports = {
 
 			const setRole = args['role'];
 			const assignedRole = message.channel.guild.roles.cache.find(role => role.id === setRole);
-			const off = true;
+			const off = false;
 
 			if(off) {
 				return message.channel.send('Contact <@310756994044657674> for help with this.');
