@@ -11,7 +11,7 @@
 	client.commands = new Discord.Collection();
 
 	// Bot Configuration
-	const botConfig = require('./util/config.js');
+	const botConfig = require('./util/configSetup.js');
 
 	// Get all of the config files ON LOAD to reduce database checks
 	// NOTE: This means if the config file changes we MUST restart Dynos.
@@ -25,7 +25,8 @@
 	// Utilities
 	const validateArguments = require('./util/validateArguments.js');
 	const expectedArguments = require('./util/expectedArguments.js');
-	const rolePermissionCheck = require('./util/rolePermissionCheck.js');
+	const checkRoles = require('./util/checkRoles.js');
+	const checkChannels = require('./util/checkChannels.js');
 	const cooldown = require('./util/cooldown.js');
 
 
@@ -63,8 +64,7 @@
 
 			// console.log(message);
 
-			const member = message.guild.members.cache.get(message.author.id);
-			console.log(member);
+			// const member = message.guild.members.cache.get(message.author.id);
 
 			// Establish Prefix
 			client.prefix = process.env.prefix;
@@ -119,9 +119,16 @@
 			}
 
 			if(command.roles) {
-				const roleCheck = await rolePermissionCheck(client, message, command);
+				const roleCheck = checkRoles(client, message, command);
 				if(!roleCheck) {
 					return message.reply('You do not have permissions to do this!');
+				}
+			}
+
+			if(command.channels) {
+				const channelCheck = checkChannels(client, message, command);
+				if(!channelCheck) {
+					return message.reply('This command can not be used in this channel!');
 				}
 			}
 

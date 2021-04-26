@@ -8,6 +8,7 @@ module.exports = {
 	args: false,
 	cooldown: 5,
 	roles: ['roleCDUser', 'roleCDAdmin'],
+	channels: ['channelRegister'],
 	execute(message, args, client) {
 		(async function() {
 			const user = message.author;
@@ -21,7 +22,7 @@ module.exports = {
 					ign: userInfo.ign,
 					level: userInfo.level,
 					team: userInfo.team,
-					enrollDate: new Date(),
+					enrollDate: new Date().toLocaleDateString('en-us'),
 				};
 
 				message.react('👌');

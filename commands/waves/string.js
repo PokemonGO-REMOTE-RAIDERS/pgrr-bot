@@ -1,3 +1,5 @@
+const getUserInfo = require('../../util/getUserInfo');
+const setUserInfo = require('../../util/setUserInfo');
 module.exports = {
 	name: 'string',
 	aliases: [ 'ss', 'screenshot', 'stringme', 'stringify'],
@@ -12,7 +14,8 @@ module.exports = {
 
 			// Get attachments
 			const attachments = message.attachments.array();
-
+			const user = message.author;
+			const userInfo = await getUserInfo(process.env.workbookWavehost, process.env.sheetWaveHosts, user, 'row');
 
 			if(attachments.length > 0) {
 
@@ -141,6 +144,13 @@ module.exports = {
 						// Send the string to channel
 						message.channel.send(trainerString);
 					}
+
+				}).then(() => {
+
+					const strings = parseInt(userInfo.strings);
+					const processed = attachments.length;
+
+					setUserInfo(process.env.workbookWavehost, process.env.sheetWaveHosts, user, 'strings', Math.floor(strings + processed)).catch();
 
 				}).catch(err => {
 					console.log(err);

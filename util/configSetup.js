@@ -46,7 +46,7 @@ module.exports = async function botConfig(workbookID, sheetID) {
 
 	}
 
-	console.log(config);
+	// console.log(config);
 	return config;
 
 
