@@ -33,14 +33,32 @@ module.exports = {
 			'Yes',
 			'No',
 			'I\'m positive you will',
-			'You may rely on it'
+			'You may rely on it',
 		];
 
-		let responses =  generalResponses;
-		
+		let responses = generalResponses;
+
 		// Limit these to BX
-		if(message.channel.id == '831954736919347220' || message.channel.id == '827925149605036053') {
-			
+		const bxRooms = [
+			'829158987555012619',
+			'763560311327293460',
+			'827925149605036053',
+			'832057829925978112',
+			'832057749281701888',
+			'831954736919347220',
+			'828302052924325928',
+			'827925149605036053',
+		];
+
+		const isBXRoom = bxRooms.forEach((elem) => {
+			if(elem == message.channel.id) {
+				console.log(true);
+				return true;
+			}
+		});
+
+		if(isBXRoom) {
+
 			const bxResponses = [
 				'No, Amanda took a wrong turn to this gym',
 				'No, Amanda kicked Bill out of the car and you\'re on his team',

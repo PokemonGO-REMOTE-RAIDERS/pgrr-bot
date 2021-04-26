@@ -28,7 +28,6 @@ module.exports = {
 	expectedArgs: 1,
 	cooldown: 2,
 	noPrefix: true,
-	// roles: ['roleWaveHost', 'roleAdmin', 'roleVerified'],
 	roles: ['roleVerified'],
 	execute(message, args, client) {
 		(async function() {
@@ -49,11 +48,14 @@ module.exports = {
 			const thisWave = parseInt(userInfo.currentwave) + 1;
 			const tcmessageid = userInfo.tcmessageid;
 
+			const starttime = new Date(userInfo.starttime).toLocaleDateString('en-us');
+
 			const resetWaveData = [
 				{ data: 'hosting', 		value: false },
 				{ data: 'currentwave', 	value: 0 },
 				{ data: 'fails',		value: 0 },
 				{ data: 'notifications',	value: 0 },
+				{ data: 'strings',		value: 0 },
 				{ data: 'tcmessageid', 	value: '' },
 				{ data: 'starttime',	value: '' },
 				{ data: 'waveid',		value: '' },
@@ -69,8 +71,7 @@ module.exports = {
 				waveid: 		userInfo.waveid,
 				userid: 		userInfo.userid,
 				ign: 		userInfo.ign,
-				starttime: 	userInfo.starttime,
-				endtime:		now,
+				date: 		starttime,
 				duration:		ms(duration, { long: true }),
 				channel:		message.channel.id,
 				boss:		userInfo.boss ? userInfo.boss : 'Not Set',
@@ -78,6 +79,7 @@ module.exports = {
 				fails:		userInfo.fails,
 				notifications: userInfo.notifications,
 				channelname: 	userInfo.channelname,
+				strings: 		userInfo.strings,
 			};
 
 			switch(wave) {
@@ -86,7 +88,6 @@ module.exports = {
 			case 'fails':
 			case 'failed':
 				message.channel.send(userInfo.failed ? userInfo.failed : 'Wave Failed');
-				// console.log(userInfo.failtc);
 				if(userInfo.failtc == 'TRUE' && userInfo.failtc !== 'FALSE') {
 					message.channel.send(userInfo.tc).then((sent) => {
 

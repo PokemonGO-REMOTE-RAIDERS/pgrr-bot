@@ -38,8 +38,15 @@ module.exports = async function botConfig(workbookID, sheetID) {
 			config.development[row.config] 	= row.development.trim();
 			config.production[row.config] 	= row.production.trim();
 		}
+
+		if(row.type == 'datetime') {
+			config.development[row.config] 	= new Date(row.development);
+			config.production[row.config] 	= new Date(row.production);
+		}
+
 	}
 
+	// console.log(config);
 	return config;
 
 
