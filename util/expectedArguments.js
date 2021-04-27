@@ -51,7 +51,6 @@ module.exports = function expectedArguments(message, commandName, noPrefix, comm
 
 
 	// loop through args
-	/*
 	for(const arg of args) {
 		const currentArg = String(arg);
 
@@ -59,7 +58,7 @@ module.exports = function expectedArguments(message, commandName, noPrefix, comm
 		if (currentArg.startsWith('<@') && currentArg.endsWith('>')) {
 
 			// A user was mentioned
-			mention = currentArg.slice(2, -1);
+			let mention = currentArg.slice(2, -1);
 
 			// A user with a nickname was mentioned
 			if (mention.startsWith('!')) {
@@ -77,7 +76,6 @@ module.exports = function expectedArguments(message, commandName, noPrefix, comm
 			}
 		}
 	}
-	*/
 
 	return expectedArgs;
 
