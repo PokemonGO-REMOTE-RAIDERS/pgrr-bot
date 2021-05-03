@@ -3,7 +3,7 @@ const getUserInfo = require('../../util/getUserInfo.js');
 const checkDateValidation = require('../../util/checkDateValidation.js');
 module.exports = {
 	name: 'submit',
-	description: '',
+	description: 'Submit your Community Day Event Pokemon',
 	config: 'cd',
 	args: false,
 	cooldown: 5,

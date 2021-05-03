@@ -3,7 +3,7 @@ const getUserInfo = require('../../util/getUserInfo.js');
 const getTeamRole = require('../../util/getTeamRole.js');
 module.exports = {
 	name: 'register',
-	description: 'Set information about a wavehost. Only accessible by mod or the actual wavehost.',
+	description: 'Register for community day',
 	config: 'cd',
 	args: false,
 	cooldown: 5,
@@ -75,7 +75,7 @@ module.exports = {
 								},
 								{
 									name: '---',
-									value: 'If any of your information has not been processed correctly please use `%change {ign, level, or team} {correct value}` to fix your information.\n\nFor example, `%fix ign Nhemps311` to fix my in-game name',
+									value: 'If any of your information has not been processed correctly please use `%change {ign, level, or team} {correct value}` to fix your information.\n\nFor example, `%change ign Nhemps311` to fix my in-game name',
 								},
 							],
 						} });
