@@ -19,6 +19,8 @@ module.exports = {
 
 			if(attachments.length > 0) {
 
+				message.react('👌');
+
 				// Promises, promises, how I hate thee. Fire off a resolve to reset, just in case
 				let sequences = Promise.resolve();
 
@@ -140,6 +142,8 @@ module.exports = {
 
 						// Convert array to string.
 						const trainerString = trainerNames.join(', ');
+
+						message.reactions.removeAll().then(() => message.react('👍')).catch();
 
 						// Send the string to channel
 						message.channel.send(trainerString);
