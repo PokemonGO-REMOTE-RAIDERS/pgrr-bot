@@ -16,16 +16,10 @@
 	// Get all of the config files ON LOAD to reduce database checks
 	// NOTE: This means if the config file changes we MUST restart Dynos.
 	client.config = new Array();
-<<<<<<< Updated upstream
-	client.config['wavehost'] 	= await botConfig(process.env.workbookWavehost, process.env.sheetWaveConfig).catch();
-	client.config['bx'] 		= await botConfig(process.env.workbookBX, process.env.sheetBXConfig).catch();
-	client.config['cd'] 		= await botConfig(process.env.workbookCD, process.env.sheetCDConfig).catch();
-=======
 	client.config['wavehost'] 	= await botConfig(process.env.workbookWavehost, process.env.sheetWaveConfig).catch(error => console.log(error));
 	client.config['bx'] 		= await botConfig(process.env.workbookBX, process.env.sheetBXConfig).catch(error => console.log(error));
 	client.config['cd'] 		= await botConfig(process.env.workbookCD, process.env.sheetCDConfig).catch(error => console.log(error));
 	client.config['snickers'] 	= await botConfig(process.env.workbookSnickers, process.env.sheetSnickersConfig).catch(error => console.log(error));
->>>>>>> Stashed changes
 
 	console.log('Config loaded.');
 
