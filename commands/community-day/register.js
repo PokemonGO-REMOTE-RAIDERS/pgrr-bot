@@ -12,13 +12,16 @@ module.exports = {
 	execute(message, args, client) {
 		(async function() {
 			const user = message.author;
+			const member = message.guild.members.cache.get(user.id);
 			const userInfo = await getUserInfo(process.env.workbookCD, process.env.sheetCDDatabase, user, 'row').catch();
+			let memberName = new String();
+			memberName = member.nickname ? member.nickname : user.name;
 
 			if(userInfo) {
 
 				const newEventRegistration = {
 					userid: user.id,
-					discordName: user.username,
+					discordName: memberName,
 					ign: userInfo.ign,
 					level: userInfo.level,
 					team: userInfo.team,
@@ -96,7 +99,7 @@ module.exports = {
 				const newUser = {
 					userid: user.id,
 					verified: false,
-					discordName: user.username,
+					discordName: memberName,
 					ign: '',
 					level: '',
 					team: getTeamRole(message, client),
@@ -189,7 +192,9 @@ module.exports = {
 
 					const and = text.indexOf('&');
 					const ign = and - 1;
-					newUser.ign = text[ign];
+					newUser.ign = text[ign] ? text[ign] : 'Not found';
+					let checkIgn = new String();
+					checkIgn = newUser.ign;
 
 					const possibleLevels = new Array();
 
@@ -210,7 +215,7 @@ module.exports = {
 							return index === self.indexOf(elem);
 						});
 
-					newUser.level = level[0];
+					newUser.level = level[0] ? level[0] : 'Not found';
 
 					setUserInfo(process.env.workbookCD, process.env.sheetCDDatabase, user, newUser, null, true)
 
@@ -252,6 +257,10 @@ module.exports = {
 									},
 								},
 							);
+
+							if(memberName.toLowerCase() !== checkIgn.toLowerCase()) {
+								message.channel.send(`<@${user.id}> please make sure your IGN and Server Nickname match`);
+							}
 						})
 
 						.then(() => {
