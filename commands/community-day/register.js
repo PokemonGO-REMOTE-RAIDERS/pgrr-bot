@@ -251,7 +251,11 @@ module.exports = {
 											},
 											{
 												name: '---',
-												value: 'If any of your information has not been processed correctly please use `%change {ign, level, or team} {correct value}` to fix your information.\n\nFor example, `%fix ign Nhemps311` to fix my in-game name',
+												value: 'If any of your information has not been processed correctly please use `%change {ign, level, or team} {correct value}` to fix your information.\n\nFor example, `%fix ign Nhemps311` to fix my in-game name.\n\n---',
+											},
+											{
+												name: 'Event Details',
+												value: client.config.guild.eventDescription,
 											},
 										],
 									},
