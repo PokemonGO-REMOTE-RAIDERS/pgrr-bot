@@ -15,7 +15,7 @@ module.exports = {
 			const member = message.guild.members.cache.get(user.id);
 			const userInfo = await getUserInfo(process.env.workbookCD, process.env.sheetCDDatabase, user, 'row').catch();
 			let memberName = new String();
-			memberName = member.nickname ? member.nickname : user.name;
+			memberName = member.nickname ? member.nickname : user.username;
 
 			if(userInfo) {
 
