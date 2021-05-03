@@ -3,11 +3,11 @@
  * @param {*} user The id of the user you're looking up.
  * @param {*} data which data do you need to return from that user.
  */
-module.exports = async function getUserInfo(workbookID, sheetID, user, data) {
+module.exports = async function getSnickers(workbookID, sheetID, snickerChannel, data) {
 
 	// Setup
 	this.sheetID 		= sheetID;
-	this.user 		= user;
+	this.snickerChannel = snickerChannel;
 	this.data 		= data;
 	this.wookbookID 	= workbookID;
 	let response;
@@ -32,33 +32,33 @@ module.exports = async function getUserInfo(workbookID, sheetID, user, data) {
 	// console.log(rows, user);
 
 	// Loop through the rows and pull back the user based on the Discord User ID
-	const userArray = new Array();
-	let userInfo = false;
+	const snickerArray = new Array();
+	let snicker = false;
 	for(const row of rows) {
-		if(row.userid == this.user.id) {
-			userInfo = row;
-			userArray.push(row);
+		if(row.snickerChannel == this.snickerChannel) {
+			snicker = row;
+			snickerArray.push(row);
 		}
 	}
 
 	// If no user back out
-	if(!userInfo) {
+	if(!snicker) {
 		return false;
 	}
 
 	// Send back all of the rows
 	else if(this.data == 'array') {
-		response = userArray;
+		response = snickerArray;
 	}
 
 	// Send back the first full row if requested
 	else if(this.data == 'row') {
-		response = userInfo;
+		response = snicker;
 	}
 
 	// Otherwise send back just that one data point.
 	else {
-		response = userInfo[data];
+		response = snicker[data];
 	}
 
 	// Wait for response to be set before sending.

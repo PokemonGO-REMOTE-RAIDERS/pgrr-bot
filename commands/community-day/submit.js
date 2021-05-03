@@ -161,7 +161,7 @@ module.exports = {
 										icon_url: client.config.guild.botIcon,
 									},
 									title: 'Community Day Submission',
-									description: `<@${user.id}>, thank you for submitting your Community Day submission, please confirm your information below:`,
+									description: `<@${user.id}>, thank you for submitting your Community Day submission!`,
 									fields: [
 										{
 											name: 'Height',

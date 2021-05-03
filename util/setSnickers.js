@@ -6,11 +6,11 @@
  * @param {boolean} newRow bool that sets a new row
  */
 // const ms = require('ms');
-module.exports = async function setUserInfo(workbookID, sheetID, user, data, value, newRow) {
+module.exports = async function setUserInfo(workbookID, sheetID, snickerChannel, data, value, newRow) {
 
 	// Setup
 	this.sheetID		= sheetID;
-	this.user 		= user;
+	this.snickerChannel = snickerChannel;
 	this.data 		= data;
 	this.value 		= value;
 	this.newRow 		= newRow;
@@ -35,12 +35,12 @@ module.exports = async function setUserInfo(workbookID, sheetID, user, data, val
 	const rows = await sheet.getRows();
 
 	// Check to make sure a user exists
-	let userInfo = false;
+	let snicker = false;
 	let response = false;
 
 	for(const row of rows) {
-		if(row.userid == this.user.id) {
-			userInfo = row;
+		if(row.snickerChannel == this.snickerChannel) {
+			snicker = row;
 		}
 	}
 
@@ -57,13 +57,13 @@ module.exports = async function setUserInfo(workbookID, sheetID, user, data, val
 	}
 
 	// Process an array of data
-	else if(userInfo && Array.isArray(data)) {
+	else if(snicker && Array.isArray(data)) {
 
 		for(const newData of this.data) {
 
-			userInfo[newData.data] = newData.value;
+			snicker[newData.data] = newData.value;
 
-			await userInfo.save();
+			await snicker.save();
 
 		}
 
@@ -72,11 +72,11 @@ module.exports = async function setUserInfo(workbookID, sheetID, user, data, val
 	}
 
 	// Process a single value
-	else if(userInfo) {
+	else if(snicker) {
 
-		userInfo[this.data] = this.value;
+		snicker[this.data] = this.value;
 		// console.log(this.value);
-		await userInfo.save();
+		await snicker.save();
 
 		response = true;
 	}

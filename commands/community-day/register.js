@@ -1,6 +1,7 @@
 const setUserInfo = require('../../util/setUserInfo.js');
 const getUserInfo = require('../../util/getUserInfo.js');
 const getTeamRole = require('../../util/getTeamRole.js');
+const checkDateValidation = require('../../util/checkDateValidation.js');
 module.exports = {
 	name: 'register',
 	description: 'Set information about a wavehost. Only accessible by mod or the actual wavehost.',
@@ -13,6 +14,16 @@ module.exports = {
 		(async function() {
 			const user = message.author;
 			const userInfo = await getUserInfo(process.env.workbookCD, process.env.sheetCDDatabase, user, 'row').catch();
+			const startDate = client.config.guild.enrollmentStart;
+			const endDate = client.config.guild.enrollmentEnd;
+
+			const dateValidation = checkDateValidation(startDate, endDate);
+
+			if(dateValidation == 'early' || dateValidation == 'late') {
+				const closedOpens = dateValidation == 'early' ? 'not open yet' : 'closed';
+
+				return message.channel.send(`<@${user.id}>, community day enrollment is ${closedOpens}.`);
+			}
 
 			if(userInfo) {
 
