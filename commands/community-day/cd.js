@@ -19,7 +19,7 @@ module.exports = {
 					{
 						name: 'How to Register',
 						// value: `To register, go to <#${client.config.guild.channelRegister[0]}>, you will use the command \`%register\`, and **IN THE SAME MESSAGE** attach a photo of your trainer profile.`,
-						value: `To submit pick your best **shiny**, go to <#${client.config.guild.channelSubmit[0]}>, you will use the command \`%submit\`, and **IN THE SAME MESSAGE** attach two screenshots: one with the pokemon and it's stats and one with the appraisal window open.`,
+						value: `To submit pick your best **shiny**, go to <#${client.config.guild.channelSubmit[0]}>, you will use the command \`%submit\`, and **IN THE SAME MESSAGE** attach two screenshots: one with the pokemon and its stats and one with the appraisal window open.`,
 					},
 				],
 				timestamp: new Date(client.config.guild.enrollmentEnd),
