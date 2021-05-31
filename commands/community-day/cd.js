@@ -5,6 +5,7 @@ module.exports = {
 	config: 'cd',
 	args: false,
 	cooldown: 5,
+	noPrefix: true,
 	execute(message, args, client) {
 		(async function() {
 

@@ -9,6 +9,7 @@ module.exports = {
 	roles: ['roleCDUser', 'roleCDAdmin'],
 	expectedArgs: 1,
 	aliases: ['fix', 'change', 'changed'],
+	noPrefix: true,
 	validArgs: [
 		{
 			name: 'ign',

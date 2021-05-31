@@ -7,6 +7,7 @@ module.exports = {
 	config: 'cd',
 	args: false,
 	cooldown: 5,
+	noPrefix: true,
 	roles: ['roleCDUser', 'roleCDAdmin'],
 	channels: ['channelSubmit'],
 	execute(message, args, client) {
