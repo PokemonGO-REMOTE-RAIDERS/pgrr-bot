@@ -1,6 +1,7 @@
 const setUserInfo = require('../../util/setUserInfo.js');
 const getUserInfo = require('../../util/getUserInfo.js');
 const getTeamRole = require('../../util/getTeamRole.js');
+const checkDateValidation = require('../../util/checkDateValidation.js');
 module.exports = {
 	name: 'register',
 	description: 'Register for community day',
@@ -16,6 +17,17 @@ module.exports = {
 			const userInfo = await getUserInfo(process.env.workbookCD, process.env.sheetCDDatabase, user, 'row').catch();
 			let memberName = new String();
 			memberName = member.nickname ? member.nickname : user.username;
+
+			const startDate = client.config.guild.enrollmentStart;
+			const endDate = client.config.guild.enrollmentEnd;
+
+			const dateValidation = checkDateValidation(startDate, endDate);
+
+			if(dateValidation == 'early' || dateValidation == 'late') {
+				const closedOpens = dateValidation == 'early' ? 'not open yet' : 'closed';
+
+				return message.channel.send(`<@${user.id}>, community day registrations are ${closedOpens}.`);
+			}
 
 			if(userInfo) {
 

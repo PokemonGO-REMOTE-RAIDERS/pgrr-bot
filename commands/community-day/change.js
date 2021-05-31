@@ -52,6 +52,8 @@ module.exports = {
 										description: args['content'],
 									},
 								});
+
+							setUserInfo(process.env.workbookCD, client.config.guild.eventID, user, data, value).catch();
 						}
 					})
 					.catch((error) =>{
