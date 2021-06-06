@@ -114,7 +114,7 @@ module.exports = {
 					});
 				});
 
-				// console.log(text);
+				console.log(text);
 
 				const weightRegex 	= new RegExp(/^[0-9]+\.[0-9]+kg$/);
 				const heightRegex 	= new RegExp(/^[0-9]+\.[0-9]+m$/);
@@ -130,11 +130,13 @@ module.exports = {
 
 				if(!weight || !height) {
 					message.reactions.removeAll().then(() => message.react('👎')).catch();
+					console.log(`<@${user.id}>, height or weight not detected.`);
 					return message.channel.send(`<@${user.id}>, height or weight not detected.`);
 				}
 
 				if(!date) {
 					message.reactions.removeAll().then(() => message.react('👎')).catch();
+					console.log(`<@${user.id}> please open the appraisal window and resubmit your screenshot.`);
 					return message.channel.send(`<@${user.id}> please open the appraisal window and resubmit your screenshot.`);
 				}
 
