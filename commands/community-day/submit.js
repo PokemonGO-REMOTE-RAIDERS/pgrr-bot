@@ -118,7 +118,7 @@ module.exports = {
 
 				const weightRegex 	= new RegExp(/^[0-9]+\.[0-9]+kg$/);
 				const heightRegex 	= new RegExp(/^[0-9]+\.[0-9]+m$/);
-				const dateRegex 	= new RegExp(/^[0-9]+\/[0-9]+\/[0-9]+$/);
+				const dateRegex 	= new RegExp(/^[0-9]+[\/\-\.][0-9]+[\/\-\.][0-9]+$/);
 
 				let weight 	= text.filter(elem => weightRegex.test(elem));
 				let height 	= text.filter(elem => heightRegex.test(elem));
@@ -130,7 +130,7 @@ module.exports = {
 
 				if(!weight || !height) {
 					message.reactions.removeAll().then(() => message.react('👎')).catch();
-					return message.channel.send(`<@${user.id}> this doesn't appear to be a screenshot of a pokémon, please try again.`);
+					return message.channel.send(`<@${user.id}>, height or weight not detected.`);
 				}
 
 				if(!date) {
