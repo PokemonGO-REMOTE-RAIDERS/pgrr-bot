@@ -199,7 +199,7 @@ module.exports = {
 
 			}).catch(err => {
 				console.log(err);
-				message.channel.send('An error has occurred, please resubmit.');
+				message.channel.send('An error has occurred, please resubmit. This error is normally due to your image files being to large for the API to process. (5Mb limit)');
 			});
 
 		})();
