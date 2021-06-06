@@ -36,6 +36,7 @@ module.exports = {
 				return message.channel.send(`<@${user.id}> please upload a screeshot of your submission with the appraisal window open.`);
 			}
 
+
 			// Promises, promises, how I hate thee. Fire off a resolve to reset, just in case
 			let sequences = Promise.resolve();
 
@@ -116,36 +117,92 @@ module.exports = {
 
 				console.log(text);
 
-				const weightRegex 	= new RegExp(/^[0-9]+[\.\,][0-9]+kg$/);
-				const heightRegex 	= new RegExp(/^[0-9]+[\.\,][0-9]+m$/);
-				const dateRegex 	= new RegExp(/^[0-9]+[\/\-\.][0-9]+[\/\-\.][0-9]+$/);
+				const embed = {
+					color: client.config.guild.embedColor,
+					author: {
+						name: client.config.guild.botName,
+						icon_url: client.config.guild.botIcon,
+					},
+					title: 'Community Day Submission',
+					description: `<@${user.id}>, thank you for submitting your Community Day submission, please confirm your information below:`,
+					fields: [],
+				};
+
+				const customData = new Array();
+
+				const weightRegex 	= new RegExp(/^[0-9]+[.,][0-9]+kg$/);
+				const heightRegex 	= new RegExp(/^[0-9]+[.,][0-9]+m$/);
+				const dateRegex 	= new RegExp(/^[0-9]+[/\-.][0-9]+[/\-.][0-9]+$/);
 
 				let weight 	= text.filter(elem => weightRegex.test(elem));
 				let height 	= text.filter(elem => heightRegex.test(elem));
 				let date 		= text.filter(elem => dateRegex.test(elem));
 
+				const weightIndex = text.indexOf('WEIGHT') - 1;
+				const heightIndex = text.indexOf('HEIGHT') - 1;
+
 				weight 	= weight.length > 0 ? weight[0] : false;
 				height 	= height.length > 0 ? height[0] : false;
 				date 	= date.length > 0 ? date[0] : false;
 
-				if(!weight || !height) {
-					message.reactions.removeAll().then(() => message.react('👎')).catch();
-					console.log(`<@${user.id}>, height or weight not detected.`);
-					return message.channel.send(`<@${user.id}>, height or weight not detected.`);
+				if(!userInfo.weight) {
+					if(weightIndex || weight && weight !== 'undefined' && weight !== undefined) {
+						if(!weight) {
+							weight = text[weightIndex];
+						}
+						if(weight) {
+							customData.push({ data: 'weight', value: weight });
+							embed.fields.push({
+								name: 'Weight',
+								value: weight,
+								inline: true,
+							});
+							customData.push({ data: 'image', value: attachments[0].url });
+						}
+					}
+					else {
+						message.channel.send(`<@${user.id}> could not read weight, please retry or tag a manager.`);
+					}
 				}
 
-				if(!date) {
-					message.reactions.removeAll().then(() => message.react('👎')).catch();
-					console.log(`<@${user.id}> please open the appraisal window and resubmit your screenshot.`);
-					return message.channel.send(`<@${user.id}> please open the appraisal window and resubmit your screenshot.`);
+				if(!userInfo.height) {
+					if(heightIndex || height && height !== 'undefined' && height !== undefined) {
+						if(!height) {
+							height = text[heightIndex];
+						}
+						customData.push({ data: 'height', value: height });
+						embed.fields.push({
+							name: 'Height',
+							value: height,
+							inline: true,
+						});
+						if(!weight) {
+							customData.push({ data: 'image', value: attachments[0].url });
+						}
+					}
+					else {
+						message.channel.send(`<@${user.id}> could not read height, please retry or tag a manager.`);
+					}
 				}
 
-				const customData = [
-					{ data: 'height', value: height },
-					{ data: 'weight', value: weight },
-					{ data: 'capturedate', value: date },
-					{ data: 'image', value: attachments[0].url },
-				];
+				if(!userInfo.date) {
+					if(date) {
+						customData.push({ data: 'capturedate', value: date });
+						embed.fields.push({
+							name: 'Capture Date',
+							value: date,
+							inline: true,
+						});
+					}
+					else {
+						message.channel.send(`<@${user.id}> please open the appraisal window and resubmit your screenshot.`);
+					}
+				}
+
+				embed.fields.push({
+					name: '---',
+					value: 'If there are any errors in your submission please tag a manager.',
+				});
 
 				console.log(customData);
 
@@ -155,39 +212,7 @@ module.exports = {
 
 						message.reactions.removeAll().then(() => message.react('👍')).catch();
 
-						message.channel.send(
-							{
-								embed: {
-									color: client.config.guild.embedColor,
-									author: {
-										name: client.config.guild.botName,
-										icon_url: client.config.guild.botIcon,
-									},
-									title: 'Community Day Submission',
-									description: `<@${user.id}>, thank you for submitting your Community Day submission, please confirm your information below:`,
-									fields: [
-										{
-											name: 'Height',
-											value: height,
-											inline: true,
-										},
-										{
-											name: 'Weight',
-											value: weight,
-											inline: true,
-										},
-										{
-											name: 'Capture Date',
-											value: date,
-											inline: true,
-										},
-										{
-											name: '---',
-											value: 'We will verify your information and notify you if you need to submit a video.',
-										},
-									],
-								},
-							},
+						message.channel.send({ embed: embed },
 						);
 
 					})

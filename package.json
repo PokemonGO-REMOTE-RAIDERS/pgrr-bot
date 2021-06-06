@@ -13,7 +13,7 @@
     "common-tags": "^1.8.0",
     "discord.js": "^12.5.3",
     "dotenv": "^8.2.0",
-    "elint": "^2.0.1",
+    "elint": "^1.5.3",
     "google-spreadsheet": "^3.1.15",
     "googleapis": "^67.1.1",
     "gs": "^0.0.2",
