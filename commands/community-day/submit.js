@@ -116,8 +116,8 @@ module.exports = {
 
 				console.log(text);
 
-				const weightRegex 	= new RegExp(/^[0-9]+\.[0-9]+kg$/);
-				const heightRegex 	= new RegExp(/^[0-9]+\.[0-9]+m$/);
+				const weightRegex 	= new RegExp(/^[0-9]+[\.\,][0-9]+kg$/);
+				const heightRegex 	= new RegExp(/^[0-9]+[\.\,][0-9]+m$/);
 				const dateRegex 	= new RegExp(/^[0-9]+[\/\-\.][0-9]+[\/\-\.][0-9]+$/);
 
 				let weight 	= text.filter(elem => weightRegex.test(elem));
