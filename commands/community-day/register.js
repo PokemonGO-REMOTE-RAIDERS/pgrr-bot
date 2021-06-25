@@ -69,7 +69,7 @@ module.exports = {
 								icon_url: client.config.guild.botIcon,
 							},
 							title: 'Community Day Registration',
-							description: `<@${user.id}>, thank you for registering for our ${client.config.guild.eventName} Community Day event, please confirm your information below:`,
+							description: `<@${user.id}>, welcome back!`,
 							fields: [
 								{
 									name: 'IGN',
@@ -92,7 +92,7 @@ module.exports = {
 								},
 								{
 									name: 'Update Your Info',
-									value: 'If any of your information has not been processed correctly please use `cdu {ign, lvl, or team} {correct value}` to fix your information.\n\nFor example, `cdu ign Nhemps311` to fix my in-game name.\n\n---',
+									value: 'Use `cdu {ign, lvl, or team} {correct value}`. For example, `cdu lvl 50` to fix your level.',
 								},
 							],
 						} });
@@ -108,7 +108,7 @@ module.exports = {
 			else {
 
 				if(!message.attachments.first()) {
-					return message.reply('Please upload a screenshot of your trainer profile with the command `register`');
+					return message.reply('Hello there! As a first time registrant you will need to type `register` and add a screenshot of your trainer profile in the same message.');
 				}
 
 				message.react('👌');
@@ -272,7 +272,7 @@ module.exports = {
 											},
 											{
 												name: 'Update Your Info',
-												value: 'If any of your information has not been processed correctly please use `cdu {ign, lvl, or team} {correct value}` to fix your information.\n\nFor example, `cdu ign Nhemps311` to fix my in-game name.\n\n---',
+												value: 'If any of your information has not been processed correctly please use `cdu {ign, lvl, or team} {correct value}` to update your information.\n\nFor example, `cdu lvl 50` to fix your in-game name.',
 											},
 										],
 									},
@@ -280,7 +280,7 @@ module.exports = {
 							);
 
 							if(memberName.toLowerCase() !== checkIgn.toLowerCase()) {
-								message.channel.send(`<@${user.id}> please make sure your IGN and Server Nickname match`);
+								// message.channel.send(`<@${user.id}> please make sure your IGN and Server Nickname match`);
 							}
 						})
 
