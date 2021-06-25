@@ -92,7 +92,7 @@ module.exports = {
 								},
 								{
 									name: 'Update Your Info',
-									value: 'Use `cdu {ign, lvl, or team} {correct value}`. For example, `cdu lvl 50` to fix your level.',
+									value: 'Use `cdu {ign, lvl, or team} {correct value}`. For example, `cdu lvl 50` to update your level.',
 								},
 							],
 						} });
@@ -108,7 +108,7 @@ module.exports = {
 			else {
 
 				if(!message.attachments.first()) {
-					return message.reply('Hello there! As a first time registrant you will need to type `register` and add a screenshot of your trainer profile in the same message.');
+					return message.reply(`Hello there <@${user.id}>! As a first time registrant you will need to type \`register\` and add a screenshot of your trainer profile in the same message.`);
 				}
 
 				message.react('👌');
@@ -272,7 +272,7 @@ module.exports = {
 											},
 											{
 												name: 'Update Your Info',
-												value: 'If any of your information has not been processed correctly please use `cdu {ign, lvl, or team} {correct value}` to update your information.\n\nFor example, `cdu lvl 50` to fix your in-game name.',
+												value: 'If any of your information has not been processed correctly please use `cdu {ign, lvl, or team} {correct value}` to update your information.\n\nFor example, `cdu lvl 50` to update your level.',
 											},
 										],
 									},
