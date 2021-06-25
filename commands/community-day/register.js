@@ -108,7 +108,7 @@ module.exports = {
 			else {
 
 				if(!message.attachments.first()) {
-					return message.send(`Hello there <@${user.id}>! As a first time registrant you will need to type \`register\` and add a screenshot of your trainer profile in the same message.`);
+					return message.channel.send(`Hello there <@${user.id}>! As a first time registrant you will need to type \`register\` and add a screenshot of your trainer profile in the same message.`);
 				}
 
 				message.react('👌');
