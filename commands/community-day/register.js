@@ -69,7 +69,7 @@ module.exports = {
 								icon_url: client.config.guild.botIcon,
 							},
 							title: 'Community Day Registration',
-							description: `<@${user.id}>, welcome back!`,
+							description: `Welcome back <@${user.id}>!`,
 							fields: [
 								{
 									name: 'IGN',
@@ -108,7 +108,7 @@ module.exports = {
 			else {
 
 				if(!message.attachments.first()) {
-					return message.reply(`Hello there <@${user.id}>! As a first time registrant you will need to type \`register\` and add a screenshot of your trainer profile in the same message.`);
+					return message.send(`Hello there <@${user.id}>! As a first time registrant you will need to type \`register\` and add a screenshot of your trainer profile in the same message.`);
 				}
 
 				message.react('👌');
