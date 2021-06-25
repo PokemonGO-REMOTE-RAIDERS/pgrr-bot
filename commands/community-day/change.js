@@ -8,7 +8,7 @@ module.exports = {
 	cooldown: 5,
 	roles: ['roleCDUser', 'roleCDAdmin'],
 	expectedArgs: 1,
-	aliases: ['fix', 'change', 'changed'],
+	aliases: ['fix', 'change', 'changed', 'cdu'],
 	noPrefix: true,
 	validArgs: [
 		{

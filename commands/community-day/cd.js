@@ -36,7 +36,7 @@ module.exports = {
 				messageEmbed.fields = [
 					{
 						name: 'How to Register',
-						value: `To register, go to <#${client.config.guild.channelRegister[0]}>, you will use the command \`%register\`. If this is your first time registering attach a photo of your trainer profile **IN THE SAME MESSAGE**.`,
+						value: `To register, go to <#${client.config.guild.channelRegister[0]}>, you will use the command \`register\`. If this is your first time registering attach a photo of your trainer profile **IN THE SAME MESSAGE**.`,
 					},
 				];
 			}
@@ -51,7 +51,7 @@ module.exports = {
 			else {
 				messageEmbed.fields = [
 					{
-						name: 'Community Is Closed',
+						name: 'Community Day Is Closed',
 						value: 'Thank you for your interest in community day, however registration and submission are closed at the moment.',
 					},
 				];
