@@ -87,6 +87,10 @@ module.exports = {
 									inline: true,
 								},
 								{
+									name: 'Event Details',
+									value: client.config.guild.eventDescription,
+								},
+								{
 									name: 'Update Your Info',
 									value: 'If any of your information has not been processed correctly please use `cdu {ign, lvl, or team} {correct value}` to fix your information.\n\nFor example, `cdu ign Nhemps311` to fix my in-game name.\n\n---',
 								},
@@ -263,12 +267,12 @@ module.exports = {
 												inline: true,
 											},
 											{
-												name: 'Update Your Info',
-												value: 'If any of your information has not been processed correctly please use `cdu {ign, lvl, or team} {correct value}` to fix your information.\n\nFor example, `cdu ign Nhemps311` to fix my in-game name.\n\n---',
-											},
-											{
 												name: 'Event Details',
 												value: client.config.guild.eventDescription,
+											},
+											{
+												name: 'Update Your Info',
+												value: 'If any of your information has not been processed correctly please use `cdu {ign, lvl, or team} {correct value}` to fix your information.\n\nFor example, `cdu ign Nhemps311` to fix my in-game name.\n\n---',
 											},
 										],
 									},
