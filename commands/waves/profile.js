@@ -65,6 +65,11 @@ module.exports = {
 						value: 'Coming Soon',
 						inline: true,
 					},
+					{
+						name: 'Hosting Since',
+						value: userInfo.registrationdate,
+						inline: true,
+					},
 				];
 			}
 

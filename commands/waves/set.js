@@ -75,6 +75,7 @@ module.exports = {
 					hosting: false,
 					failtc: true,
 					currentwave: 0,
+					registrationdate: new Date().toLocaleDateString('en-us'),
 				};
 
 				newUser[data] = value;
