@@ -115,7 +115,7 @@ module.exports = {
 					});
 				});
 
-				console.log(text);
+				// console.log(text);
 
 				const embed = {
 					color: client.config.guild.embedColor,
@@ -128,6 +128,10 @@ module.exports = {
 					fields: [],
 				};
 
+
+	
+
+
 				const customData = new Array();
 
 				const weightRegex 	= new RegExp(/^[0-9]+[.,][0-9]+kg$/);
@@ -136,20 +140,27 @@ module.exports = {
 
 				let weight 	= text.filter(elem => weightRegex.test(elem));
 				let height 	= text.filter(elem => heightRegex.test(elem));
-				let date 		= text.filter(elem => dateRegex.test(elem));
+				// let date 		= text.filter(elem => dateRegex.test(elem));
 
-				const weightIndex = text.indexOf('WEIGHT') - 1;
-				const heightIndex = text.indexOf('HEIGHT') - 1;
+				let weightIndex = text.indexOf('WEIGHT') - 1;
+				let heightIndex = text.indexOf('HEIGHT') - 1;
 
+
+				// Check if the XL / XS bubble is interferring with the text read.
+				weightIndex = text[weightIndex] === 'g' ? weightIndex - 1 : weightIndex;
+				heightIndex = text[heightIndex] === 'm' ? heightIndex - 1 : heightIndex;
+
+				
 				weight 	= weight.length > 0 ? weight[0] : false;
 				height 	= height.length > 0 ? height[0] : false;
-				date 	= date.length > 0 ? date[0] : false;
+				// date 	= date.length > 0 ? date[0] : false;
 
 				if(!userInfo.weight) {
 					if(weightIndex || weight && weight !== 'undefined' && weight !== undefined) {
 						if(!weight) {
 							weight = text[weightIndex];
 						}
+
 						if(weight) {
 							customData.push({ data: 'weight', value: weight });
 							embed.fields.push({
@@ -185,26 +196,26 @@ module.exports = {
 					}
 				}
 
-				if(!userInfo.date) {
-					if(date) {
-						customData.push({ data: 'capturedate', value: date });
-						embed.fields.push({
-							name: 'Capture Date',
-							value: date,
-							inline: true,
-						});
-					}
-					else {
-						message.channel.send(`<@${user.id}> please open the appraisal window and resubmit your screenshot.`);
-					}
-				}
+				// if(!userInfo.date) {
+				// 	if(date) {
+				// 		customData.push({ data: 'capturedate', value: date });
+				// 		embed.fields.push({
+				// 			name: 'Capture Date',
+				// 			value: date,
+				// 			inline: true,
+				// 		});
+				// 	}
+				// 	else {
+				// 		message.channel.send(`<@${user.id}> please open the appraisal window and resubmit your screenshot.`);
+				// 	}
+				// }
 
 				embed.fields.push({
 					name: '---',
 					value: 'If there are any errors in your submission please tag a manager.',
 				});
 
-				console.log(customData);
+//				console.log(customData);
 
 				setUserInfo(process.env.workbookCD, client.config.guild.eventID, user, customData, null)
 
