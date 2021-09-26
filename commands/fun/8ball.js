@@ -60,6 +60,8 @@ module.exports = {
 				'Yes, Bill poo\'d successfully',
 				'No, Streaks hasn\'t done enough shots',
 				'Yes, Streaks has shots ready',
+				'No, Schuller is busy tending to her ttar farm',
+				'Yes, Schuller beat Bill in hardest hitter',
 			];
 
 			responses = generalResponses.concat(bxResponses);
