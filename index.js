@@ -126,7 +126,7 @@
 			}
 
 			if(command.channels) {
-				const channelCheck = checkChannels(client, message, command);
+				const channelCheck = checkChannels(client, message, command.channels);
 				if(!channelCheck) {
 					return message.reply('This command can not be used in this channel!');
 				}

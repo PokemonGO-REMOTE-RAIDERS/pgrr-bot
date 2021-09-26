@@ -87,6 +87,7 @@ module.exports = {
 					{ data: 'waveid', 		value: sent.id },
 					{ data: 'starttime', 	value: new Date() },
 					{ data: 'channelname', 	value: message.channel.name },
+					{ data: 'channelid', 	value: message.channel.id },
 				];
 
 				if(role) {

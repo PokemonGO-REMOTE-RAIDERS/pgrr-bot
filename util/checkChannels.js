@@ -1,10 +1,10 @@
-module.exports = function checkChannel(client, message, command) {
+module.exports = function checkChannel(client, message, channels) {
 
 	// Establish the allowed channels array
 	const allowedChannels = new Array();
 
 	// Loop through all of the channels allowed by the command
-	command.channels.forEach(channel => {
+	channels.forEach(channel => {
 
 		// Grab the config values (should be an array of channel IDs set in Google Sheets)
 		const allowedChannel = client.config.guild[channel];
