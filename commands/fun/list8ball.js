@@ -6,12 +6,6 @@ module.exports = {
 	noPrefix: true,
 	// cooldown: 60,
 	execute(message) {
-
-		function randomNumber(min, max) {
-			return Math.floor(Math.random() * (max - min) + min);
-		}
-		const user = message.author;
-
 		const generalResponses = [
 			'As I see it, yes',
 			'Ask again later',
@@ -50,16 +44,10 @@ module.exports = {
 			'827925149605036053',
 			'878230563608223834',
 			'829158987555012619',
+			'828302052924325928',
 		];
 
-		const isBXRoom = bxRooms.forEach((elem) => {
-			if(elem == message.channel.id) {
-				console.log(true);
-				return true;
-			}
-		});
-
-		if(isBXRoom) {
+		if(bxRooms.includes(message.channel.id)) {
 
 			const bxResponses = [
 				'No, Amanda took a wrong turn to this gym',

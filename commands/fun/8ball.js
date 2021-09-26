@@ -52,14 +52,7 @@ module.exports = {
 			'829158987555012619',
 		];
 
-		const isBXRoom = bxRooms.forEach((elem) => {
-			if(elem == message.channel.id) {
-				console.log(true);
-				return true;
-			}
-		});
-
-		if(isBXRoom) {
+		if(bxRooms.includes(message.channel.id)) {
 
 			const bxResponses = [
 				'No, Amanda took a wrong turn to this gym',
