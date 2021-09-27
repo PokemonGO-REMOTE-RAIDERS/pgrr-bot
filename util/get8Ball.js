@@ -52,8 +52,6 @@ module.exports = async function get8Balls(workbookID, sheetID) {
 		bxRooms: bxRooms,
 	};
 
-	console.log(general);
-
 	return response;
 
 	// If no user back out
