@@ -3,14 +3,12 @@
  * @param {*} user The id of the user you're looking up.
  * @param {*} data which data do you need to return from that user.
  */
-module.exports = async function getUserInfo(workbookID, sheetID, user, data) {
+module.exports = async function get8Balls(workbookID, sheetID) {
 
 	// Setup
 	this.sheetID 		= sheetID;
-	this.user 		= user;
-	this.data 		= data;
 	this.wookbookID 	= workbookID;
-	let response;
+	// let response;
 
 	// Google Sheets
 	const { GoogleSpreadsheet } = require('google-spreadsheet');
@@ -29,32 +27,51 @@ module.exports = async function getUserInfo(workbookID, sheetID, user, data) {
 	const sheet = doc.sheetsById[this.sheetID];
 	const rows = await sheet.getRows();
 
-	// console.log(rows, user);
-
 	// Loop through the rows and pull back the user based on the Discord User ID
-	let userInfo = false;
-	for(const row of rows) {
-		if(row.userid == this.user.id) {
-			userInfo = row;
+	// let userInfo = false;
+
+	const general = Array();
+	const bxResponses = Array();
+	const bxRooms = Array();
+
+	rows.forEach((row) => {
+		if(row.general !== '' && row.general !== undefined && row.general !== null && row.general !== 'undefined') {
+			general.push(row.general);
 		}
-	}
+		if(row.bxResponses !== '' && row.bxResponses !== undefined && row.bxResponses !== null && row.bxResponses !== 'undefined') {
+			bxResponses.push(row.bxResponses);
+		}
+		if(row.bxRooms !== '' && row.bxRooms !== undefined && row.bxRooms !== null && row.bxRooms !== 'undefined') {
+			bxRooms.push(row.bxRooms);
+		}
+	});
+
+	const response = {
+		general: general,
+		bxResponses: bxResponses,
+		bxRooms: bxRooms,
+	};
+
+	console.log(general);
+
+	return response;
 
 	// If no user back out
-	if(!userInfo) {
-		return false;
-	}
+	// if(!response) {
+	// 	return false;
+	// }
 
 	// Send back the full row if requested
-	else if(this.data == 'row') {
-		response = userInfo;
-	}
+	// else if(this.data == 'row') {
+	// 	response = userInfo;
+	// }
 
 	// Otherwise send back just that one data point.
-	else {
-		response = userInfo[data];
-	}
+	// else {
+	// 	response = userInfo[data];
+	// }
 
 	// Wait for response to be set before sending.
-	return await response;
+	// return await response;
 
 };

@@ -1,20 +1,24 @@
 const setUserInfo = require('../../util/setUserInfo.js');
 const getUserInfo = require('../../util/getUserInfo.js');
 const checkDateValidation = require('../../util/checkDateValidation.js');
+const botConfig = require('../../util/configSetup.js');
 module.exports = {
 	name: 'submit',
 	description: 'Submit your Community Day Event Pokemon',
-	config: 'cd',
 	args: false,
 	cooldown: 5,
 	noPrefix: true,
+	config: 'cd',
 	roles: ['roleCDUser', 'roleCDAdmin'],
 	channels: ['channelSubmit'],
-	execute(message, args, client) {
+	execute(message) {
 		(async function() {
+			const config = await botConfig(process.env.workbookCD, process.env.sheetCDConfig).catch(error => console.log(error));
+			const cdConfig = message.guild.id === config.production.guild ? config.production : config.development;
+
 			const user = message.author;
-			const startDate = client.config.guild.submitStart;
-			const endDate = client.config.guild.submitEnd;
+			const startDate = cdConfig.submitStart;
+			const endDate = cdConfig.submitEnd;
 
 			const dateValidation = checkDateValidation(startDate, endDate);
 
@@ -24,9 +28,9 @@ module.exports = {
 				return message.channel.send(`<@${user.id}>, community day submissions are ${closedOpens}.`);
 			}
 
-			const userInfo = await getUserInfo(process.env.workbookCD, client.config.guild.eventID, user, 'row').catch();
+			const userInfo = await getUserInfo(process.env.workbookCD, cdConfig.eventID, user, 'row').catch();
 			if(!userInfo) {
-				return message.channel.send(`<@${user.id}>, you are not registered for this Community Day event, please be sure to submit your registration before the deadline. This community day deadline was ${client.config.guild.enrollmentEnd}.`);
+				return message.channel.send(`<@${user.id}>, you are not registered for this Community Day event, please be sure to submit your registration before the deadline. This community day deadline was ${cdConfig.enrollmentEnd}.`);
 			}
 
 			const attachments = message.attachments.array();
@@ -118,20 +122,16 @@ module.exports = {
 				// console.log(text);
 
 				const embed = {
-					color: client.config.guild.embedColor,
+					color: cdConfig.embedColor,
 					author: {
-						name: client.config.guild.botName,
-						icon_url: client.config.guild.botIcon,
+						name: cdConfig.botName,
+						icon_url: cdConfig.botIcon,
 					},
 					title: 'Community Day Submission',
 					description: `<@${user.id}>, thank you for submitting your Community Day submission, please confirm your information below:`,
 					fields: [],
 				};
-
-
 	
-
-
 				const customData = new Array();
 
 				const weightRegex 	= new RegExp(/^[0-9]+[.,][0-9]+kg$/);
@@ -150,7 +150,7 @@ module.exports = {
 				weightIndex = text[weightIndex] === 'g' ? weightIndex - 1 : weightIndex;
 				heightIndex = text[heightIndex] === 'm' ? heightIndex - 1 : heightIndex;
 
-				
+
 				weight 	= weight.length > 0 ? weight[0] : false;
 				height 	= height.length > 0 ? height[0] : false;
 				// date 	= date.length > 0 ? date[0] : false;
@@ -217,7 +217,7 @@ module.exports = {
 
 //				console.log(customData);
 
-				setUserInfo(process.env.workbookCD, client.config.guild.eventID, user, customData, null)
+				setUserInfo(process.env.workbookCD, cdConfig.eventID, user, customData, null)
 
 					.then(() => {
 

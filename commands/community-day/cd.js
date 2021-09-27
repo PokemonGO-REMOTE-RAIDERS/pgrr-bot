@@ -1,33 +1,35 @@
 const checkDateValidation = require('../../util/checkDateValidation.js');
+const botConfig = require('../../util/configSetup.js');
 module.exports = {
 	name: 'cd',
 	description: 'Get information about community day',
-	config: 'cd',
 	args: false,
 	cooldown: 5,
+	config: 'cd',
 	noPrefix: true,
-	execute(message, args, client) {
+	execute(message) {
 		(async function() {
-
+			const config = await botConfig(process.env.workbookCD, process.env.sheetCDConfig).catch(error => console.log(error));
+			const cdConfig = message.guild.id === config.production.guild ? config.production : config.development;
 			const messageEmbed = {
-				color: client.config.guild.embedColor,
+				color: cdConfig.embedColor,
 				author: {
-					name: client.config.guild.botName,
-					icon_url: client.config.guild.botIcon,
+					name: cdConfig.botName,
+					icon_url: cdConfig.botIcon,
 				},
-				title: `${client.config.guild.eventName} Community Day Event`,
-				description: `${client.config.guild.eventDescription}`,
-				timestamp: new Date(client.config.guild.enrollmentEnd),
+				title: `${cdConfig.eventName} Community Day Event`,
+				description: `${cdConfig.eventDescription}`,
+				timestamp: new Date(cdConfig.enrollmentEnd),
 				footer: {
 					text: 'Registration ends',
 				},
 			};
 
-			const submitStartDate = client.config.guild.submitStart;
-			const submitEndDate = client.config.guild.submitEnd;
+			const submitStartDate = cdConfig.submitStart;
+			const submitEndDate = cdConfig.submitEnd;
 
-			const enrollmentStartDate = client.config.guild.enrollmentStart;
-			const enrollmentEndDate = client.config.guild.enrollmentEnd;
+			const enrollmentStartDate = cdConfig.enrollmentStart;
+			const enrollmentEndDate = cdConfig.enrollmentEnd;
 
 			const submitDateValidation = checkDateValidation(submitStartDate, submitEndDate);
 			const enrollmentDateValidation = checkDateValidation(enrollmentStartDate, enrollmentEndDate);
@@ -36,7 +38,7 @@ module.exports = {
 				messageEmbed.fields = [
 					{
 						name: 'How to Register',
-						value: `To register, go to <#${client.config.guild.channelRegister[0]}>, you will use the command \`register\`. If this is your first time registering attach a photo of your trainer profile **IN THE SAME MESSAGE**.`,
+						value: `To register, go to <#${cdConfig.channelRegister[0]}>, you will use the command \`register\`. If this is your first time registering attach a photo of your trainer profile **IN THE SAME MESSAGE**.`,
 					},
 				];
 			}
@@ -44,7 +46,7 @@ module.exports = {
 				messageEmbed.fields = [
 					{
 						name: 'How to Submit',
-						value: `To submit pick your best **shiny**, go to <#${client.config.guild.channelSubmit[0]}>, you will use the command \`%submit\`, and **IN THE SAME MESSAGE** attach two screenshots: one with the pokemon and its stats and one with the appraisal window open.`,
+						value: `To submit pick your best **shiny**, go to <#${cdConfig.channelSubmit[0]}>, you will use the command \`%submit\`, and **IN THE SAME MESSAGE** attach two screenshots: one with the pokemon and its stats and one with the appraisal window open.`,
 					},
 				];
 			}

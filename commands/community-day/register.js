@@ -2,25 +2,29 @@ const setUserInfo = require('../../util/setUserInfo.js');
 const getUserInfo = require('../../util/getUserInfo.js');
 const getTeamRole = require('../../util/getTeamRole.js');
 const checkDateValidation = require('../../util/checkDateValidation.js');
+const botConfig = require('../../util/configSetup.js');
 module.exports = {
 	name: 'register',
 	description: 'Register for community day',
-	config: 'cd',
 	args: false,
+	config: 'cd',
 	cooldown: 5,
 	noPrefix: true,
 	roles: ['roleCDUser', 'roleCDAdmin'],
 	channels: ['channelRegister'],
 	execute(message, args, client) {
 		(async function() {
+			const config = await botConfig(process.env.workbookCD, process.env.sheetCDConfig).catch(error => console.log(error));
+			const cdConfig = message.guild.id === config.production.guild ? config.production : config.development;
+
 			const user = message.author;
 			const member = message.guild.members.cache.get(user.id);
 			const userInfo = await getUserInfo(process.env.workbookCD, process.env.sheetCDDatabase, user, 'row').catch();
 			let memberName = new String();
 			memberName = member.nickname ? member.nickname : user.username;
 
-			const startDate = client.config.guild.enrollmentStart;
-			const endDate = client.config.guild.enrollmentEnd;
+			const startDate = cdConfig.enrollmentStart;
+			const endDate = cdConfig.enrollmentEnd;
 
 			const dateValidation = checkDateValidation(startDate, endDate);
 
@@ -43,7 +47,7 @@ module.exports = {
 
 				message.react('👌');
 
-				const eventUserInfo = await getUserInfo(process.env.workbookCD, client.config.guild.eventID, user, 'row').catch();
+				const eventUserInfo = await getUserInfo(process.env.workbookCD, cdConfig.eventID, user, 'row').catch();
 
 				if(eventUserInfo) {
 					message.channel.send(`<@${user.id}> you have already registered for this event.`);
@@ -51,7 +55,7 @@ module.exports = {
 					return;
 				}
 
-				setUserInfo(process.env.workbookCD, client.config.guild.eventID, user, newEventRegistration, null, true)
+				setUserInfo(process.env.workbookCD, cdConfig.eventID, user, newEventRegistration, null, true)
 
 					.then(() => {
 						setUserInfo(process.env.workbookCD, process.env.sheetCDDatabase, user, 'numEnrollments', parseInt(userInfo.numEnrollments) + 1, false).catch();
@@ -63,10 +67,10 @@ module.exports = {
 
 					.then(() => {
 						message.channel.send({ embed: {
-							color: client.config.guild.embedColor,
+							color: cdConfig.embedColor,
 							author: {
-								name: client.config.guild.botName,
-								icon_url: client.config.guild.botIcon,
+								name: cdConfig.botName,
+								icon_url: cdConfig.botIcon,
 							},
 							title: 'Community Day Registration',
 							description: `Welcome back <@${user.id}>!`,
@@ -88,7 +92,7 @@ module.exports = {
 								},
 								{
 									name: 'Event Details',
-									value: client.config.guild.eventDescription,
+									value: cdConfig.eventDescription,
 								},
 								{
 									name: 'Update Your Info',
@@ -243,13 +247,13 @@ module.exports = {
 							message.channel.send(
 								{
 									embed: {
-										color: client.config.guild.embedColor,
+										color: cdConfig.embedColor,
 										author: {
-											name: client.config.guild.botName,
-											icon_url: client.config.guild.botIcon,
+											name: cdConfig.botName,
+											icon_url: cdConfig.botIcon,
 										},
 										title: 'Community Day Registration',
-										description: `<@${user.id}>, thank you for registering for our ${client.config.guild.eventName} Community Day event, please confirm your information below:`,
+										description: `<@${user.id}>, thank you for registering for our ${cdConfig.eventName} Community Day event, please confirm your information below:`,
 										fields: [
 											{
 												name: 'IGN',
@@ -268,7 +272,7 @@ module.exports = {
 											},
 											{
 												name: 'Event Details',
-												value: client.config.guild.eventDescription,
+												value: cdConfig.eventDescription,
 											},
 											{
 												name: 'Update Your Info',
@@ -293,7 +297,7 @@ module.exports = {
 								team: newUser.team,
 								enrollDate: newUser.initialEnrollDate,
 							};
-							setUserInfo(process.env.workbookCD, client.config.guild.eventID, user, newEventRegistration, null, true).catch();
+							setUserInfo(process.env.workbookCD, cdConfig.eventID, user, newEventRegistration, null, true).catch();
 						})
 
 						.catch();

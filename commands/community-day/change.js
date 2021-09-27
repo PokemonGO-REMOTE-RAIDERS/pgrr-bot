@@ -1,11 +1,12 @@
 const setUserInfo = require('../../util/setUserInfo.js');
 const getUserInfo = require('../../util/getUserInfo.js');
+
 module.exports = {
 	name: 'change',
 	description: 'Change information about a Community Day participant.',
-	config: 'cd',
 	args: true,
 	cooldown: 5,
+	config: 'cd',
 	roles: ['roleCDUser', 'roleCDAdmin'],
 	expectedArgs: 1,
 	aliases: ['fix', 'change', 'changed', 'cdu'],
