@@ -4,10 +4,13 @@ const checkChannel = require('../../util/checkChannels');
 const ms = require('ms');
 
 function waveMessage(wave, userInfo, client) {
+
+	wave = wave ? wave : '';
+
 	const embed = {
 		color: client.config.guild.embedColor,
-		title: `**✨Wave ${wave} SENDING INVITES!✨**`,
-		description: 'DON’T LEAVE WHEN THE HOST DOES\n\n_LEAVE ONLY AT 10 SECONDS IF YOU HAVE LESS PEOPLE THAN RECOMMENDED._',
+		title: `**✨WAVE ${wave} SENDING INVITES!✨**`,
+		description: '**DON’T LEAVE WHEN THE HOST DOES**\n\n_Leve only at 10 seconds if you have less trainers than is recommended._',
 		author: {
 			name: client.config.guild.botName,
 			icon_url: client.config.guild.botIcon,
@@ -37,27 +40,35 @@ module.exports = {
 			const channels = ['sponsoredChannels'];
 			const userInfo = await getUserInfo(process.env.workbookWavehost, process.env.sheetWaveHosts, user, 'row');
 
-			console.log(channels);
-
 			const isSponsoredChannel = checkChannel(client, message, channels);
 
 			// We're not in a sponsored channel, send away.
 			if(!isSponsoredChannel) {
-				console.log('Not a sponsored channel');
+				console.log(`${user.username}: Not a sponsored channel, good to go.`);
 				return message.channel.send({ embed: waveMessage(wave, userInfo, client) });
 			}
 
 			// We are in a sponsored channel.
-			// The user doesn't have permissions. Return silence.
-			if(!userInfo || (userInfo.hosting == 'FALSE' || userInfo.hosting == false) || userInfo.channelid !== message.channel.id) {
-				console.log('Not verified user OR not current hosting OR hosting and not in the correct channel.');
+			if(!userInfo) {
+				console.log(`${user.username}: Not a verified host OR  OR .`);
+				return;
+			}
+
+			if(userInfo.hosting == 'FALSE' || userInfo.hosting == false) {
+				console.log(`${user.username}: Not currently hosting`);
+				return;
+			}
+
+			if(userInfo.channelid !== message.channel.id) {
+				console.log(`${user.username}: Hosting, but not waving in the correct channel.`);
 				return;
 			}
 
 			// User is hosting AND the channel id's match
+			// One last check for good measure.
 			if((userInfo.hosting == 'TRUE' || userInfo.host == true) && userInfo.channelid == message.channel.id) {
 
-				console.log('Verified user, and in the correct channel.');
+				// console.log(`${user.username}: Verified user, and in the correct channel.`);
 
 				const now = new Date();
 				const duration = now - Date.parse(userInfo.starttime);
@@ -70,7 +81,7 @@ module.exports = {
 					{ data: 'hosting', 		value: false },
 					{ data: 'currentwave', 	value: 0 },
 					{ data: 'fails',		value: 0 },
-					{ data: 'notifications',	 value: 0 },
+					{ data: 'notifications',	value: 0 },
 					{ data: 'strings',		value: 0 },
 					{ data: 'tcmessageid', 	value: '' },
 					{ data: 'starttime',	value: '' },
@@ -224,7 +235,7 @@ module.exports = {
 							},
 						],
 					} });
-					
+
 					// Delete Trainer Code if it's still there.
 					if(tcmessageid) {
 						message.channel.messages.fetch(tcmessageid)
