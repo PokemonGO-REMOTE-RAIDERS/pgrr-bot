@@ -49,8 +49,8 @@ module.exports = {
 
 			// We are in a sponsored channel.
 			// The user doesn't have permissions. Return silence.
-			if(!userInfo || (userInfo.hosting == 'FALSE' || userInfo.hosting == false)) {
-				console.log('Not verified user OR not current hosting.');
+			if(!userInfo || (userInfo.hosting == 'FALSE' || userInfo.hosting == false) || userInfo.channelid !== message.channel.id) {
+				console.log('Not verified user OR not current hosting OR hosting and not in the correct channel.');
 				return;
 			}
 
@@ -62,7 +62,7 @@ module.exports = {
 				const now = new Date();
 				const duration = now - Date.parse(userInfo.starttime);
 				const thisWave = parseInt(userInfo.currentwave) + 1;
-				const tcmessageid = userInfo.tcmessageid;
+				const tcmessageid = userInfo.tcmessageid ? userInfo.tcmessageid : false;
 
 				const starttime = new Date(userInfo.starttime).toLocaleDateString('en-us');
 
@@ -143,8 +143,19 @@ module.exports = {
 				case 'closed':
 				case 'end':
 
+
+					// Save all data to History
+					setUserInfo(process.env.workbookWavehost, process.env.sheetWaveHistory, user, history, null, true).then(() => {
+
+						// Reset wavehost sheet
+						setUserInfo(process.env.workbookWavehost, process.env.sheetWaveHosts, user, resetWaveData, null).catch();
+
+					}).catch();
+
+
 					// Send Wave Record if reached
 					if(parseInt(userInfo.maxwaves) < userInfo.currentwave) {
+
 						resetWaveData.push({ data: 'maxwaves', value: userInfo.currentwave });
 						message.channel.send({ embed: {
 							color: client.config.guild.embedColor,
@@ -167,14 +178,15 @@ module.exports = {
 							],
 							timestamp: now,
 						} });
-					}
 
+					}
 
 					// Send Wave Summary
 					message.channel.send({ embed: {
 						color: client.config.guild.embedColor,
 						title: 'WAVE HOST HAS BEEN CLOSED!',
 						description: userInfo.closed,
+						timestamp: now,
 						author: {
 							name: client.config.guild.botName,
 							icon_url: client.config.guild.botIcon,
@@ -211,13 +223,8 @@ module.exports = {
 								inline: true,
 							},
 						],
-						timestamp: now,
-						// footer: {
-						// 	text: 'If you have questions, please tag @manager',
-						// },
-					},
-					});
-
+					} });
+					
 					// Delete Trainer Code if it's still there.
 					if(tcmessageid) {
 						message.channel.messages.fetch(tcmessageid)
@@ -226,14 +233,6 @@ module.exports = {
 								tcmessage.channel.send('Trainer Code Deleted');
 							}).catch((error) => console.log(error));
 					}
-
-					// Save all data to History
-					setUserInfo(process.env.workbookWavehost, process.env.sheetWaveHistory, user, history, null, true).then(() => {
-
-						// Reset wavehost sheet
-						setUserInfo(process.env.workbookWavehost, process.env.sheetWaveHosts, user, resetWaveData, null).catch();
-
-					}).catch();
 
 					break;
 
