@@ -14,6 +14,8 @@ module.exports = function checkChannel(client, message, channels) {
 
 	});
 
+
+	console.log('AllowedChannels: ', allowedChannels);
 	let response = false;
 
 	// Loop through all Role IDs and check to see if the user is assigned to any of them

@@ -32,22 +32,32 @@ module.exports = {
 	roles: ['roleVerified'],
 	execute(message, args, client) {
 		(async function() {
-
 			const wave = args[0];
 			const user = message.author;
 			const channels = ['sponsoredChannels'];
 			const userInfo = await getUserInfo(process.env.workbookWavehost, process.env.sheetWaveHosts, user, 'row');
 
-			if(!userInfo && !checkChannel(client, message, channels)) {
+			console.log(channels);
+
+			const isSponsoredChannel = checkChannel(client, message, channels);
+
+			// We're not in a sponsored channel, send away.
+			if(!isSponsoredChannel) {
+				console.log('Not a sponsored channel');
 				return message.channel.send({ embed: waveMessage(wave, userInfo, client) });
 			}
-			else if(userInfo.hosting == 'FALSE' || userInfo.hosting == false && !checkChannel(client, message, channels)) {
-				return message.channel.send({ embed: waveMessage(wave, userInfo, client) });
+
+			// We are in a sponsored channel.
+			// The user doesn't have permissions. Return silence.
+			if(!userInfo || (userInfo.hosting == 'FALSE' || userInfo.hosting == false)) {
+				console.log('Not verified user OR not current hosting.');
+				return;
 			}
-			else if(
-				userInfo
-				&& checkChannel(client, message, channels)
-				&& ((userInfo.hosting == 'TRUE' || userInfo.host == true) && userInfo.channelid == message.channel.id)) {
+
+			// User is hosting AND the channel id's match
+			if((userInfo.hosting == 'TRUE' || userInfo.host == true) && userInfo.channelid == message.channel.id) {
+
+				console.log('Verified user, and in the correct channel.');
 
 				const now = new Date();
 				const duration = now - Date.parse(userInfo.starttime);
