@@ -50,12 +50,12 @@ module.exports = {
 
 			// We are in a sponsored channel.
 			if(!userInfo) {
-				console.log(`${user.username}: Not a verified host OR  OR .`);
+				console.log(`${user.username}: In a sponsored channel, but not a verified host.`);
 				return;
 			}
 
 			if(userInfo.hosting == 'FALSE' || userInfo.hosting == false) {
-				console.log(`${user.username}: Not currently hosting`);
+				console.log(`${user.username}: Verified host, but not currently hosting.`);
 				return;
 			}
 
