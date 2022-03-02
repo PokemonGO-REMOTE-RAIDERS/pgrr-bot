@@ -10,7 +10,7 @@ function waveMessage(wave, userInfo, client) {
 	const embed = {
 		color: client.config.guild.embedColor,
 		title: `**✨WAVE ${wave} SENDING INVITES!✨**`,
-		description: '**DON’T LEAVE WHEN THE HOST DOES**\n\n_Leve only at 10 seconds if you have less trainers than is recommended._',
+		description: '**DON’T LEAVE WHEN THE HOST DOES**\n\n_Leave only at 10 seconds if you have less trainers than is recommended._',
 		author: {
 			name: client.config.guild.botName,
 			icon_url: client.config.guild.botIcon,
