@@ -3,6 +3,7 @@ const setUserInfo = require('../../util/setUserInfo.js');
 const processNotifications = require('../../util/processNotifications.js');
 
 module.exports = {
+	include: true,	
 	name: 'notify',
 	description: 'Promote an active wave.',
 	aliases: ['announce', 'announcement', 'notify', 'notification', 'promote'],
@@ -11,7 +12,7 @@ module.exports = {
 	// cooldown: 600,
 	roles: ['roleWaveHost', 'roleAdmin'],
 	args: false,
-	execute(message, args, client) {
+	execute(message, args, client, logger) {
 		(async function() {
 			const data = 'row';
 			const user = message.author;
@@ -29,7 +30,7 @@ module.exports = {
 				});
 			}
 
-		}());
+		}().catch((error) => { logger.log({ level: 'error', message: error }); }));
 
 	},
 };

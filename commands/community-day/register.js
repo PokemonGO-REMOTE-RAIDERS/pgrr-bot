@@ -4,6 +4,7 @@ const getTeamRole = require('../../util/getTeamRole.js');
 const checkDateValidation = require('../../util/checkDateValidation.js');
 const botConfig = require('../../util/configSetup.js');
 module.exports = {
+	include: true,	
 	name: 'register',
 	description: 'Register for community day',
 	args: false,
@@ -12,14 +13,25 @@ module.exports = {
 	noPrefix: true,
 	roles: ['roleCDUser', 'roleCDAdmin'],
 	channels: ['channelRegister'],
-	execute(message, args, client) {
+	execute(message, args, client, logger) {
 		(async function() {
-			const config = await botConfig(process.env.workbookCD, process.env.sheetCDConfig).catch(error => console.log(error));
-			const cdConfig = message.guild.id === config.production.guild ? config.production : config.development;
+			const config = await botConfig(
+				process.env.workbookCD,
+				process.env.sheetCDConfig,
+			).catch((error) => console.log(error));
+			const cdConfig =
+				message.guild.id === config.production.guild
+					? config.production
+					: config.development;
 
 			const user = message.author;
 			const member = message.guild.members.cache.get(user.id);
-			const userInfo = await getUserInfo(process.env.workbookCD, process.env.sheetCDDatabase, user, 'row').catch();
+			const userInfo = await getUserInfo(
+				process.env.workbookCD,
+				process.env.sheetCDDatabase,
+				user,
+				'row',
+			).catch();
 			let memberName = new String();
 			memberName = member.nickname ? member.nickname : user.username;
 
@@ -28,14 +40,15 @@ module.exports = {
 
 			const dateValidation = checkDateValidation(startDate, endDate);
 
-			if(dateValidation == 'early' || dateValidation == 'late') {
+			if (dateValidation == 'early' || dateValidation == 'late') {
 				const closedOpens = dateValidation == 'early' ? 'not open yet' : 'closed';
 
-				return message.channel.send(`<@${user.id}>, community day registrations are ${closedOpens}.`);
+				return message.channel.send(
+					`<@${user.id}>, community day registrations are ${closedOpens}.`,
+				);
 			}
 
-			if(userInfo) {
-
+			if (userInfo) {
 				const newEventRegistration = {
 					userid: user.id,
 					discordName: memberName,
@@ -47,72 +60,101 @@ module.exports = {
 
 				message.react('👌');
 
-				const eventUserInfo = await getUserInfo(process.env.workbookCD, cdConfig.eventID, user, 'row').catch();
+				const eventUserInfo = await getUserInfo(
+					process.env.workbookCD,
+					cdConfig.eventID,
+					user,
+					'row',
+				).catch();
 
-				if(eventUserInfo) {
-					message.channel.send(`<@${user.id}> you have already registered for this event.`);
-					message.reactions.removeAll().then(() => message.react('👍')).catch();
+				if (eventUserInfo) {
+					message.channel.send(
+						`<@${user.id}> you have already registered for this event.`,
+					);
+					message.reactions
+						.removeAll()
+						.then(() => message.react('👍'))
+						.catch();
 					return;
 				}
 
-				setUserInfo(process.env.workbookCD, cdConfig.eventID, user, newEventRegistration, null, true)
-
+				setUserInfo(
+					process.env.workbookCD,
+					cdConfig.eventID,
+					user,
+					newEventRegistration,
+					null,
+					true,
+				)
 					.then(() => {
-						setUserInfo(process.env.workbookCD, process.env.sheetCDDatabase, user, 'numEnrollments', parseInt(userInfo.numEnrollments) + 1, false).catch();
+						setUserInfo(
+							process.env.workbookCD,
+							process.env.sheetCDDatabase,
+							user,
+							'numEnrollments',
+							parseInt(userInfo.numEnrollments) + 1,
+							false,
+						).catch();
 					})
 
 					.then(() => {
-						message.reactions.removeAll().then(() => message.react('👍')).catch();
+						message.reactions
+							.removeAll()
+							.then(() => message.react('👍'))
+							.catch();
 					})
 
 					.then(() => {
-						message.channel.send({ embed: {
-							color: cdConfig.embedColor,
-							author: {
-								name: cdConfig.botName,
-								icon_url: cdConfig.botIcon,
+						message.channel.send({
+							embed: {
+								color: cdConfig.embedColor,
+								author: {
+									name: cdConfig.botName,
+									icon_url: cdConfig.botIcon,
+								},
+								title: 'Community Day Registration',
+								description: `Welcome back <@${user.id}>!`,
+								fields: [
+									{
+										name: 'IGN',
+										value: userInfo.ign,
+										inline: true,
+									},
+									{
+										name: 'Level',
+										value: userInfo.level,
+										inline: true,
+									},
+									{
+										name: 'Team',
+										value: userInfo.team,
+										inline: true,
+									},
+									{
+										name: 'Event Details',
+										value: cdConfig.eventDescription,
+									},
+									{
+										name: 'Update Your Info',
+										value:
+											'Use `cdu {ign, lvl, or team} {correct value}`. For example, `cdu lvl 50` to update your level.',
+									},
+								],
 							},
-							title: 'Community Day Registration',
-							description: `Welcome back <@${user.id}>!`,
-							fields: [
-								{
-									name: 'IGN',
-									value: userInfo.ign,
-									inline: true,
-								},
-								{
-									name: 'Level',
-									value: userInfo.level,
-									inline: true,
-								},
-								{
-									name: 'Team',
-									value: userInfo.team,
-									inline: true,
-								},
-								{
-									name: 'Event Details',
-									value: cdConfig.eventDescription,
-								},
-								{
-									name: 'Update Your Info',
-									value: 'Use `cdu {ign, lvl, or team} {correct value}`. For example, `cdu lvl 50` to update your level.',
-								},
-							],
-						} });
+						});
 					})
 
-					.catch((error) =>{
-						message.channel.send('Sorry, there was an error.  Please try again later.');
+					.catch((error) => {
+						message.channel.send(
+							'Sorry, there was an error.  Please try again later.',
+						);
 						console.log(error);
 					});
-
-			}
-
-			else {
-
-				if(!message.attachments.first()) {
-					return message.channel.send(`Hello there <@${user.id}>! As a first time registrant you will need to type \`register\` and add a screenshot of your trainer profile in the same message.`);
+			} else {
+				if (!message.attachments.first()) {
+					return message.channel.send(
+						`Hello there <@${user.id}>! As a first time registrant you will need to type \`register\` and add a screenshot of your trainer profile in the same message.`,
+					);
 				}
 
 				message.react('👌');
@@ -142,13 +184,10 @@ module.exports = {
 				const screenshots = new Array();
 
 				// Loop through the attachments
-				for(const attachment of attachments) {
-
+				for (const attachment of attachments) {
 					// Add a sequence to the sequence Promise.
 					sequences = sequences.then(() => {
-
 						return new Promise((resolve, reject) => {
-
 							// Microsoft Vision OCR options
 							const options = {
 								method: 'POST',
@@ -168,84 +207,91 @@ module.exports = {
 							};
 
 							// Send screenshot to MS Vision
-							axios.request(options).then(function(response) {
+							axios
+								.request(options)
+								.then(function(response) {
+									// Push the results to screenshots array
+									screenshots.push(response.data);
 
-								// Push the results to screenshots array
-								screenshots.push(response.data);
-
-								// Resolve this Promise, so we ca move on to the next one.
-								resolve(response.data);
-
-							}).catch(function(error) {
-								// Catch any errors
-								reject(error);
-								console.error(error);
-							});
-
+									// Resolve this Promise, so we ca move on to the next one.
+									resolve(response.data);
+								})
+								.catch(function(error) {
+									// Catch any errors
+									reject(error);
+									console.error(error);
+								});
 						});
 					});
 				}
 
 				// Loop all of the promises sequentially.
-				sequences.then(items => {
+				sequences
+					.then(() => {
+						// I don't like the this is done, need to figure out a better way.
+						// Vision OCR object is DEEP and has a lot of arrays, so this is the way for now.
+						const words = new Array();
+						const text = new Array();
 
-					// I don't like the this is done, need to figure out a better way.
-					// Vision OCR object is DEEP and has a lot of arrays, so this is the way for now.
-					const words = new Array();
-					const text = new Array();
-
-					// Drill down into the OCR response and push to words[].
-					screenshots.forEach(s => {
-						s.regions.forEach(r => {
-							r.lines.forEach(l => {
-								words.push(l.words);
+						// Drill down into the OCR response and push to words[].
+						screenshots.forEach((s) => {
+							s.regions.forEach((r) => {
+								r.lines.forEach((l) => {
+									words.push(l.words);
+								});
 							});
 						});
-					});
 
-					// Drill down further, because as I mentioned, it's a deep object.
-					words.forEach(w => {
-						w.forEach(word => {
-							// Push words[] to text[]
-							text.push(word.text);
-						});
-					});
-
-					const and = text.indexOf('&');
-					const ign = and - 1;
-					newUser.ign = text[ign] ? text[ign] : 'Not found';
-					let checkIgn = new String();
-					checkIgn = newUser.ign;
-
-					const possibleLevels = new Array();
-
-					possibleLevels.push(text[and + 2]);
-					possibleLevels.push(text[and + 3]);
-					possibleLevels.push(text[and + 4]);
-					possibleLevels.push(text[and + 5]);
-
-					const regex = new RegExp(/^[0-9]+$/);
-
-					const level = possibleLevels
-						// exlude special characters
-						.filter(elem => regex.test(elem))
-						// exlude anything smaller than 3 charaters
-						.filter(elem => elem >= 1 && elem <= 50)
-						// duplicates check
-						.filter((elem, index, self) => {
-							return index === self.indexOf(elem);
+						// Drill down further, because as I mentioned, it's a deep object.
+						words.forEach((w) => {
+							w.forEach((word) => {
+								// Push words[] to text[]
+								text.push(word.text);
+							});
 						});
 
-					newUser.level = level[0] ? level[0] : 'Not found';
+						const and = text.indexOf('&');
+						const ign = and - 1;
+						newUser.ign = text[ign] ? text[ign] : 'Not found';
+						let checkIgn = new String();
+						checkIgn = newUser.ign;
 
-					setUserInfo(process.env.workbookCD, process.env.sheetCDDatabase, user, newUser, null, true)
+						const possibleLevels = new Array();
 
-						.then(() => {
+						possibleLevels.push(text[and + 2]);
+						possibleLevels.push(text[and + 3]);
+						possibleLevels.push(text[and + 4]);
+						possibleLevels.push(text[and + 5]);
 
-							message.reactions.removeAll().then(() => message.react('👍')).catch();
+						const regex = new RegExp(/^[0-9]+$/);
 
-							message.channel.send(
-								{
+						const level = possibleLevels
+							// exlude special characters
+							.filter((elem) => regex.test(elem))
+							// exlude anything smaller than 3 charaters
+							.filter((elem) => elem >= 1 && elem <= 50)
+							// duplicates check
+							.filter((elem, index, self) => {
+								return index === self.indexOf(elem);
+							});
+
+						newUser.level = level[0] ? level[0] : 'Not found';
+
+						setUserInfo(
+							process.env.workbookCD,
+							process.env.sheetCDDatabase,
+							user,
+							newUser,
+							null,
+							true,
+						)
+							.then(() => {
+								message.reactions
+									.removeAll()
+									.then(() => message.react('👍'))
+									.catch();
+
+								message.channel.send({
 									embed: {
 										color: cdConfig.embedColor,
 										author: {
@@ -276,39 +322,44 @@ module.exports = {
 											},
 											{
 												name: 'Update Your Info',
-												value: 'If any of your information has not been processed correctly please use `cdu {ign, lvl, or team} {correct value}` to update your information.\n\nFor example, `cdu lvl 50` to update your level.',
+												value:
+													'If any of your information has not been processed correctly please use `cdu {ign, lvl, or team} {correct value}` to update your information.\n\nFor example, `cdu lvl 50` to update your level.',
 											},
 										],
 									},
-								},
-							);
+								});
 
-							if(memberName.toLowerCase() !== checkIgn.toLowerCase()) {
-								// message.channel.send(`<@${user.id}> please make sure your IGN and Server Nickname match`);
-							}
-						})
+								if (memberName.toLowerCase() !== checkIgn.toLowerCase()) {
+									// message.channel.send(`<@${user.id}> please make sure your IGN and Server Nickname match`);
+								}
+							})
 
-						.then(() => {
-							const newEventRegistration = {
-								userid: user.id,
-								discordName: user.username,
-								ign: newUser.ign,
-								level: newUser.level,
-								team: newUser.team,
-								enrollDate: newUser.initialEnrollDate,
-							};
-							setUserInfo(process.env.workbookCD, cdConfig.eventID, user, newEventRegistration, null, true).catch();
-						})
+							.then(() => {
+								const newEventRegistration = {
+									userid: user.id,
+									discordName: user.username,
+									ign: newUser.ign,
+									level: newUser.level,
+									team: newUser.team,
+									enrollDate: newUser.initialEnrollDate,
+								};
+								setUserInfo(
+									process.env.workbookCD,
+									cdConfig.eventID,
+									user,
+									newEventRegistration,
+									null,
+									true,
+								).catch();
+							})
 
-						.catch();
-
-				}).catch(err => {
-					console.log(err);
-					message.channel.send('An error has occurred, please resubmit.');
-				});
-
+							.catch();
+					})
+					.catch((err) => {
+						console.log(err);
+						message.channel.send('An error has occurred, please resubmit.');
+					});
 			}
-
-		})();
+		}().catch((error) => { logger.log({ level: 'error', message: error }); }));
 	},
 };

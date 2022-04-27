@@ -4,13 +4,13 @@ const checkChannel = require('../../util/checkChannels');
 const ms = require('ms');
 
 function waveMessage(wave, userInfo, client) {
-
 	wave = wave ? wave : '';
 
 	const embed = {
 		color: client.config.guild.embedColor,
 		title: `**✨WAVE ${wave} SENDING INVITES!✨**`,
-		description: '**DON’T LEAVE WHEN THE HOST DOES**\n\n_Leave only at 10 seconds if you have less trainers than is recommended._',
+		description:
+			'**DON\'T LEAVE WHEN THE HOST DOES**\n\n_Leave only at 10 seconds if you have less trainers than is recommended._',
 		author: {
 			name: client.config.guild.botName,
 			icon_url: client.config.guild.botIcon,
@@ -18,7 +18,7 @@ function waveMessage(wave, userInfo, client) {
 		timestamp: new Date(),
 	};
 
-	if(userInfo) {
+	if (userInfo) {
 		embed['footer'] = { text: `Invite coming from ${userInfo.ign}` };
 	}
 
@@ -26,6 +26,7 @@ function waveMessage(wave, userInfo, client) {
 }
 
 module.exports = {
+	include: true,	
 	name: 'wave',
 	description: 'Let a wave know which one is happening next.',
 	config: 'wavehost',
@@ -33,41 +34,56 @@ module.exports = {
 	cooldown: 2,
 	noPrefix: true,
 	roles: ['roleVerified'],
-	execute(message, args, client) {
+	execute(message, args, client, logger) {
 		(async function() {
 			const wave = args[0];
-			const user = message.author;
-			const channels = ['sponsoredChannels'];
-			const userInfo = await getUserInfo(process.env.workbookWavehost, process.env.sheetWaveHosts, user, 'row');
+			logger.defaultMeta.arg = wave;
 
+			const user = message.author;
+			const userInfo = await getUserInfo(
+				process.env.workbookWavehost,
+				process.env.sheetWaveHosts,
+				user,
+				'row',
+			);
+
+			const channels = ['sponsoredChannels'];
 			const isSponsoredChannel = checkChannel(client, message, channels);
 
 			// We're not in a sponsored channel, send away.
-			if(!isSponsoredChannel) {
-				console.log(`${user.username}: Not a sponsored channel, good to go.`);
+			if (!isSponsoredChannel) {
+				// console.log(`${user.username}: Not a sponsored channel, good to go.`);
 				return message.channel.send({ embed: waveMessage(wave, userInfo, client) });
 			}
 
 			// We are in a sponsored channel.
-			if(!userInfo) {
-				console.log(`${user.username}: In a sponsored channel, but not a verified host.`);
-				return;
+			if (!userInfo) {
+				return logger.log({
+					level: 'info',
+					message: `${user.username}: In a sponsored channel, but not a verified host.`,
+				});
 			}
 
-			if(userInfo.hosting == 'FALSE' || userInfo.hosting == false) {
-				console.log(`${user.username}: Verified host, but not currently hosting.`);
-				return;
+			if (userInfo.hosting == 'FALSE' || userInfo.hosting == false) {
+				return logger.log({
+					level: 'info',
+					message: `${user.username}: Verified host, but not currently hosting.`,
+				});
 			}
 
-			if(userInfo.channelid !== message.channel.id) {
-				console.log(`${user.username}: Hosting, but not waving in the correct channel.`);
-				return;
+			if (userInfo.channelid !== message.channel.id) {
+				return logger.log({
+					level: 'info',
+					message: `${user.username}: Hosting, but not waving in the correct channel.`,
+				});
 			}
 
 			// User is hosting AND the channel id's match
 			// One last check for good measure.
-			if((userInfo.hosting == 'TRUE' || userInfo.host == true) && userInfo.channelid == message.channel.id) {
-
+			if (
+				(userInfo.hosting == 'TRUE' || userInfo.host == true) &&
+				userInfo.channelid == message.channel.id
+			) {
 				// console.log(`${user.username}: Verified user, and in the correct channel.`);
 
 				const now = new Date();
@@ -78,190 +94,247 @@ module.exports = {
 				const starttime = new Date(userInfo.starttime).toLocaleDateString('en-us');
 
 				const resetWaveData = [
-					{ data: 'hosting', 		value: false },
-					{ data: 'currentwave', 	value: 0 },
-					{ data: 'fails',		value: 0 },
-					{ data: 'notifications',	value: 0 },
-					{ data: 'strings',		value: 0 },
-					{ data: 'tcmessageid', 	value: '' },
-					{ data: 'starttime',	value: '' },
-					{ data: 'waveid',		value: '' },
-					{ data: 'boss',		value: '' },
-					{ data: 'bossid',		value: '' },
-					{ data: 'hosts', 		value: parseInt(userInfo.hosts) + 1 },
-					{ data: 'channelname', 	value: '' },
-					{ data: 'channelid', 	value: '' },
+					{ data: 'hosting', value: false },
+					{ data: 'currentwave', value: 0 },
+					{ data: 'fails', value: 0 },
+					{ data: 'notifications', value: 0 },
+					{ data: 'strings', value: 0 },
+					{ data: 'tcmessageid', value: '' },
+					{ data: 'starttime', value: '' },
+					{ data: 'waveid', value: '' },
+					{ data: 'boss', value: '' },
+					{ data: 'bossid', value: '' },
+					{ data: 'hosts', value: parseInt(userInfo.hosts) + 1 },
+					{ data: 'channelname', value: '' },
+					{ data: 'channelid', value: '' },
 				];
-
 
 				// Log all data to WaveHistory
 				const history = {
-					waveid: 		userInfo.waveid,
-					userid: 		userInfo.userid,
-					ign: 		userInfo.ign,
-					date: 		starttime,
-					duration:		ms(duration, { long: true }),
-					channel:		message.channel.id,
-					boss:		userInfo.boss ? userInfo.boss : 'Not Set',
-					waves:		userInfo.currentwave,
-					fails:		userInfo.fails,
+					waveid: userInfo.waveid,
+					userid: userInfo.userid,
+					ign: userInfo.ign,
+					date: starttime,
+					duration: ms(duration, { long: true }),
+					channel: message.channel.id,
+					boss: userInfo.boss ? userInfo.boss : 'Not Set',
+					waves: userInfo.currentwave,
+					fails: userInfo.fails,
 					notifications: userInfo.notifications,
-					channelname: 	userInfo.channelname,
-					channelid: 	userInfo.channelid,
-					strings: 		userInfo.strings,
+					channelname: userInfo.channelname,
+					channelid: userInfo.channelid,
+					strings: userInfo.strings,
 				};
 
-				switch(wave) {
+				switch (wave) {
+					case 'fail':
+					case 'fails':
+					case 'failed':
+						message.channel.send(userInfo.failed ? userInfo.failed : 'Wave Failed');
+						if (userInfo.failtc == 'TRUE' && userInfo.failtc !== 'FALSE') {
+							message.channel
+								.send(userInfo.tc)
+								.then((sent) => {
+									setUserInfo(
+										process.env.workbookWavehost,
+										process.env.sheetWaveHosts,
+										user,
+										'fails',
+										parseInt(userInfo.fails) + 1,
+									);
 
-				case 'fail':
-				case 'fails':
-				case 'failed':
-					message.channel.send(userInfo.failed ? userInfo.failed : 'Wave Failed');
-					if(userInfo.failtc == 'TRUE' && userInfo.failtc !== 'FALSE') {
-						message.channel.send(userInfo.tc).then((sent) => {
+									setTimeout(() => sent.delete(), 10000);
+								})
+								.catch((error) => {
+									logger.log({
+										level: 'error',
+										message: error,
+									});
+								});
+						}
+						break;
 
-							setUserInfo(process.env.workbookWavehost, process.env.sheetWaveHosts, user, 'fails', parseInt(userInfo.fails) + 1);
+					case 'last':
+					case 'final':
+						message.channel.send({ embed: waveMessage(thisWave, userInfo, client) });
+						message.channel.send(userInfo.last);
+						setUserInfo(
+							process.env.workbookWavehost,
+							process.env.sheetWaveHosts,
+							user,
+							'currentwave',
+							thisWave,
+						)
+							.then(() => {
+								// Delete Trainer Code if it's still there.
+								if (tcmessageid) {
+									message.channel.messages
+										.fetch(tcmessageid)
+										.then((tcmessage) => {
+											tcmessage.delete();
+											tcmessage.channel.send('Trainer Code Deleted');
 
-							setTimeout(() => sent.delete(), 10000);
+											setUserInfo(
+												process.env.workbookWavehost,
+												process.env.sheetWaveHosts,
+												user,
+												'tcmessageid',
+												'',
+												false,
+											).catch();
+										})
+										.catch((error) => {
+											logger.log({
+												level: 'error',
+												message: error,
+											});
+										});
+								}
+							})
+							.catch();
+						break;
 
+					case 'close':
+					case 'closed':
+					case 'end':
+						// Save all data to History
+						setUserInfo(
+							process.env.workbookWavehost,
+							process.env.sheetWaveHistory,
+							user,
+							history,
+							null,
+							true,
+						)
+							.then(() => {
+								// Reset wavehost sheet
+								setUserInfo(
+									process.env.workbookWavehost,
+									process.env.sheetWaveHosts,
+									user,
+									resetWaveData,
+									null,
+								).catch();
+							})
+							.catch();
+
+						// Send Wave Record if reached
+						if (parseInt(userInfo.maxwaves) < userInfo.currentwave) {
+							resetWaveData.push({ data: 'maxwaves', value: userInfo.currentwave });
+							message.channel.send({
+								embed: {
+									color: client.config.guild.embedColor,
+									title: `<a:AnimatedPartyPopperBadge:745495016067301547> <a:AnimatedPartyPopperBadge:745495016067301547> Congratulations ${userInfo.ign}, you set a personal best! <a:AnimatedPartyPopperBadge:745495016067301547> <a:AnimatedPartyPopperBadge:745495016067301547>`,
+									author: {
+										name: client.config.guild.botName,
+										icon_url: client.config.guild.botIcon,
+									},
+									fields: [
+										{
+											name: 'Previous Record',
+											value: userInfo.maxwaves,
+											inline: true,
+										},
+										{
+											name: 'New Record',
+											value: userInfo.currentwave,
+											inline: true,
+										},
+									],
+									timestamp: now,
+								},
+							});
+						}
+
+						// Send Wave Summary
+						message.channel.send({
+							embed: {
+								color: client.config.guild.embedColor,
+								title: 'WAVE HOST HAS BEEN CLOSED!',
+								description: userInfo.closed,
+								timestamp: now,
+								author: {
+									name: client.config.guild.botName,
+									icon_url: client.config.guild.botIcon,
+								},
+								fields: [
+									{
+										name: 'Host Duration',
+										value: history.duration,
+										inline: true,
+									},
+									{
+										name: 'Boss',
+										value: history.boss,
+										inline: true,
+									},
+									{
+										name: 'Host #',
+										value: parseInt(userInfo.hosts) + 1,
+										inline: true,
+									},
+									{
+										name: 'Completed Waves',
+										value: history.waves,
+										inline: true,
+									},
+									{
+										name: 'Waves Failed',
+										value: history.fails,
+										inline: true,
+									},
+									{
+										name: 'Notifications',
+										value: history.notifications,
+										inline: true,
+									},
+								],
+							},
 						});
-					}
-					break;
-
-				case 'last':
-				case 'final':
-					message.channel.send({ embed: waveMessage(thisWave, userInfo, client) });
-					message.channel.send(userInfo.last);
-					setUserInfo(process.env.workbookWavehost, process.env.sheetWaveHosts, user, 'currentwave', thisWave).then(() => {
 
 						// Delete Trainer Code if it's still there.
-						if(tcmessageid) {
-							message.channel.messages.fetch(tcmessageid)
+						if (tcmessageid) {
+							message.channel.messages
+								.fetch(tcmessageid)
 								.then((tcmessage) => {
 									tcmessage.delete();
 									tcmessage.channel.send('Trainer Code Deleted');
-
-									setUserInfo(process.env.workbookWavehost, process.env.sheetWaveHosts, user, 'tcmessageid', '', false).catch();
-
-								}).catch((error) => console.log(error));
+								})
+								.catch((error) => {
+									logger.log({
+										level: 'error',
+										message: error,
+									});
+								});
 						}
 
-					}).catch();
-					break;
+						break;
 
+					case 'next':
+						message.channel.send({ embed: waveMessage(thisWave, userInfo, client) });
+						setUserInfo(
+							process.env.workbookWavehost,
+							process.env.sheetWaveHosts,
+							user,
+							'currentwave',
+							thisWave,
+						).catch();
+						break;
 
-				case 'close':
-				case 'closed':
-				case 'end':
-
-
-					// Save all data to History
-					setUserInfo(process.env.workbookWavehost, process.env.sheetWaveHistory, user, history, null, true).then(() => {
-
-						// Reset wavehost sheet
-						setUserInfo(process.env.workbookWavehost, process.env.sheetWaveHosts, user, resetWaveData, null).catch();
-
-					}).catch();
-
-
-					// Send Wave Record if reached
-					if(parseInt(userInfo.maxwaves) < userInfo.currentwave) {
-
-						resetWaveData.push({ data: 'maxwaves', value: userInfo.currentwave });
-						message.channel.send({ embed: {
-							color: client.config.guild.embedColor,
-							title: `<a:AnimatedPartyPopperBadge:745495016067301547> <a:AnimatedPartyPopperBadge:745495016067301547> Congratulations ${userInfo.ign}, you set a personal best! <a:AnimatedPartyPopperBadge:745495016067301547> <a:AnimatedPartyPopperBadge:745495016067301547>`,
-							author: {
-								name: client.config.guild.botName,
-								icon_url: client.config.guild.botIcon,
-							},
-							fields: [
-								{
-									name: 'Previous Record',
-									value: userInfo.maxwaves,
-									inline: true,
-								},
-								{
-									name: 'New Record',
-									value: userInfo.currentwave,
-									inline: true,
-								},
-							],
-							timestamp: now,
-						} });
-
-					}
-
-					// Send Wave Summary
-					message.channel.send({ embed: {
-						color: client.config.guild.embedColor,
-						title: 'WAVE HOST HAS BEEN CLOSED!',
-						description: userInfo.closed,
-						timestamp: now,
-						author: {
-							name: client.config.guild.botName,
-							icon_url: client.config.guild.botIcon,
-						},
-						fields: [
-							{
-								name: 'Host Duration',
-								value: history.duration,
-								inline: true,
-							},
-							{
-								name: 'Boss',
-								value: history.boss,
-								inline: true,
-							},
-							{
-								name: 'Host #',
-								value: parseInt(userInfo.hosts) + 1,
-								inline: true,
-							},
-							{
-								name: 'Completed Waves',
-								value: history.waves,
-								inline: true,
-							},
-							{
-								name: 'Waves Failed',
-								value: history.fails,
-								inline: true,
-							},
-							{
-								name: 'Notifications',
-								value: history.notifications,
-								inline: true,
-							},
-						],
-					} });
-
-					// Delete Trainer Code if it's still there.
-					if(tcmessageid) {
-						message.channel.messages.fetch(tcmessageid)
-							.then((tcmessage) => {
-								tcmessage.delete();
-								tcmessage.channel.send('Trainer Code Deleted');
-							}).catch((error) => console.log(error));
-					}
-
-					break;
-
-				case 'next':
-					message.channel.send({ embed: waveMessage(thisWave, userInfo, client) });
-					setUserInfo(process.env.workbookWavehost, process.env.sheetWaveHosts, user, 'currentwave', thisWave).catch();
-					break;
-
-				default:
-					message.channel.send({ embed: waveMessage(thisWave, userInfo, client) });
-					setUserInfo(process.env.workbookWavehost, process.env.sheetWaveHosts, user, 'currentwave', thisWave).catch();
-					break;
-
+					default:
+						message.channel.send({ embed: waveMessage(thisWave, userInfo, client) });
+						setUserInfo(
+							process.env.workbookWavehost,
+							process.env.sheetWaveHosts,
+							user,
+							'currentwave',
+							thisWave,
+						).catch();
+						break;
 				}
 			}
-
-
-		}().catch(function(error) { console.error(error); }));
-
+		})().catch((error) => {
+			logger.log({ level: 'error', message: error });
+		});
 	},
 };

@@ -1,0 +1,51 @@
+{"level":"info","message":"nhemps311: Verified host, but not currently hosting.","service":"user-service"}
+{
+  level: 'info',
+  message: 'nhemps311: Verified host, but not currently hosting.',
+  service: 'user-service',
+  timestamp: '2022-04-13T16:25:06.231Z'
+}
+{
+  level: 'info',
+  message: 'nhemps311: Verified host, but not currently hosting.',
+  command: 'wave',
+  timestamp: '2022-04-13T16:26:48.369Z'
+}
+{
+  level: 'info',
+  message: 'nhemps311: Verified host, but not currently hosting.',
+  command: 'wave',
+  args: '',
+  arg: undefined,
+  timestamp: '2022-04-13T16:57:19.729Z'
+}
+{ level: 'error',
+  message:
+   ReferenceError: getSlots is not defined
+       at /Users/nick/Local Sites/pgrr-bot/commands/fun/slots.js:13:18
+       at Object.execute (/Users/nick/Local Sites/pgrr-bot/commands/fun/slots.js:25:4)
+       at /Users/nick/Local Sites/pgrr-bot/index.js:189:13
+       at Client.client.on.message (/Users/nick/Local Sites/pgrr-bot/index.js:194:4)
+       at Client.emit (events.js:198:13)
+       at MessageCreateAction.handle (/Users/nick/Local Sites/pgrr-bot/node_modules/discord.js/src/client/actions/MessageCreate.js:31:14)
+       at Object.module.exports [as MESSAGE_CREATE] (/Users/nick/Local Sites/pgrr-bot/node_modules/discord.js/src/client/websocket/handlers/MESSAGE_CREATE.js:4:32)
+       at WebSocketManager.handlePacket (/Users/nick/Local Sites/pgrr-bot/node_modules/discord.js/src/client/websocket/WebSocketManager.js:384:31)
+       at WebSocketShard.onPacket (/Users/nick/Local Sites/pgrr-bot/node_modules/discord.js/src/client/websocket/WebSocketShard.js:444:22)
+       at WebSocketShard.onMessage (/Users/nick/Local Sites/pgrr-bot/node_modules/discord.js/src/client/websocket/WebSocketShard.js:301:10),
+  command: 'slots',
+  args: '',
+  timestamp: '2022-04-27T21:51:18.867Z' }
+{ level: 'error',
+  message:
+   TypeError: message.channel.reply is not a function
+       at /Users/nick/Local Sites/pgrr-bot/commands/fun/slots.js:33:20
+       at process._tickCallback (internal/process/next_tick.js:68:7),
+  command: 'slots',
+  args: '',
+  timestamp: '2022-04-27T22:01:13.625Z' }
+{ level: 'info',
+  message: 'nhemps311: Verified host, but not currently hosting.',
+  command: 'wave',
+  args: '',
+  arg: '1',
+  timestamp: '2022-04-27T22:21:50.176Z' }

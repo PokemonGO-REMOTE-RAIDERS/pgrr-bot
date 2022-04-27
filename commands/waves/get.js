@@ -2,8 +2,10 @@ const getUserInfo = require('../../util/getUserInfo.js');
 const checkMentions = require('../../util/checkMentions.js');
 const ms = require('ms');
 module.exports = {
+	include: true,	
 	name: 'get',
-	description: 'Get information about a wavehost. Only accessible by the actual wavehost.',
+	description:
+		'Get information about a wavehost. Only accessible by the actual wavehost.',
 	config: 'wavehost',
 	args: true,
 	expectedArgs: 2,
@@ -59,25 +61,33 @@ module.exports = {
 			aliases: ['lasts'],
 		},
 	],
-	execute(message, args) {
+	execute(message, args, client, logger) {
 		const data = args[0];
 		const user = checkMentions(message, args);
 
-		getUserInfo(process.env.workbookWavehost, process.env.sheetWaveHosts, user, data)
+		getUserInfo(
+			process.env.workbookWavehost,
+			process.env.sheetWaveHosts,
+			user,
+			data,
+		)
 			.then((response) => {
-				if(response) {
-					if(data == 'timer') {
+				if (response) {
+					if (data == 'timer') {
 						response = ms(response);
 					}
 					message.channel.send(response);
-				}
-				else {
-					message.channel.send(`No information found, consider starting a wavehost profile by using use \`${process.env.prefix}set tc\` and set your trainer code.`);
+				} else {
+					message.channel.send(
+						`No information found, consider starting a wavehost profile by using use \`${process.env.prefix}set tc\` and set your trainer code.`,
+					);
 				}
 			})
 			.catch((error) => {
-				console.log(error, `userid: ${user}`);
-				message.channel.send(`No data found for this user. Maybe consider using \`${process.env.prefix}set\` and add yourself!`);
+				logger.log({ level: 'error', message: error });
+				message.channel.send(
+					`No data found for this user. Maybe consider using \`${process.env.prefix}set\` and add yourself!`,
+				);
 			});
 	},
 };

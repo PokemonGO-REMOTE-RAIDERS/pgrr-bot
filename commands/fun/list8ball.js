@@ -1,12 +1,13 @@
 const get8Balls = require('../../util/get8Ball');
 module.exports = {
+	include: true,	
 	name: 'list8ball',
 	// aliases: [ '8balls', 'eightball', '8bal', 'ball'],
 	description: 'An 8ball command to replace the one from Carl. No prefix needed.',
 	config: false,
 	noPrefix: true,
 	// cooldown: 60,
-	execute(message) {
+	execute(message, args, client, logger) {
 		(async function() {
 
 			const the8balls = await get8Balls(process.env.workbookWavehost, process.env.sheet8ball).catch((error) => console.log(error));
@@ -29,7 +30,7 @@ module.exports = {
 
 			message.channel.send(`🎱 | 8Ball Responses for this channel:\n${listResponses}`);
 
-		}().catch((error) => { console.log(error); }));
+		}().catch((error) => { logger.log({ level: 'error', message: error }); }));
 
 	},
 };

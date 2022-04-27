@@ -3,6 +3,7 @@ const checkMentions = require('../../util/checkMentions.js');
 // const getHistoricalWaves = require('../../util/getHistoricalWaves.js');
 // const ms = require('ms');
 module.exports = {
+	include: true,	
 	name: 'profile',
 	description: 'Get historical information about a wavehost.',
 	aliases: ['wavehost', 'waveprofile'],
@@ -21,7 +22,7 @@ module.exports = {
 			aliases: ['setting'],
 		},
 	],
-	execute(message, args, client) {
+	execute(message, args, client, logger) {
 		(async function() {
 			const filter = args[0];
 			const user = checkMentions(message, args);
@@ -121,6 +122,6 @@ module.exports = {
 			message.channel.send({ embed: embed });
 			// console.log(userInfo);
 			// console.log(wavehistory);
-		}());
+		}().catch((error) => { logger.log({ level: 'error', message: error }); }));
 	},
 };

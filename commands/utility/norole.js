@@ -2,6 +2,7 @@ const noRoles = require('../../noRoles.js');
 const chunkArray = require('../../util/chunkArray.js');
 const secondsToHms = require('../../util/secondsToHms.js');
 module.exports = {
+	include: false,	
 	name: 'norole',
 	description: 'Assign users with no role a specific role',
 	expectedArgs: 1,

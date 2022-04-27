@@ -2,11 +2,13 @@ const setUserInfo = require('../../util/setUserInfo.js');
 const getUserInfo = require('../../util/getUserInfo.js');
 const ms = require('ms');
 module.exports = {
+	include: true,	
 	name: 'set',
-	description: 'Set information about a wavehost. Only accessible by mod or the actual wavehost.',
-	config: 'wavehost',
+	description:
+		'Set information about a wavehost. Only accessible by mod or the actual wavehost.',
 	args: true,
 	cooldown: 5,
+	config: 'wavehost',
 	roles: ['roleWaveHost', 'roleAdmin'],
 	expectedArgs: 1,
 	validArgs: [
@@ -48,17 +50,22 @@ module.exports = {
 		},
 	],
 	execute(message, args, client) {
-		(async function() {
+		(async function () {
 			const data = args[0];
 			let value = args['content'];
 			const user = message.author;
-			const userInfo = await getUserInfo(process.env.workbookWavehost, process.env.sheetWaveHosts, user, 'row').catch();
+			const userInfo = await getUserInfo(
+				process.env.workbookWavehost,
+				process.env.sheetWaveHosts,
+				user,
+				'row',
+			).catch();
 
-			if(data == 'timer') {
+			if (data == 'timer') {
 				value = ms(value);
 			}
 
-			if(!userInfo) {
+			if (!userInfo) {
 				const newUser = {
 					userid: user.id,
 					ign: 'not set',
@@ -80,28 +87,43 @@ module.exports = {
 
 				newUser[data] = value;
 
-				setUserInfo(process.env.workbookWavehost, process.env.sheetWaveHosts, user, newUser, null, true).then(() => {
-
-					if(data == 'ign') {
-						message.channel.send(`<@${user.id}> You've been added as wavehost! Next set your trainer code by using \`${client.prefix}set tc\``);
-					}
-					else if(data == 'tc') {
-						message.channel.send(`<@${user.id}> You've been added as wavehost! Next set your in game name by using \`${client.prefix}set ign\``);
-					}
-
-
-				}).catch((error) => {
-					message.channel.send(`Error trying to add new wavehost ${user.username}, please try again later or contact a manager!`);
-					console.log(error);
-				});
-			}
-			else {
-
-				setUserInfo(process.env.workbookWavehost, process.env.sheetWaveHosts, user, data, value)
-					.then((response) => {
-						if(response) {
+				setUserInfo(
+					process.env.workbookWavehost,
+					process.env.sheetWaveHosts,
+					user,
+					newUser,
+					null,
+					true,
+				)
+					.then(() => {
+						if (data == 'ign') {
 							message.channel.send(
-								{
+								`<@${user.id}> You've been added as wavehost! Next set your trainer code by using \`${client.prefix}set tc\``,
+							);
+						} else if (data == 'tc') {
+							message.channel.send(
+								`<@${user.id}> You've been added as wavehost! Next set your in game name by using \`${client.prefix}set ign\``,
+							);
+						}
+					})
+					.catch((error) => {
+						message.channel.send(
+							`Error trying to add new wavehost ${user.username}, please try again later or contact a manager!`,
+						);
+						console.log(error);
+					});
+			} else {
+				setUserInfo(
+					process.env.workbookWavehost,
+					process.env.sheetWaveHosts,
+					user,
+					data,
+					value,
+				)
+					.then((response) => {
+						if (response) {
+							message.channel
+								.send({
 									embed: {
 										color: client.config.guild.embedColor,
 										author: {
@@ -117,11 +139,14 @@ module.exports = {
 											},
 										],
 									},
-								}).catch((error) => console.log(error));
+								})
+								.catch((error) => console.log(error));
 						}
 					})
-					.catch((error) =>{
-						message.channel.send('Sorry, there was an error.  Please try again later.');
+					.catch((error) => {
+						message.channel.send(
+							'Sorry, there was an error.  Please try again later.',
+						);
 						console.log(error);
 					});
 			}

@@ -6,14 +6,20 @@
  * @param {boolean} newRow bool that sets a new row
  */
 // const ms = require('ms');
-module.exports = async function setUserInfo(workbookID, sheetID, user, data, value, newRow) {
-
+module.exports = async function setUserInfo(
+	workbookID,
+	sheetID,
+	user,
+	data,
+	value,
+	newRow
+) {
 	// Setup
-	this.sheetID	= sheetID;
-	this.user 		= user;
-	this.data 		= data;
-	this.value 		= value;
-	this.newRow 	= newRow;
+	this.sheetID = sheetID;
+	this.user = user;
+	this.data = data;
+	this.value = value;
+	this.newRow = newRow;
 	this.wookbookID = workbookID;
 
 	const isObject = (obj) => {
@@ -38,8 +44,8 @@ module.exports = async function setUserInfo(workbookID, sheetID, user, data, val
 	let userInfo = false;
 	let response = false;
 
-	for(const row of rows) {
-		if(row.userid == this.user.id) {
+	for (const row of rows) {
+		if (row.userid == this.user.id) {
 			userInfo = row;
 		}
 	}
@@ -47,19 +53,17 @@ module.exports = async function setUserInfo(workbookID, sheetID, user, data, val
 	// console.log(userInfo);
 
 	// New User
-	if(this.newRow && isObject(this.data)) {
+	if (this.newRow && isObject(this.data)) {
 
 		const addNewUser = await sheet.addRow(this.data);
 		await addNewUser.save();
 
 		response = true;
 
-	}
+	} else if (userInfo && Array.isArray(data)) {
 
-	// Process an array of data
-	else if(userInfo && Array.isArray(data)) {
-
-		for(const newData of this.data) {
+		// Process an array of data
+		for (const newData of this.data) {
 
 			userInfo[newData.data] = newData.value;
 
@@ -68,17 +72,16 @@ module.exports = async function setUserInfo(workbookID, sheetID, user, data, val
 		}
 
 		response = true;
+	} else if (userInfo) {
 
-	}
-
-	// Process a single value
-	else if(userInfo) {
-
+		// Process a single value
 		userInfo[this.data] = this.value;
+
 		// console.log(this.value);
 		await userInfo.save();
 
 		response = true;
+
 	}
 
 	return response;

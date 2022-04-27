@@ -1,0 +1,24 @@
+{ level: 'error',
+  message:
+   ReferenceError: getSlots is not defined
+       at /Users/nick/Local Sites/pgrr-bot/commands/fun/slots.js:13:18
+       at Object.execute (/Users/nick/Local Sites/pgrr-bot/commands/fun/slots.js:25:4)
+       at /Users/nick/Local Sites/pgrr-bot/index.js:189:13
+       at Client.client.on.message (/Users/nick/Local Sites/pgrr-bot/index.js:194:4)
+       at Client.emit (events.js:198:13)
+       at MessageCreateAction.handle (/Users/nick/Local Sites/pgrr-bot/node_modules/discord.js/src/client/actions/MessageCreate.js:31:14)
+       at Object.module.exports [as MESSAGE_CREATE] (/Users/nick/Local Sites/pgrr-bot/node_modules/discord.js/src/client/websocket/handlers/MESSAGE_CREATE.js:4:32)
+       at WebSocketManager.handlePacket (/Users/nick/Local Sites/pgrr-bot/node_modules/discord.js/src/client/websocket/WebSocketManager.js:384:31)
+       at WebSocketShard.onPacket (/Users/nick/Local Sites/pgrr-bot/node_modules/discord.js/src/client/websocket/WebSocketShard.js:444:22)
+       at WebSocketShard.onMessage (/Users/nick/Local Sites/pgrr-bot/node_modules/discord.js/src/client/websocket/WebSocketShard.js:301:10),
+  command: 'slots',
+  args: '',
+  timestamp: '2022-04-27T21:51:18.867Z' }
+{ level: 'error',
+  message:
+   TypeError: message.channel.reply is not a function
+       at /Users/nick/Local Sites/pgrr-bot/commands/fun/slots.js:33:20
+       at process._tickCallback (internal/process/next_tick.js:68:7),
+  command: 'slots',
+  args: '',
+  timestamp: '2022-04-27T22:01:13.625Z' }

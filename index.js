@@ -37,7 +37,9 @@
 		const commandFiles = fs.readdirSync(`./commands/${folder}`).filter(file => file.endsWith('.js'));
 		for (const file of commandFiles) {
 			const command = require(`./commands/${folder}/${file}`);
-			client.commands.set(command.name, command);
+			if(command.include) {
+				client.commands.set(command.name, command);
+			}
 		}
 	}
 
@@ -51,6 +53,33 @@
 	}
 
 	console.log('Commands loaded.');
+
+	const winston = require('winston');
+	const { createLogger, format, transports } = require('winston');
+	const { combine, timestamp, prettyPrint } = format;
+
+	const logger = createLogger({
+		level: 'info',
+		format: combine(
+			winston.format.json(),
+			timestamp(),
+			prettyPrint(),
+		),
+		defaultMeta: {
+			command: '',
+			args: '',
+		},
+		timestamp: timestamp(),
+		transports: [
+			//
+			// - Write all logs with importance level of `error` or less to `error.log`
+			// - Write all logs with importance level of `info` or less to `combined.log`
+			//
+			new transports.Console(),
+			new transports.File({ filename: 'error.log', level: 'error' }),
+			new transports.File({ filename: 'combined.log' }),
+		],
+	});
 
 	const cooldowns = new Discord.Collection();
 
@@ -82,8 +111,7 @@
 			if (noPrefix && !message.author.bot) {
 				args = message.content.trim().split(/ +/);
 
-			}
-			else if (!message.content.startsWith(client.prefix) || message.author.bot) {
+			} else if (!message.content.startsWith(client.prefix) || message.author.bot) {
 				return;
 			}
 
@@ -158,9 +186,9 @@
 			}
 
 			try {
-				command.execute(message, args, client);
-			}
-			catch (error) {
+				logger.defaultMeta.command = command.name;
+				command.execute(message, args, client, logger);
+			} catch (error) {
 				console.error(error);
 				message.reply('there was an error trying to execute that command!');
 			}
