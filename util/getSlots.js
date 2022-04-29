@@ -36,6 +36,7 @@ module.exports = async function get8Balls(workbookID, sheetID) {
 		slots.push({
 			pokemon: row.pokemon,
 			emoji: row.emoji,
+			reward: row.reward,
 		});
 	});
 

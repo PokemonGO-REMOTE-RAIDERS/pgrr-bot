@@ -49,3 +49,176 @@
   args: '',
   arg: '1',
   timestamp: '2022-04-27T22:21:50.176Z' }
+{ level: 'error',
+  message:
+   TypeError: (intermediate value).parse is not a function
+       at /Users/nick/Local Sites/pgrr-bot/commands/slots/spin.js:74:26
+       at process._tickCallback (internal/process/next_tick.js:68:7),
+  command: 'spin',
+  args: '',
+  timestamp: '2022-04-28T21:17:13.436Z' }
+{ level: 'error',
+  message:
+   TypeError: Date.now is not a constructor
+       at /Users/nick/Local Sites/pgrr-bot/commands/slots/spin.js:75:15
+       at process._tickCallback (internal/process/next_tick.js:68:7),
+  command: 'spin',
+  args: '',
+  timestamp: '2022-04-28T21:18:58.471Z' }
+{ level: 'error',
+  message:
+   TypeError: Cannot read property 'save' of undefined
+       at setUserInfo (/Users/nick/Local Sites/pgrr-bot/util/setUserInfo.js:59:20)
+       at process._tickCallback (internal/process/next_tick.js:68:7),
+  command: 'spin',
+  args: '',
+  timestamp: '2022-04-28T21:19:22.099Z' }
+{ level: 'error',
+  message:
+   TypeError: array.push is not a function
+       at getUserInfo (/Users/nick/Local Sites/pgrr-bot/util/getUserInfo.js:41:11)
+       at process._tickCallback (internal/process/next_tick.js:68:7),
+  command: 'lastwin',
+  args: '',
+  timestamp: '2022-04-28T21:45:12.130Z' }
+{ level: 'error',
+  message:
+   ReferenceError: lastWin is not defined
+       at /Users/nick/Local Sites/pgrr-bot/commands/slots/wins.js:69:41
+       at process._tickCallback (internal/process/next_tick.js:68:7),
+  command: 'wins',
+  args: '',
+  timestamp: '2022-04-28T22:04:03.860Z' }
+{ level: 'error',
+  message:
+   TypeError: (intermediate value).parse is not a function
+       at /Users/nick/Local Sites/pgrr-bot/commands/slots/wins.js:69:35
+       at process._tickCallback (internal/process/next_tick.js:68:7),
+  command: 'wins',
+  args: '',
+  timestamp: '2022-04-28T22:04:29.268Z' }
+{ level: 'error',
+  message:
+   TypeError: Date(...).parse is not a function
+       at /Users/nick/Local Sites/pgrr-bot/commands/slots/wins.js:69:31
+       at process._tickCallback (internal/process/next_tick.js:68:7),
+  command: 'wins',
+  args: '',
+  timestamp: '2022-04-28T22:04:49.525Z' }
+{ level: 'error',
+  message:
+   ReferenceError: checkMentions is not defined
+       at /Users/nick/Local Sites/pgrr-bot/commands/slots/wins.js:17:17
+       at Object.execute (/Users/nick/Local Sites/pgrr-bot/commands/slots/wins.js:103:5)
+       at /Users/nick/Local Sites/pgrr-bot/index.js:192:13
+       at Client.client.on.message (/Users/nick/Local Sites/pgrr-bot/index.js:197:4)
+       at Client.emit (events.js:198:13)
+       at MessageCreateAction.handle (/Users/nick/Local Sites/pgrr-bot/node_modules/discord.js/src/client/actions/MessageCreate.js:31:14)
+       at Object.module.exports [as MESSAGE_CREATE] (/Users/nick/Local Sites/pgrr-bot/node_modules/discord.js/src/client/websocket/handlers/MESSAGE_CREATE.js:4:32)
+       at WebSocketManager.handlePacket (/Users/nick/Local Sites/pgrr-bot/node_modules/discord.js/src/client/websocket/WebSocketManager.js:384:31)
+       at WebSocketShard.onPacket (/Users/nick/Local Sites/pgrr-bot/node_modules/discord.js/src/client/websocket/WebSocketShard.js:444:22)
+       at WebSocketShard.onMessage (/Users/nick/Local Sites/pgrr-bot/node_modules/discord.js/src/client/websocket/WebSocketShard.js:301:10),
+  command: 'wins',
+  args: '',
+  timestamp: '2022-04-28T22:07:41.129Z' }
+{
+  level: 'error',
+  message: ReferenceError: Cannot access 'timeSinceFirstWin' before initialization
+      at /Users/nick/Local Sites/pgrr-bot/commands/slots/wins.js:77:39
+      at processTicksAndRejections (node:internal/process/task_queues:96:5),
+  command: 'wins',
+  args: '',
+  timestamp: '2022-04-28T22:12:54.354Z'
+}
+{
+  level: 'error',
+  message: ReferenceError: a is not defined
+      at /Users/nick/Local Sites/pgrr-bot/commands/slots/wins.js:80:30
+      at processTicksAndRejections (node:internal/process/task_queues:96:5),
+  command: 'wins',
+  args: '',
+  timestamp: '2022-04-28T22:19:35.600Z'
+}
+{
+  level: 'error',
+  message: TypeError: Assignment to constant variable.
+      at /Users/nick/Local Sites/pgrr-bot/commands/slots/wins.js:82:11
+      at Array.forEach (<anonymous>)
+      at /Users/nick/Local Sites/pgrr-bot/commands/slots/wins.js:81:9
+      at processTicksAndRejections (node:internal/process/task_queues:96:5),
+  command: 'wins',
+  args: '',
+  timestamp: '2022-04-28T22:24:37.148Z'
+}
+{
+  level: 'error',
+  message: TypeError: Cannot read properties of undefined (reading 'datetime')
+      at /Users/nick/Local Sites/pgrr-bot/commands/slots/wins.js:71:43
+      at processTicksAndRejections (node:internal/process/task_queues:96:5),
+  command: 'wins',
+  args: '',
+  timestamp: '2022-04-28T22:28:16.462Z'
+}
+{
+  level: 'error',
+  message: ReferenceError: now is not defined
+      at /Users/nick/Local Sites/pgrr-bot/commands/slots/stats.js:115:16
+      at processTicksAndRejections (node:internal/process/task_queues:96:5),
+  command: 'stats',
+  args: '',
+  timestamp: '2022-04-28T22:57:14.808Z'
+}
+{
+  level: 'error',
+  message: TypeError: Cannot read properties of undefined (reading 'datetime')
+      at /Users/nick/Local Sites/pgrr-bot/commands/slots/stats.js:70:44
+      at processTicksAndRejections (node:internal/process/task_queues:96:5),
+  command: 'stats',
+  args: '',
+  timestamp: '2022-04-28T23:54:03.347Z'
+}
+{
+  level: 'error',
+  message: TypeError: Cannot read properties of undefined (reading 'datetime')
+      at /Users/nick/Local Sites/pgrr-bot/commands/slots/stats.js:70:44
+      at processTicksAndRejections (node:internal/process/task_queues:96:5),
+  command: 'stats',
+  args: '',
+  timestamp: '2022-04-28T23:54:36.723Z'
+}
+{
+  level: 'error',
+  message: TypeError: Cannot read properties of undefined (reading 'datetime')
+      at /Users/nick/Local Sites/pgrr-bot/commands/slots/stats.js:70:44
+      at processTicksAndRejections (node:internal/process/task_queues:96:5),
+  command: 'stats',
+  args: '',
+  timestamp: '2022-04-28T23:54:56.313Z'
+}
+{
+  level: 'error',
+  message: TypeError: spins.filter is not a function
+      at /Users/nick/Local Sites/pgrr-bot/commands/slots/stats.js:59:23
+      at processTicksAndRejections (node:internal/process/task_queues:96:5),
+  command: 'stats',
+  args: '',
+  timestamp: '2022-04-28T23:59:18.373Z'
+}
+{
+  level: 'error',
+  message: TypeError: spins.filter is not a function
+      at /Users/nick/Local Sites/pgrr-bot/commands/slots/stats.js:59:23
+      at processTicksAndRejections (node:internal/process/task_queues:96:5),
+  command: 'stats',
+  args: '',
+  timestamp: '2022-04-28T23:59:52.726Z'
+}
+{
+  level: 'error',
+  message: TypeError: Cannot read properties of undefined (reading 'emoji')
+      at /Users/nick/Local Sites/pgrr-bot/commands/slots/spin.js:55:52
+      at processTicksAndRejections (node:internal/process/task_queues:96:5),
+  command: 'spin',
+  args: '',
+  timestamp: '2022-04-29T00:11:23.191Z'
+}

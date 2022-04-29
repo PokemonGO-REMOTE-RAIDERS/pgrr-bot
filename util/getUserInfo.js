@@ -33,9 +33,13 @@ module.exports = async function getUserInfo(workbookID, sheetID, user, data) {
 
 	// Loop through the rows and pull back the user based on the Discord User ID
 	let userInfo = false;
+	let array = new Array();
 	for(const row of rows) {
 		if(row.userid == this.user.id) {
 			userInfo = row;
+			if(this.data == 'all' ) {
+				array.push(row);
+			}
 		}
 	}
 
@@ -47,6 +51,11 @@ module.exports = async function getUserInfo(workbookID, sheetID, user, data) {
 	// Send back the full row if requested
 	else if(this.data == 'row') {
 		response = userInfo;
+	}
+
+	// Send back the full row if requested
+	else if(this.data == 'all' && array) {
+		response = array;
 	}
 
 	// Otherwise send back just that one data point.
